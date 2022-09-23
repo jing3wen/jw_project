@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jw_server.dao.system.mapper.SysUserMapper">
+
+    <select id="selectPasswordByUserId" resultType="java.lang.String">
+        select password from sys_user where id = #{userId}
+    </select>
+
+    <update id="updatePasswordByUserId">
+        update sys_user set password = #{password} where id = #{userId}
+    </update>
+</mapper>

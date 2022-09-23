@@ -1,0 +1,57 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*标签位置调整*/
+.mt-10{
+    margin-top: 10px;
+}
+.mb-10{
+    margin-bottom: 10px;
+}
+.ml-5{
+    margin-left: 5px;
+}
+.mr-5{
+    margin-right: 5px;
+}
+.pl-10{
+    padding-left: 10px;
+}
+.pr-10{
+    padding-right: 10px;
+}
+
+/* 表格头部表框的css */
+.tableHeader-style{
+    background-color: #eee!important;
+    font-weight:800;
+}
+/* 分页的css */
+.pagination-style{
+    padding-left: 10px;
+    margin-top: 10px
+}
+/* 新增，批量删除，数据导入，导出按钮组的css */
+.table-head-operate-buttons{
+    margin: 10px 5px;
+}
+/*四个边角变成圆角*/
+.border-radius-25{
+    border-radius:25px
+}
+/*span内容过长时隐藏部分内容*/
+.span-hidden-text{
+    white-space:nowrap;/*强制单行显示*/
+    text-overflow:ellipsis;/*超出部分省略号表示*/
+    overflow:hidden;/*超出部分隐藏*/
+    /*width: 180px;!*设置显示的最大宽度*!*/
+    display:inline-block;
+}
+
+/*全局表单标签颜色*/
+.el-form-item__label{
+    font-weight:bold;
+}

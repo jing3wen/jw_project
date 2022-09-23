@@ -1,0 +1,52 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jw_project?serverTimezone=GMT%2b8
+    username: 你的用户名
+    password: 你的密码
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+  servlet:
+    multipart:
+      # 上传单个文件大小限制
+      max-file-size: 100MB
+      #  总上传的数据大小限制
+      max-request-size: 1024MB
+
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml  #扫描所有mybatis的xml文件
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# JWT配置，创建，解析token
+jwt:
+  data:
+    #jwt有效时间 (60*60*1000) 一个小时
+    jwtTtl: 3600000
+    #jwt加密明文
+    jwtKey: jingwen
+    #    jwt储存的请求头token固定写法
+    tokenHeader: token
+
+
+# 用户密码初始化
+sysUser:
+  initPassword: 123456
+
+# 人脸检测相关配置
+dlFaceDetect:
+  #添加人脸后是否自动更新人脸库
+  autoUpdateFaceDatabase: false
+
+
+#文件上传
+upload:
+  mode: local
+  local:
+    path: D:/IDEA/project/jw_project/static/upload/

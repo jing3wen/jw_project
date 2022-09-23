@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jw_server.dao.deeplearning.mapper.DlFaceDetectFileMapper">
+
+    <select id="getFileDetectStatus" resultType="java.lang.Integer">
+        select detect_status from dl_face_detect_file where id = #{id}
+    </select>
+
+    <update id="updateFileDetectStatus">
+        update dl_face_detect_file set detect_status = #{detectStatus} where id = #{fileId}
+    </update>
+</mapper>
