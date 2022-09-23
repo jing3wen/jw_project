@@ -105,7 +105,7 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
         //TODO 此处用redis比较好
         Integer detectStatus = dlFaceDetectFileMapper.getFileDetectStatus(detectFile.getId());
         if(detectStatus==1){
-            return ResponseResult.success("文件正在检测中, 请稍等");
+            return ResponseResult.error(HttpCode.CODE_202,"文件正在检测中, 请稍等");
         }
         if(detectStatus == 2){
             return ResponseResult.success("文件检测完成");

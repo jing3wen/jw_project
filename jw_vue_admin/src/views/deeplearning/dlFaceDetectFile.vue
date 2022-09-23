@@ -37,11 +37,13 @@
       </el-table-column>
       <el-table-column prop="fileAddress" label="检测文件" width="100px" align="center">
         <template slot-scope="scope">
-          <el-image :src="scope.row.fileAddress"
+          <el-image v-if="scope.row.fileType === 'image'"
+                    :src="scope.row.fileAddress"
                     style="height: 50px"
                     :fit="'contain'"
                     :preview-src-list="[scope.row.fileAddress]">
           </el-image>
+          <el-button type="text" v-if="scope.row.fileType==='video'" @click="openVideoDialog(scope.row.fileAddress)"> 播放视频</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="detectStatus" label="检测状态" width="100px" align="center">
@@ -64,8 +66,9 @@
                     style="height: 50px"
                     :fit="'contain'"
                     :preview-src-list="[scope.row.resultFileAddress]"
-                    v-if="scope.row.detectStatus === 2">
+                    v-if="scope.row.detectStatus === 2 && scope.row.fileType === 'image'">
           </el-image>
+          <el-button type="text" v-if="scope.row.fileType==='video'" @click="openVideoDialog(scope.row.resultFileAddress)"> 播放视频</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="resultMsg" label="检测结果描述" width="300px" align="center"></el-table-column>
@@ -135,18 +138,23 @@
         <el-button type="primary" @click="addOrUpdate">确 定</el-button>
       </div>
     </el-dialog>
+
+    <video-player :f_video-url="f_videoUrl"
+                  :f_open-video.sync="f_openVideo">
+    </video-player>
   </el-card>
 </template>
 
 <script>
 import Pagination from "@/components/pagination/Pagination";
 import ImageUpload from "@/components/upload/image-upload/ImageUpload";
+import VideoPlayer from "@/components/video-player/VideoPlayer";
 import {detectFileTypeList, detectFileSizeLimit} from "@/assets/js/config";
 import {getFileType} from "@/assets/js/common"
 
 export default {
   name: "dlFaceDetectFile",
-  components:{Pagination, ImageUpload},
+  components:{Pagination, ImageUpload, VideoPlayer},
   data() {
     return {
       // 查询表单
@@ -190,7 +198,11 @@ export default {
       action:"/api/dlFaceDetectFile/uploadFaceDetectFile",
       removeDetectFileUrl:'/api/dlFaceDetectFile/deleteFaceDetectFile',
       detectFileTypeList: detectFileTypeList,
-      detectFileSizeLimit: detectFileSizeLimit
+      detectFileSizeLimit: detectFileSizeLimit,
+
+      //播放视频
+      f_openVideo:false,
+      f_videoUrl:'',
     }
   },
   computed:{
@@ -311,10 +323,18 @@ export default {
     detectFaceFile(data){
       this.request.post('/api/dlFaceDetectFile/detectFaceFile', data).then(res =>{
         if(res.code === 200){
-          this.$message.success(res.msg)
+          this.$message.success("文件检测完成")
           this.getPageList()
-        }else this.$message.error(res.msg)
+        }else if(res.code === 202){
+          this.$message.info("文件正在检测中, 请稍等")
+        }
+        else this.$message.error(res.msg)
       })
+    },
+    //播放视频
+    openVideoDialog(data){
+      this.f_openVideo = true
+      this.f_videoUrl = data
     }
 
   }

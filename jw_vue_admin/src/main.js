@@ -9,7 +9,6 @@ import './assets/css/global.css'
 import request from "@/utils/request";
 import directives from "./directives";
 
-
 Vue.config.productionTip = false
 
 Vue.prototype.request = request
