@@ -11,7 +11,7 @@
  Target Server Version : 80013
  File Encoding         : 65001
 
- Date: 23/09/2022 13:12:12
+ Date: 23/09/2022 16:09:28
 */
 
 SET NAMES utf8mb4;
@@ -37,7 +37,7 @@ CREATE TABLE `dl_face_database`  (
   `update_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人脸库' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '人脸库' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of dl_face_database
@@ -45,6 +45,7 @@ CREATE TABLE `dl_face_database`  (
 INSERT INTO `dl_face_database` VALUES (24, 0, '胡歌', '', '', '', '/static/upload/deep_learning/face_detect/face_database/defined_face/胡歌_1.png', '', '1', '0', 'jingwen', '2022-09-22 15:51:17', 'jingwen', '2022-09-22 16:25:57');
 INSERT INTO `dl_face_database` VALUES (30, 0, '黄日华', '', '', '黄日华', '/static/upload/deep_learning/face_detect/face_database/defined_face/黄日华_1.png', '', '1', '0', 'jingwen', '2022-09-23 09:27:40', 'jingwen', '2022-09-23 09:27:40');
 INSERT INTO `dl_face_database` VALUES (31, 0, '翁美玲', '', '', '翁美玲', '/static/upload/deep_learning/face_detect/face_database/defined_face/翁美玲_1.png', '', '1', '0', 'jingwen', '2022-09-23 09:32:55', 'jingwen', '2022-09-23 09:32:55');
+INSERT INTO `dl_face_database` VALUES (32, 0, '李现', '', '', '李现', '/static/upload/deep_learning/face_detect/face_database/defined_face/李现_1.png', '', '1', '0', 'jingwen', '2022-09-23 13:51:38', 'jingwen', '2022-09-23 13:51:38');
 
 -- ----------------------------
 -- Table structure for dl_face_detect_file
@@ -73,7 +74,6 @@ CREATE TABLE `dl_face_detect_file`  (
 -- ----------------------------
 INSERT INTO `dl_face_detect_file` VALUES (16, '胡歌视频2', '/static/upload/deep_learning/face_detect/face_detect_file/to_detect_file/2022-09-23-ab02212a5e224c149f35d8309d90f47a_undetected.mp4', 'video', 2, '1', '/static/upload/deep_learning/face_detect/face_detect_file/detect_file_result/2022-09-23-ab02212a5e224c149f35d8309d90f47a_detected_voice.mp4', '检测到的人脸: []', NULL, '0', 'jingwen', '2022-09-23 09:13:14', '', NULL);
 INSERT INTO `dl_face_detect_file` VALUES (20, '郭靖黄蓉2', '/static/upload/deep_learning/face_detect/face_detect_file/to_detect_file/2022-09-23-a9c93032bc2b49e4a345da5c5e44862d_undetected.jpg', 'image', 2, '1', '/static/upload/deep_learning/face_detect/face_detect_file/detect_file_result/2022-09-23-a9c93032bc2b49e4a345da5c5e44862d_detected.jpg', '检测到的人脸: []', NULL, '0', 'jingwen', '2022-09-23 09:33:33', '', NULL);
-INSERT INTO `dl_face_detect_file` VALUES (21, '乔峰阿朱', '/static/upload/deep_learning/face_detect/face_detect_file/to_detect_file/2022-09-23-a8d36ddd07cb4fd4a2e548420fe41010_undetected.jpg', 'image', 2, '1', '/static/upload/deep_learning/face_detect/face_detect_file/detect_file_result/2022-09-23-a8d36ddd07cb4fd4a2e548420fe41010_detected.jpg', '检测到的人脸: []', NULL, '0', 'jingwen', '2022-09-23 12:56:11', '', NULL);
 INSERT INTO `dl_face_detect_file` VALUES (22, '郭靖黄蓉', '/static/upload/deep_learning/face_detect/face_detect_file/to_detect_file/2022-09-23-54cff315b44b418e93da275b42a4f47b_undetected.jpg', 'image', 2, '1', '/static/upload/deep_learning/face_detect/face_detect_file/detect_file_result/2022-09-23-54cff315b44b418e93da275b42a4f47b_detected.jpg', '检测到的人脸: [\"黄日华\",\"翁美玲\"]', NULL, '0', 'jingwen', '2022-09-23 12:57:22', '', NULL);
 
 -- ----------------------------
@@ -91,7 +91,7 @@ CREATE TABLE `sys_login_log`  (
   `login_msg` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '登录结果',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户登录日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 81 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户登录日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_login_log
@@ -172,6 +172,10 @@ INSERT INTO `sys_login_log` VALUES (73, 'jingwen', '127.0.0.1', '内网IP', 'Chr
 INSERT INTO `sys_login_log` VALUES (74, 'jingwen', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2022-09-23 08:43:06');
 INSERT INTO `sys_login_log` VALUES (75, 'jingwen', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2022-09-23 11:29:09');
 INSERT INTO `sys_login_log` VALUES (76, 'jingwen', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2022-09-23 12:55:19');
+INSERT INTO `sys_login_log` VALUES (77, 'jingwen', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2022-09-23 13:44:35');
+INSERT INTO `sys_login_log` VALUES (78, 'jingwen', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2022-09-23 13:50:14');
+INSERT INTO `sys_login_log` VALUES (79, 'jingwen', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2022-09-23 15:08:05');
+INSERT INTO `sys_login_log` VALUES (80, 'jingwen', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2022-09-23 15:32:46');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -256,7 +260,7 @@ CREATE TABLE `sys_operation_log`  (
   `opt_location` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '操作地址',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 162 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统操作日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 273 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统操作日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_operation_log
@@ -429,6 +433,8 @@ INSERT INTO `sys_operation_log` VALUES (267, '人脸检测模块', '删除', '�
 INSERT INTO `sys_operation_log` VALUES (268, '人脸检测模块', '新增', '新增', '/dlFaceDetectFile/add', 'POST', 'com.jw_server.controller.deeplearning.DlFaceDetectFileController.add', '[{\"createBy\":\"jingwen\",\"fileName\":\"乔峰阿朱\",\"saveResult\":\"1\",\"createTime\":\"2022-09-23T12:56:10.971299600\",\"updateBy\":\"jingwen\",\"resultFileAddress\":\"\",\"updateTime\":\"2022-09-23T12:56:10.971299600\",\"id\":21,\"fileAddress\":\"/static/upload/deep_learning/face_detect/face_detect_file/to_detect_file/2022-09-23-a8d36ddd07cb4fd4a2e548420fe41010_undetected.jpg\",\"fileType\":\"image\"}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'jingwen', '127.0.0.1', '内网IP', '2022-09-23 12:56:11');
 INSERT INTO `sys_operation_log` VALUES (269, '人脸检测模块', '删除', '删除', '/dlFaceDetectFile/deleteBatch', 'POST', 'com.jw_server.controller.deeplearning.DlFaceDetectFileController.deleteBatch', '[[19]]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'jingwen', '127.0.0.1', '内网IP', '2022-09-23 12:57:09');
 INSERT INTO `sys_operation_log` VALUES (270, '人脸检测模块', '新增', '新增', '/dlFaceDetectFile/add', 'POST', 'com.jw_server.controller.deeplearning.DlFaceDetectFileController.add', '[{\"createBy\":\"jingwen\",\"fileName\":\"郭靖黄蓉\",\"saveResult\":\"1\",\"createTime\":\"2022-09-23T12:57:22.259321200\",\"updateBy\":\"jingwen\",\"resultFileAddress\":\"\",\"updateTime\":\"2022-09-23T12:57:22.259321200\",\"id\":22,\"fileAddress\":\"/static/upload/deep_learning/face_detect/face_detect_file/to_detect_file/2022-09-23-54cff315b44b418e93da275b42a4f47b_undetected.jpg\",\"fileType\":\"image\"}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'jingwen', '127.0.0.1', '内网IP', '2022-09-23 12:57:22');
+INSERT INTO `sys_operation_log` VALUES (271, '人脸库模块', '新增', '新增人脸库', '/dlFaceDatabase/add', 'POST', 'com.jw_server.controller.deeplearning.DlFaceDatabaseController.add', '[{\"faceName\":\"李现\",\"createBy\":\"jingwen\",\"imageName\":\"李现\",\"createTime\":\"2022-09-23T13:51:37.536781700\",\"updateBy\":\"jingwen\",\"imageAddress\":\"/static/upload/deep_learning/face_detect/face_database/defined_face/李现_1.png\",\"remark\":\"\",\"updateTime\":\"2022-09-23T13:51:37.537789800\",\"id\":32}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'jingwen', '127.0.0.1', '内网IP', '2022-09-23 13:51:38');
+INSERT INTO `sys_operation_log` VALUES (272, '人脸检测模块', '删除', '删除', '/dlFaceDetectFile/deleteBatch', 'POST', 'com.jw_server.controller.deeplearning.DlFaceDetectFileController.deleteBatch', '[[21]]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'jingwen', '127.0.0.1', '内网IP', '2022-09-23 15:33:02');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -566,7 +572,7 @@ CREATE TABLE `sys_user`  (
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (7, NULL, 'admin', '$2a$10$CFcSWC9cIEQZIjGC3tCWrOjBifdaER3LOyi9PfkAJRludP3b.sZMy', '系统管理员', '系统管理员', 'admin@admin.com', '15644584597', '男', '/static/upload/avatar/2022-09-22-3d87428a6e4e553c6875d58c593f7c7f.png', '系统管理员,jingwen创建，请勿随便编辑', '2022-09-22 16:27:51', '1', '0', '123', '2022-09-06 14:41:00', 'admin', '2022-09-22 16:28:03');
-INSERT INTO `sys_user` VALUES (8, NULL, 'jingwen', '$2a$10$2bffMPbMd6uUINpEO39Eaev9v3BQpsStQx/Bni26SJOfZ1PIKxRj6', '靖文', '系统管理员', 'jingwen@qq.com', '17965788459', '男', '/static/upload/avatar/2022-09-13-1df66f0dfd0017b90e9dc0fb850224f4.jpeg', '靖文', '2022-09-23 12:55:18', '1', '0', 'admin', '2022-09-06 16:28:54', 'jingwen', '2022-09-13 23:10:11');
+INSERT INTO `sys_user` VALUES (8, NULL, 'jingwen', '$2a$10$2bffMPbMd6uUINpEO39Eaev9v3BQpsStQx/Bni26SJOfZ1PIKxRj6', '靖文', '系统管理员', 'jingwen@qq.com', '17965788459', '男', '/static/upload/avatar/2022-09-13-1df66f0dfd0017b90e9dc0fb850224f4.jpeg', '靖文', '2022-09-23 15:32:46', '1', '0', 'admin', '2022-09-06 16:28:54', 'jingwen', '2022-09-13 23:10:11');
 INSERT INTO `sys_user` VALUES (9, NULL, 'test', '$2a$10$hH9JZDXz9TF2VV4Zz1PfEOAwu3ATteErTOwqSqEZ97JuQ4TLDEGG2', '测试用户', '测试用户', 'test@test.com', '15744859358', '男', '/static/upload/avatar/2022-09-22-e38b8bb8bb5dac520e082160aaa5f4cd.jpg', '测试用户', '2022-09-22 16:28:12', '1', '0', 'admin', '2022-09-06 16:53:24', 'test', '2022-09-22 16:28:33');
 INSERT INTO `sys_user` VALUES (10, NULL, 'test2', '$2a$10$U/Yz11s/IP4mZQ/tB0uqPe2mW5RAyYBM.Dh3K6f/K3FgyduKQIXTq', '测试用户2', '测试用户2', 'tset2@tset2.com', '15845845876', '女', '/static/upload/avatar/2022-09-22-e35c9fe0ffa0ef32f5e7e8ea206f6225.png', '测试用户2，靖文创建', '2022-09-22 16:30:57', '1', '0', 'jingwen', '2022-09-10 22:04:08', 'test2', '2022-09-22 16:31:11');
 INSERT INTO `sys_user` VALUES (14, NULL, 'dluser', '$2a$10$z9cxaj57nM0wVBnG.DqtcONvgojE9vJi0B7mRWi/UcacwD/4OoRtq', '深度学习专用角色', '深度学习专用角色', 'dluser@qq.com', '15845912368', '男', '/static/upload/avatar/2022-09-13-6835aa50df0e535cc5b851d3c99cd8dd.png', '深度学习专用角色', '2022-09-13 16:21:50', '1', '0', 'unknown', '2022-09-13 16:07:48', 'dluser', '2022-09-13 16:21:41');
