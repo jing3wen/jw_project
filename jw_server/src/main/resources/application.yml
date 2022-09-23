@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/jw_project?serverTimezone=GMT%2b8
-    username: 你的用户名
-    password: 你的密码
+    url: jdbc:mysql://101.201.196.173:3307/jw_project?serverTimezone=GMT%2b8
+    username: root
+    password: root
   redis:
     host: 127.0.0.1
     port: 6379
@@ -49,4 +49,4 @@ dlFaceDetect:
 upload:
   mode: local
   local:
-    path: D:/IDEA/project/jw_project/static/upload/
+    path: E:/IDEA/project/jw_project/static/upload/

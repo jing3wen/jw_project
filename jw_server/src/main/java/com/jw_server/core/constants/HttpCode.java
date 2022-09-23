@@ -8,6 +8,7 @@ package com.jw_server.core.constants;
 public class HttpCode {
 
     public static Integer CODE_200 = 200; //成功
+    public static Integer CODE_202 = 202; //一个请求已经进入后台排队（异步任务）
     public static Integer CODE_401 = 401;  // 身份认证验证
     public static Integer CODE_403 = 403;  // 禁止访问, 登录认证使用
     public static Integer CODE_400 = 400;  // 参数错误
