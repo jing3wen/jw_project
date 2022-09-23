@@ -1,9 +1,11 @@
-# jw_project
+## jw_project  jw后台管理系统
+
+ **目前已完成功能: ** 
+ **1. 一个简单的权限管理后台** 
+ **2. 基于FaceNet+ RetinaFace的人脸检测功能** 
 
 #### 介绍
 本项目[ **_码云仓库_** ](https://gitee.com/jing3wen/jw_project)已与[ **_GitHub仓库_** ](https://github.com/jing3wen/jw_project)同步更新，更新以码云仓库为主，有不懂的直接邮箱1584591284@qq.com提问
-
-jw云项目开始啦
 
 打算写一个后台管理系统，将写过的所有项目进行整合
 
