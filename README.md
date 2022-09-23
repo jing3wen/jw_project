@@ -1,6 +1,8 @@
 # jw_project
 
 #### 介绍
+本项目已与GitHub仓库[https://github.com/jing3wen/jw_project](https://github.com/jing3wen/jw_project)同步更新
+
 jw云项目开始啦
 
 打算写一个后台管理系统，将写过的所有项目进行整合
