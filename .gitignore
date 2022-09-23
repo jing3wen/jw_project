@@ -22,4 +22,6 @@ target
 *.sln
 *.sw?
 
-static
+
+static/upload/*
+package-lock.json
