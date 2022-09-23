@@ -43,7 +43,9 @@
                     :fit="'contain'"
                     :preview-src-list="[scope.row.fileAddress]">
           </el-image>
-          <el-button type="text" v-if="scope.row.fileType==='video'" @click="openVideoDialog(scope.row.fileAddress)"> 播放视频</el-button>
+          <el-button type="text" v-if="scope.row.fileType==='video'" @click="openVideoDialog(scope.row.fileAddress)">
+            <i class="el-icon-video-play"/> 播放视频
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column prop="detectStatus" label="检测状态" width="100px" align="center">
@@ -68,7 +70,9 @@
                     :preview-src-list="[scope.row.resultFileAddress]"
                     v-if="scope.row.detectStatus === 2 && scope.row.fileType === 'image'">
           </el-image>
-          <el-button type="text" v-if="scope.row.fileType==='video'" @click="openVideoDialog(scope.row.resultFileAddress)"> 播放视频</el-button>
+          <el-button type="text" v-if="scope.row.detectStatus === 2 && scope.row.fileType==='video' " @click="openVideoDialog(scope.row.resultFileAddress)">
+            <i class="el-icon-video-play"/> 播放视频
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column prop="resultMsg" label="检测结果描述" width="300px" align="center"></el-table-column>

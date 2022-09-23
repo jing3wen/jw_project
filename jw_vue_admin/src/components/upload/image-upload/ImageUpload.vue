@@ -14,7 +14,9 @@
       </el-upload>
       <div class="el-upload-list el-upload-list--picture-card" v-if="imageUrl">
         <div class="el-upload-list__item is-success" style="display:flex; justify-content: center;">
-          <el-image v-if="imageUrl" :src="imageUrl" :fit="'contain'" style="justify-content: center; align-items: center;"></el-image>
+          <el-image v-if="imageUrl && fileType === 'image'" :src="imageUrl" :fit="'contain'"
+                    style="justify-content: center; align-items: center;"></el-image>
+          <video v-if="imageUrl && fileType === 'video'" :src="imageUrl"></video>
           <span class="el-upload-list__item-actions">
             <span class="el-upload-list__item-preview" >
               <i class="el-icon-zoom-in" @click="handleImagePreview()"></i>
@@ -32,16 +34,22 @@
     <el-dialog :visible="dialogImgVisible" :append-to-body="true" @close="dialogImgVisible = false">
       <el-image :src="imageUrl" fit="'contain'" style="width:100%"></el-image>
     </el-dialog>
+
+    <video-player :f_video-url="f_videoUrl"
+                  :f_open-video.sync="f_openVideo">
+    </video-player>
   </div>
 </template>
 
 <script>
-
+import {getFileType} from "@/assets/js/common"
+import VideoPlayer from "@/components/video-player/VideoPlayer";
 /**
  * 图片上传组件
  */
 export default {
   name: "ImageUpload",
+  components:{VideoPlayer},
   props:{
     f_action: '',
     f_fileTypeLimit: {
@@ -61,6 +69,11 @@ export default {
       dialogImageUrl:'',
       loadProgress: 0, // 动态显示进度条
       progressFlag: false, // 关闭进度条
+      fileType:'',
+
+      //视频预览
+      f_videoUrl:'',
+      f_openVideo:false
     }
   },
   computed:{
@@ -109,6 +122,7 @@ export default {
     },
     handleUploadSuccess(res){
       this.$message.success('上传成功')
+      this.fileType = getFileType(res.data)
       this.imageUrl = res.data
     },
     handleRemoveImage(){
@@ -121,7 +135,11 @@ export default {
     },
     //图片预览
     handleImagePreview(){
-      this.dialogImgVisible = true
+      if(this.fileType==='image') this.dialogImgVisible = true
+      else if(this.fileType === 'video') {
+        this.f_videoUrl = this.imageUrl
+        this.f_openVideo = true
+      }
     },
 
     //进度条
