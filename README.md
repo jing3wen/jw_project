@@ -1,7 +1,7 @@
 # jw_project
 
 #### 介绍
-本项目已与GitHub仓库[https://github.com/jing3wen/jw_project](https://github.com/jing3wen/jw_project)同步更新
+本项目[ **_码云仓库_** ](https://gitee.com/jing3wen/jw_project)已与[ **_GitHub仓库_** ](https://github.com/jing3wen/jw_project)同步更新
 
 jw云项目开始啦
 
