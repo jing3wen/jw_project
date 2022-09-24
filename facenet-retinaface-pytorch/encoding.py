@@ -1,6 +1,6 @@
 import os
 
-from retinaface import Retinaface
+from model.retinaface import Retinaface
 from socket_config import face_library
 '''
 在更换facenet网络后一定要重新进行人脸编码，运行encoding.py。

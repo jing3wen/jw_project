@@ -49,4 +49,4 @@ dlFaceDetect:
 upload:
   mode: local
   local:
-    path: E:/IDEA/project/jw_project/static/upload/
+    path: D:/IDEA/project/jw_project/static/upload/

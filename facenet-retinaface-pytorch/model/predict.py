@@ -9,8 +9,6 @@ import cv2
 import numpy as np
 
 from retinaface import Retinaface
-from utils.student_utils import *
-
 
 def model_predict(mode="video", video_path=0, video_save_path="", video_fps=25.0, test_interval=100,
                   dir_origin_path="img/", dir_save_path="img_out/"):
@@ -114,24 +112,15 @@ def model_predict(mode="video", video_path=0, video_save_path="", video_fps=25.0
 
             frame, recognition_face_list = retinaface.detect_image(frame)
 
-            # len(recognition_face_list)可以理解为当前学生抬头人数，student_sum表示整个过程最大学生数
-            current_student_num = len(recognition_face_list)
-            student_total = max(len(recognition_face_list), student_total)
-
             frame = np.array(frame)
             # RGBtoBGR满足opencv显示格式
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
             fps = (fps + (1. / (time.time() - t1))) / 2
             print(f'fps= {fps:.2f};  '
-                  f'facenet识别出{len(recognition_face_list)}张人脸:{recognition_face_list}  '
-                  f'抬头率={current_student_num}/{student_total}={current_student_num/student_total}')
+                  f'facenet识别出{len(recognition_face_list)}张人脸:{recognition_face_list}  ')
 
-            # 根据识别的学生人脸更新其上课得分
-            if current_student_num != 0:
-                update_student_course_score(student_course_score_dict, recognition_face_list)
-
-            frame = cv2.putText(frame, "fps= %.2f,rise_rate= %.2f" % (fps,current_student_num / student_total), (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            frame = cv2.putText(frame, "fps= %.2f, recognition_face_num= %.2f" % (fps, len(recognition_face_list)), (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
             cv2.imshow("video", frame)
             c = cv2.waitKey(1) & 0xff

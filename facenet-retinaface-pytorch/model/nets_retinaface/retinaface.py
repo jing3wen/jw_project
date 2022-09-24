@@ -4,8 +4,8 @@ import torch.nn.functional as F
 import torchvision.models._utils as _utils
 from torchvision import models
 
-from nets_retinaface.layers import FPN, SSH
-from nets_retinaface.mobilenet025 import MobileNetV1
+from model.nets_retinaface.layers import FPN, SSH
+from model.nets_retinaface.mobilenet025 import MobileNetV1
 
 
 class ClassHead(nn.Module):
@@ -17,7 +17,7 @@ class ClassHead(nn.Module):
     def forward(self,x):
         out = self.conv1x1(x)
         out = out.permute(0,2,3,1).contiguous()
-        
+
         return out.view(out.shape[0], -1, 2)
 
 class BboxHead(nn.Module):
@@ -54,7 +54,7 @@ class RetinaFace(nn.Module):
         if cfg['name'] == 'mobilenet0.25':
             backbone = MobileNetV1()
             if pre_train:
-                checkpoint = torch.load("./model_data/mobilenetV1X0.25_pretrain.tar", map_location=torch.device('cpu'))
+                checkpoint = torch.load("model/model_data/mobilenetV1X0.25_pretrain.tar", map_location=torch.device('cpu'))
                 from collections import OrderedDict
                 new_state_dict = OrderedDict()
                 for k, v in checkpoint['state_dict'].items():
@@ -88,7 +88,7 @@ class RetinaFace(nn.Module):
         for i in range(fpn_num):
             classhead.append(ClassHead(inchannels,anchor_num))
         return classhead
-    
+
     def _make_bbox_head(self,fpn_num=3,inchannels=64,anchor_num=2):
         bboxhead = nn.ModuleList()
         for i in range(fpn_num):

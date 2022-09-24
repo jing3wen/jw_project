@@ -1,8 +1,8 @@
 import torch.nn as nn
 from torch.nn import functional as F
 
-from nets.inception_resnetv1 import InceptionResnetV1
-from nets.mobilenet import MobileNetV1
+from model.nets.inception_resnetv1 import InceptionResnetV1
+from model.nets.mobilenet import MobileNetV1
 
 
 class mobilenet(nn.Module):
@@ -38,8 +38,8 @@ class inception_resnet(nn.Module):
         x = self.model.repeat_3(x)
         x = self.model.block8(x)
         return x
-        
-    
+
+
 class Facenet(nn.Module):
     def __init__(self, backbone="mobilenet", dropout_keep_prob=0.5, embedding_size=128, num_classes=None, mode="train"):
         super(Facenet, self).__init__()

@@ -4,15 +4,13 @@
 # @Author  : jingwen
 # @File    : SocketService.py
 # @Desc:   : 将预测代码拆开封装成接口供java客户端调用
-import os
 import time
 
 import cv2
 import numpy as np
 
-from retinaface import Retinaface
+from model.retinaface import Retinaface
 from apiResponse.ApiResponse import ApiResponse
-from utils.student_utils import update_student_course_score
 from encoding import encoding
 
 from socket_config import *
@@ -27,11 +25,6 @@ class SocketService(object):
     # 内部函数
     def get_file_save_path(self, image_path):
         file_name = os.path.basename(image_path)  # jingwen_undetected.jpg
-        # if (image_path.find("classroom_file_detection") != -1):
-        #     save_directory = image_path.replace('classroom_file_detection',
-        #                                         'classroom_file_detection_result', 1).replace(file_name, '', 1)
-        # else:
-        #     save_directory = image_path.replace('to_detect_file', 'detect_file_result', 1).replace(file_name, '', 1)
         save_directory = detection_result
         if not os.path.exists(save_directory):
             os.makedirs(save_directory)
@@ -40,7 +33,7 @@ class SocketService(object):
         return save_image_path
 
     # 检测图片
-    def predictImage(self, image_path="", save_iamge=False):
+    def predictImage(self, image_path="", save_image=False):
         print("检测图片，image_path=", image_path, )
         image = cv2.imread(image_path)
         if image is None:
@@ -49,7 +42,7 @@ class SocketService(object):
         else:
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             r_image, recognition_face_list = self.retinaface.detect_image(image)
-            print(f'facenet识别出{len(recognition_face_list)}张人脸:{recognition_face_list}')
+            print(f'FaceNet识别出{len(recognition_face_list)}张人脸:{recognition_face_list}')
 
             # r_image = cv2.cvtColor(r_image, cv2.COLOR_RGB2BGR)
             # cv2.imshow("after", r_image)
@@ -59,26 +52,28 @@ class SocketService(object):
             data.setdefault('recognition_face_list', recognition_face_list)
 
             # 是否保存检测图片
-            if save_iamge == True:
+            if save_image:
                 r_image = cv2.cvtColor(r_image, cv2.COLOR_RGB2BGR)
                 save_file_path = self.get_file_save_path(image_path)
                 cv2.imwrite(save_file_path, r_image)
                 data.setdefault('save_file_path', save_file_path)
-                print('保存检测结果: '+save_file_path)
+                print('保存检测结果: ' + save_file_path)
             return ApiResponse(code=200, message="识别成功", data=data)
 
     # 检测视频,完成学生正脸检测，并返回最终得分
     def predictVideo(self, video_path="", save_video=False, video_fps=30):
         print("检测视频，video_path=", video_path)
-        student_total = 1  # 识别出的最多人数，用于计算抬头率，主要用于视频检测
+
         data = {}
         # 防止传入数据为摄像头
         if video_path == 0:
             return ApiResponse(code=500, message="该方法为检测视频，请更换摄像头检测方法")
-        student_course_score_dict = {}  # 为学生上课得分字典
+        all_recognition_face_list = []  # 为检测到的所有人脸
 
         capture = cv2.VideoCapture(video_path)
-        if save_video == True:
+        # 视频保存路径
+        video_save_path = ''
+        if save_video:
             video_save_path = self.get_file_save_path(video_path)
             # 视频的编码
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -105,8 +100,6 @@ class SocketService(object):
             # 镜头水平反转代码
             """
             # frame = cv2.flip(frame, 180)
-
-            # 每1s检测一次
             recognition_face_list = []
             if (current_ref % frameRate == 0):
                 t1 = time.time()
@@ -114,11 +107,7 @@ class SocketService(object):
                 # 格式转变，BGRtoRGB
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 # 进行检测
-
                 frame, recognition_face_list = self.retinaface.detect_image(frame)
-                # len(recognition_face_list)可以理解为当前学生抬头人数，student_sum表示整个过程最大学生数
-                current_student_num = len(recognition_face_list)
-                student_total = max(current_student_num, student_total)
 
                 frame = np.array(frame)
                 # RGBtoBGR满足opencv显示格式
@@ -126,20 +115,20 @@ class SocketService(object):
 
                 fps = (fps + (1. / (time.time() - t1))) / 2
                 print(f'fps= {fps:.2f};  '
-                      f'facenet识别出{len(recognition_face_list)}张人脸:{recognition_face_list}  '
-                      f'抬头率={current_student_num}/{student_total}={current_student_num / student_total}')
+                      f'facenet识别出{len(recognition_face_list)}张人脸:{recognition_face_list}  ')
 
-                # 根据识别的学生人脸更新其上课得分
-                if current_student_num != 0:
-                    update_student_course_score(student_course_score_dict, recognition_face_list)
-
-                frame = cv2.putText(frame, "fps= %.2f,rise_rate= %.2f" % (fps, current_student_num / student_total),
+                # 根据当前帧识别的人脸 更新总识别人脸数
+                if len(recognition_face_list) != 0:
+                    for face_name in recognition_face_list:
+                        if face_name not in all_recognition_face_list:
+                            all_recognition_face_list.append(face_name)
+                frame = cv2.putText(frame, "fps= %.2f, recognition_num= %d" % (fps, len(recognition_face_list)),
                                     (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             current_ref += 1
 
-            cv2.imshow("video", frame)
+            # cv2.imshow("video", frame)
             c = cv2.waitKey(1) & 0xff
-            if save_video == True:
+            if save_video:
                 out.write(frame)
 
             if c == 27:
@@ -154,14 +143,13 @@ class SocketService(object):
             video_add_voice_config=True 表示添加
             video_add_voice_config=False 表示不添加      
             """
-            if video_add_voice_config == True:
+            if video_add_voice_config:
                 video_save_path = video_add_voice(video_save_path, video_path)
             print("Save processed video to the path :" + video_save_path)
         cv2.destroyAllWindows()
 
         data.setdefault('save_file_path', video_save_path)
-        data.setdefault('recognition_face_list', recognition_face_list)
-        data.setdefault('student_course_score_dict', student_course_score_dict)
+        data.setdefault('recognition_face_list', all_recognition_face_list)
         return ApiResponse(code=200, message="视频检测完成", data=data)
 
     # 给数据库人脸编码
@@ -169,26 +157,7 @@ class SocketService(object):
         encoding()
         # 更新初始化的retinaface的人脸库信息
         self.retinaface.known_face_encodings = np.load(
-            "model_data/{backbone}_face_encoding.npy".format(backbone=self.retinaface.facenet_backbone))
+            "model/model_data/{backbone}_face_encoding.npy".format(backbone=self.retinaface.facenet_backbone))
         self.retinaface.known_face_names = np.load(
-            "model_data/{backbone}_names.npy".format(backbone=self.retinaface.facenet_backbone))
+            "model/model_data/{backbone}_names.npy".format(backbone=self.retinaface.facenet_backbone))
         return ApiResponse(code=200, message='人脸库更新成功')
-
-
-"""
-from socket_config import file_detection
-
-a = SocketService().predictImage(
-    "D:/SpringBoot_v2-master_upload/my_upload/file_detection/huge_undetected.png",
-    save_iamge=True)
-print(a.code, a.message, a.data)
-"""
-"""
-from socket_config import file_detection
-
-a = SocketService().predictVideo(
-    "D:/SpringBoot_v2-master_upload/my_upload/file_detection/huge_undetected.mp4",
-    save_video=True)
-print(a.code, a.message, a.data)
-
-"""
