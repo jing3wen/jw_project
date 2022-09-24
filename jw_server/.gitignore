@@ -1,5 +1,6 @@
 .idea
 target
+application.yml
 jw_server.iml
 rebel.xml
 rebel-remote.xml
