@@ -17,6 +17,7 @@ public class TestService {
     }
 
 
+    @Async
     public void TestAsync(){
 
         System.out.println("异步执行开始");
