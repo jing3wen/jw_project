@@ -35,6 +35,9 @@
   **jw_server** 是java后端， 
 
   **jw_vue_admin** 是vue前端
+
+  **static/upload** 是上传的文件路径，注意springboot的配置文件application.yml里面要修改你的数据库信息和你本地的上传文件路径
+
 ![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E7%9B%AE%E5%BD%95.png)
 
 2. webStorm或者别的开发软件打开vue项目，安装依赖，运行
