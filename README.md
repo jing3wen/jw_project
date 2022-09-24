@@ -8,6 +8,7 @@
 
 
 #### 介绍
+
 本项目[ **_码云仓库_** ](https://gitee.com/jing3wen/jw_project)已与[ **_GitHub仓库_** ](https://github.com/jing3wen/jw_project)同步更新，更新以码云仓库为主，有不懂的直接邮箱1584591284@qq.com提问
 
 **注意：** 我不能保证每次提交代码都更新数据库sql文件，所以当前的数据库sql文件和static中的文件可能对应不上，我大概每周更新一次数据库sql文件，若急需，给我发邮件获取
@@ -16,35 +17,55 @@
 
 其他内容后续补上
 
-#### 软件架构
-软件架构说明
-
+#### 开发环境
+ 
+    1.java 17   （java8也行）
+    2.vue2 
+    3.python3.8
+    4.pytorch10+cuda11
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+深度学习环境啥的建议自己配置
+
+1.  直接把整个项目下载下来，按如下目录
+![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E7%9B%AE%E5%BD%95.png)
+
+facenet-retinaface-pytorch是人脸检测项目，jw_server是java后端， jw_vue_admin是vue前端
+
+2.  webStorm或者别的开发软件打开vue项目，安装依赖，运行，
+IDEA打开jw_server，安装maven依赖，直接运行项目
+pyCharm打开facenet-retinaface-pytorch，运行 socket_to_java.py，开启python的socket服务器
+
+3.浏览器输入输入 [http://localhost:10090/login](http://)，开始运行项目吧🤣🤣🤣
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+ **1.  登陆界面** 
+
+![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E5%B0%81%E9%9D%A2.png)
+
+ **2.  用户管理** 
+![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png)
+
+ **3.  菜单管理** 
+![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E8%8F%9C%E5%8D%95%E7%AE%A1%E7%90%86.png)
+ 
+**4.  操作日志** 
+![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%97.png)
+
+ **5.  人脸库** 
+![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E4%BA%BA%E8%84%B8%E5%BA%93.png)
+
+ **6.  检测文件** 
+![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E4%B8%8A%E4%BC%A0%E6%A3%80%E6%B5%8B%E6%96%87%E4%BB%B6.png)
+![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E6%A3%80%E6%B5%8B%E6%95%88%E6%9E%9C.png)
+
 
 #### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+1.  贡献人：沈靖文
+2.  邮箱 1584591284@qq.com
 
 
-#### 特技
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+
