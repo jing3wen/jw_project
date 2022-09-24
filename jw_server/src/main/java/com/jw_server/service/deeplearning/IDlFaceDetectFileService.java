@@ -46,9 +46,16 @@ public interface IDlFaceDetectFileService extends IService<DlFaceDetectFile> {
     void deleteFaceDetectFile(List<Integer> ids);
 
     /**
-     * Description: 检测文件
+     * Description: 获取检测状态
      * Author: jingwen
      * Date: 2022/9/22 22:33
      **/
-    ResponseResult detectFaceFile(DlFaceDetectFile detectFile);
+    Integer getDetectStatus(Integer detectFileId);
+
+    /**
+     * Description: 异步检测文件
+     * Author: jingwen
+     * Date: 2022/9/24 11:55
+     **/
+    void asyncDetectedFile(DlFaceDetectFile detectFile);
 }

@@ -54,6 +54,7 @@ public class SecurityConfig{
                  **/
                 .antMatchers("/login/userLogin").anonymous()
                 .antMatchers("/sysUser/register").permitAll()
+                .antMatchers("/test/*").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .anyRequest().authenticated()  //任意请求认证后都能访问
                 .and()

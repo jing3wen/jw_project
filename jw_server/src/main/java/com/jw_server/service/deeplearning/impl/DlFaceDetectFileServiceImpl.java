@@ -101,39 +101,10 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
     }
 
     @Override
-    public ResponseResult detectFaceFile(DlFaceDetectFile detectFile) {
+    public Integer getDetectStatus(Integer detectFileId) {
 
         //TODO 此处用redis比较好
-        Integer detectStatus = dlFaceDetectFileMapper.getFileDetectStatus(detectFile.getId());
-        if(detectStatus==1){
-            return ResponseResult.error(HttpCode.CODE_202,"文件正在检测中, 请稍等");
-        }
-        if(detectStatus == 2){
-            return ResponseResult.success("文件检测完成");
-        }
-        if(detectStatus == -1){
-            return ResponseResult.error(HttpCode.CODE_400,"文件检测失败");
-        }
-        /**
-         * jingwen:
-         * 此处调用socket对文件进行检测
-         * res格式: {
-         * 				"code":200
-         *              "message":"识别成功"
-         *              "data":{
-         *              		"recognition_face_list": ["yuwenxing"],
-         *              		"save_file_path": "D:/SpringBoot_v2-master_upload/my_upload/detection_result/jingwen_detected.jpg"
-         *              		//视频时  'recognition_face_list': [],
-         *              	    //	     'student_course_score_dict': {'lixian': 2773, 'huge': 4148, 'wangyibo': 1}
-         *              	    //		 "save_file_path": "D:/SpringBoot_v2-master_upload/my_upload/detection_result/123/123/jingwen_detected.jpg"
-         *
-         *              	}
-         *
-         *
-         *          }
-         * **/
-        asyncDetectedFile(detectFile);
-        return ResponseResult.error(HttpCode.CODE_202,"文件正在检测中, 请稍等");
+        return dlFaceDetectFileMapper.getFileDetectStatus(detectFileId);
     }
 
     /**
@@ -161,6 +132,24 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
      **/
     @Async
     public void asyncDetectedFile(DlFaceDetectFile detectFile){
+        /**
+         * jingwen:
+         * 此处调用socket对文件进行检测
+         * res格式: {
+         * 				"code":200
+         *              "message":"识别成功"
+         *              "data":{
+         *              		"recognition_face_list": ["yuwenxing"],
+         *              		"save_file_path": "D:/SpringBoot_v2-master_upload/my_upload/detection_result/jingwen_detected.jpg"
+         *              		//视频时  'recognition_face_list': [],
+         *              	    //	     'student_course_score_dict': {'lixian': 2773, 'huge': 4148, 'wangyibo': 1}
+         *              	    //		 "save_file_path": "D:/SpringBoot_v2-master_upload/my_upload/detection_result/123/123/jingwen_detected.jpg"
+         *
+         *              	}
+         *
+         *
+         *          }
+         * **/
         //开始检测, 更新文件检测状态 0(未检测) -> 1(检测中)
         dlFaceDetectFileMapper.updateFileDetectStatus(detectFile.getId(), 1);
 
