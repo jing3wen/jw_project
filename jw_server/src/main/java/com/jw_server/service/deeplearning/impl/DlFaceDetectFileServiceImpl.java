@@ -19,6 +19,7 @@ import com.jw_server.dao.deeplearning.mapper.DlFaceDetectFileMapper;
 import com.jw_server.service.deeplearning.IDlFaceDetectFileService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -131,6 +132,35 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
          *
          *          }
          * **/
+        asyncDetectedFile(detectFile);
+        return ResponseResult.error(HttpCode.CODE_202,"文件正在检测中, 请稍等");
+    }
+
+    /**
+     * Description: 修改检测文件名称
+     * /static/upload/path1/name1.jpg  ->  /static/upload/path1/name1_undetected.jpg
+     * Author: jingwen
+     * Date: 2022/9/13 20:23
+     **/
+    public String getNewDetectedFileAddress(String fileUrl){
+        /*
+         * 重命名文件名
+         * /static/upload/define_face/65sga72s462n.jpg  ->  /static/upload/define_face/65sga72s462n_undetected.jpg
+         **/
+        String originalFileName = FileNameUtil.getPrefix(fileUrl);
+        String newFileNameUrl = fileUrl.replace(originalFileName, originalFileName+"_undetected");
+        fileUploadUtils.fileRename(fileUrl, newFileNameUrl);
+        return newFileNameUrl;
+    }
+
+
+    /**
+     * Description: 异步调用检测请求
+     * Author: jingwen
+     * Date: 2022/9/24 10:55
+     **/
+    @Async
+    public void asyncDetectedFile(DlFaceDetectFile detectFile){
         //开始检测, 更新文件检测状态 0(未检测) -> 1(检测中)
         dlFaceDetectFileMapper.updateFileDetectStatus(detectFile.getId(), 1);
 
@@ -179,24 +209,6 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
         detectFile.setResultFileAddress(file_detected_url);
         detectFile.setResultMsg("检测到的人脸: "+recognitionFaceList.toString());
         updateById(detectFile);
-        return ResponseResult.success("检测完成");
-    }
-
-    /**
-     * Description: 修改检测文件名称
-     * /static/upload/path1/name1.jpg  ->  /static/upload/path1/name1_undetected.jpg
-     * Author: jingwen
-     * Date: 2022/9/13 20:23
-     **/
-    public String getNewDetectedFileAddress(String fileUrl){
-        /*
-         * 重命名文件名
-         * /static/upload/define_face/65sga72s462n.jpg  ->  /static/upload/define_face/65sga72s462n_undetected.jpg
-         **/
-        String originalFileName = FileNameUtil.getPrefix(fileUrl);
-        //TODO 后续版本中对人脸库可以取消同名限制，改成自动添加后缀修改
-        String newFileNameUrl = fileUrl.replace(originalFileName, originalFileName+"_undetected");
-        fileUploadUtils.fileRename(fileUrl, newFileNameUrl);
-        return newFileNameUrl;
+        //TODO 检测视频过程很长，检测完成前，前端的axios报异常会超时，后续可通过webSocket主动向前端发送消息
     }
 }
