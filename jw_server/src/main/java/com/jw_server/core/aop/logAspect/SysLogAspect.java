@@ -124,7 +124,8 @@ public class SysLogAspect {
             /*
               Description:请求参数(过滤敏感信息)
              */
-            sysOperationLog.setRequestParam(strFilter(JSON.toJSONString(joinPoint.getArgs())));
+            if(sysLog.saveRequestParam())
+                sysOperationLog.setRequestParam(strFilter(JSON.toJSONString(joinPoint.getArgs())));
             /*
              * Description:响应结果
              */
@@ -135,7 +136,8 @@ public class SysLogAspect {
             }
             if(e == null){
                 //响应正常
-                sysOperationLog.setResponseResult(respParam);
+                if(sysLog.saveResponseData())
+                    sysOperationLog.setResponseResult(respParam);
             }else {
                 //响应异常
                 sysOperationLog.setStatus(1);

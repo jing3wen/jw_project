@@ -88,7 +88,7 @@ public class DlFaceDetectFileController {
      * Author: jingwen
      * Date: 2022/9/13 17:23
      **/
-    @SysLog(logModule=DlFaceDetectFileModule, logType = UPLOAD, logDesc = "上传检测图片")
+    @SysLog(logModule=DlFaceDetectFileModule, logType = UPLOAD, logDesc = "上传检测图片", saveRequestParam = false)
     @PostMapping("/uploadFaceDetectFile")
     public ResponseResult uploadFaceDetectFile(@RequestParam MultipartFile file){
         logger.info(DlFaceDetectFileModule+"--上传检测文件");

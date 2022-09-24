@@ -17,6 +17,7 @@ import com.jw_server.dao.deeplearning.dto.QueryDlFaceDetectFileDTO;
 import com.jw_server.dao.deeplearning.entity.DlFaceDetectFile;
 import com.jw_server.dao.deeplearning.mapper.DlFaceDetectFileMapper;
 import com.jw_server.service.deeplearning.IDlFaceDetectFileService;
+import com.jw_server.service.system.ISysUserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.jw_server.core.constants.FaceDetectConst.*;
@@ -43,6 +45,9 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
 
     @Resource
     private DetectFileUtils detectFileUtils;
+
+    @Resource
+    private ISysUserService sysUserService;
 
     @Resource
     private DlFaceDetectFileMapper dlFaceDetectFileMapper;
@@ -197,6 +202,8 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
         detectFile.setDetectStatus(2);
         detectFile.setResultFileAddress(file_detected_url);
         detectFile.setResultMsg("检测到的人脸: "+recognitionFaceList.toString());
+        detectFile.setUpdateBy(sysUserService.getCurrentLoginUser().getUsername());
+        detectFile.setUpdateTime(LocalDateTime.now());
         updateById(detectFile);
         //TODO 检测视频过程很长，检测完成前，前端的axios报异常会超时，后续可通过webSocket主动向前端发送消息
     }

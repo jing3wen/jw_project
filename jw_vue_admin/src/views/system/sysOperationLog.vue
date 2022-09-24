@@ -57,8 +57,8 @@
       <el-table-column prop="optUser" label="操作人" width="100px" align="center"></el-table-column>
       <el-table-column prop="optIp" label="操作ip" width="180px" align="center"></el-table-column>
       <el-table-column prop="optLocation" label="操作地点"  width="200px" align="center"></el-table-column>
-      <el-table-column prop="createTime" label="操作时间" width="180px" align="center"></el-table-column>
-      <el-table-column prop="operate" label="操作" fixed="right" align="center">
+      <el-table-column prop="createTime" label="操作时间" min-width="180px" align="center"></el-table-column>
+      <el-table-column prop="operate" label="操作" width="180px" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button type="text" class="el-icon-view pl-10" @click="openAddOrEditDialog(scope.row)">详情</el-button>
           <el-button type="text" class="el-icon-delete pl-10" @click="deleteRows(scope.row.id)"

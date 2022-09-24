@@ -43,8 +43,8 @@
           <span v-if="scope.row.status===1" style="color:red;">{{scope.row.loginMsg}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="登录时间" width="180px" align="center"></el-table-column>
-      <el-table-column prop="operate" label="操作" fixed="right" align="center">
+      <el-table-column prop="createTime" label="登录时间" min-width="180px" align="center"></el-table-column>
+      <el-table-column prop="operate" label="操作" width="180px" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button type="text" class="el-icon-view pl-10" @click="openAddOrEditDialog(scope.row)">详情</el-button>
           <el-button type="text" class="el-icon-delete pl-10" @click="deleteRows(scope.row.id)"

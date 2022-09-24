@@ -93,7 +93,7 @@ public class DlFaceDatabaseController {
      * Author: jingwen
      * Date: 2022/9/13 17:23
      **/
-    @SysLog(logModule=DlFaceDatabaseModule, logType = UPLOAD, logDesc = "上传人脸图片")
+    @SysLog(logModule=DlFaceDatabaseModule, logType = UPLOAD, logDesc = "上传人脸图片", saveRequestParam = false)
     @PostMapping("/uploadFaceDatabase")
     public ResponseResult uploadFaceImage(@RequestParam MultipartFile file){
         logger.info(DlFaceDatabaseModule+"--上传人脸图片");

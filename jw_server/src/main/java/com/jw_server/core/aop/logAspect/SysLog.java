@@ -26,4 +26,14 @@ public @interface SysLog {
      * Description: 日志说明
      **/
     String logDesc() default "";
+
+    /**
+     * Description: 保存请求参数
+     **/
+    boolean saveRequestParam() default true;
+
+    /**
+     * Description: 保存响应结果
+     **/
+    boolean saveResponseData() default true;
 }
