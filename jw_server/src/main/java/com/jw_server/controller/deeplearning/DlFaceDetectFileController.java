@@ -70,27 +70,6 @@ public class DlFaceDetectFileController {
         return ResponseResult.success();
     }
 
-    /**
-     * Description 查询所有数据
-     * Author jingwen
-     * Date 2022-09-22 17:31:09
-     **/
-    @GetMapping("/findAll")
-    public ResponseResult findAll() {
-        return ResponseResult.success(dlFaceDetectFileService.list());
-    }
-
-    /**
-     * Description 根据id查询数据
-     * Author jingwen
-     * Date 2022-09-22 17:31:09
-     **/
-    @GetMapping("/findOne")
-    public ResponseResult findOne(@RequestParam Integer id) {
-        return ResponseResult.success(dlFaceDetectFileService.getById(id));
-    }
-
-
 
     /**
      * Description 分页查询
@@ -108,6 +87,7 @@ public class DlFaceDetectFileController {
      * Author: jingwen
      * Date: 2022/9/13 17:23
      **/
+    @SysLog(logModule=DlFaceDetectFileModule, logType = UPLOAD, logDesc = "上传检测图片")
     @PostMapping("/uploadFaceDetectFile")
     public ResponseResult uploadFaceDetectFile(@RequestParam MultipartFile file){
         logger.info(DlFaceDetectFileModule+"--上传检测文件");
@@ -120,10 +100,11 @@ public class DlFaceDetectFileController {
      * Author: jingwen
      * Date: 2022/9/22 19:13
      **/
+    @SysLog(logModule = DlFaceDetectFileModule, logType = DELETE, logDesc = "删除上传的检测文件")
     @GetMapping("/deleteFaceDetectFile")
-    public ResponseResult deleteFaceDetectFile(@RequestParam String imageUrl){
-        logger.info(DlFaceDetectFileModule+"--删除上传的检测文件:"+imageUrl);
-        fileUploadUtils.fileDelete(imageUrl);
+    public ResponseResult deleteFaceDetectFile(@RequestParam String fileUrl){
+        logger.info(DlFaceDetectFileModule+"--删除上传的检测文件:"+fileUrl);
+        fileUploadUtils.fileDelete(fileUrl);
         return ResponseResult.success();
     }
 
@@ -132,6 +113,7 @@ public class DlFaceDetectFileController {
      * Author: jingwen
      * Date: 2022/9/22 22:28
      **/
+    @SysLog(logModule = DlFaceDetectFileModule, logType = UPDATE, logDesc = "检测文件")
     @PostMapping("/detectFaceFile")
     public ResponseResult detectFaceFile(@RequestBody DlFaceDetectFile detectFile){
         return dlFaceDetectFileService.detectFaceFile(detectFile);

@@ -70,14 +70,14 @@
       <el-card class="border-radius-25">
         <el-form :model="dialogForm" ref="dialogForm" :rules="dialogFormRules" label-width="100px" label-position="right">
           <el-form-item label="上传人脸" prop="imageAddress">
-            <image-upload
+            <image-video-upload
                 ref="image-upload"
                 :f_action.sync="action"
-                :f_image-url.sync="dialogForm.imageAddress"
-                :f_remove-image-url="removeImageUrl"
+                :f_file-url.sync="dialogForm.imageAddress"
+                :f_remove-file-url="removeImageUrl"
                 :f_file-type-limit="faceTypeList"
                 :f_file-size-limit="faceSizeLimit">
-            </image-upload>
+            </image-video-upload>
           </el-form-item>
           <el-row>
             <el-col :span="12">
@@ -107,11 +107,11 @@
 <script>
 import Pagination from "@/components/pagination/Pagination";
 import {faceSizeLimit, faceTypeList} from "@/assets/js/config";
-import ImageUpload from "@/components/upload/image-upload/ImageUpload";
+import ImageVideoUpload from "@/components/upload/imageVideoUpload/ImageVideoUpload";
 
 export default {
   name: "dlFaceDatabase",
-  components:{Pagination, ImageUpload},
+  components:{Pagination, ImageVideoUpload},
   data() {
     return {
       // 查询表单

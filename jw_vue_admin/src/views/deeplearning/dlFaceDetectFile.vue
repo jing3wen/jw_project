@@ -101,15 +101,15 @@
       <el-card class="border-radius-25">
         <el-form :model="dialogForm" ref="dialogForm" :rules="dialogFormRules" label-width="100px">
           <el-form-item label="检测文件:" prop="fileAddress" v-if="dialogTitle === '添加文件'">
-            <image-upload
+            <image-video-upload
                 ref="image-upload"
                 :f_action.sync="action"
-                :f_image-url.sync="dialogForm.fileAddress"
-                :f_remove-image-url="removeDetectFileUrl"
+                :f_file-url.sync="dialogForm.fileAddress"
+                :f_remove-file-url="removeDetectFileUrl"
                 :f_fileTypeLimit="detectFileTypeList"
                 :f_fileSizeLimit="detectFileSizeLimit"
             >
-            </image-upload>
+            </image-video-upload>
           </el-form-item>
           <el-form-item label="文件类型:">
             <el-tag v-if="dialogForm.fileType === 'image' ">图片</el-tag>
@@ -151,14 +151,14 @@
 
 <script>
 import Pagination from "@/components/pagination/Pagination";
-import ImageUpload from "@/components/upload/image-upload/ImageUpload";
+import ImageVideoUpload from "@/components/upload/imageVideoUpload/ImageVideoUpload";
 import VideoPlayer from "@/components/video-player/VideoPlayer";
 import {detectFileTypeList, detectFileSizeLimit} from "@/assets/js/config";
 import {getFileType} from "@/assets/js/common"
 
 export default {
   name: "dlFaceDetectFile",
-  components:{Pagination, ImageUpload, VideoPlayer},
+  components:{Pagination, ImageVideoUpload, VideoPlayer},
   data() {
     return {
       // 查询表单

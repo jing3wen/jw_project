@@ -2,6 +2,8 @@ package com.jw_server.controller.deeplearning;
 
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.core.common.ResponseResult;
+import com.jw_server.core.constants.HttpCode;
+import com.jw_server.core.exception.ServiceException;
 import com.jw_server.core.fileUpload.FileUploadUtils;
 import com.jw_server.core.utils.socketToPython.DetectFileUtils;
 import com.jw_server.dao.deeplearning.dto.QueryDlFaceDataDTO;
@@ -76,26 +78,6 @@ public class DlFaceDatabaseController {
     }
 
     /**
-     * Description 查询所有数据
-     * Author jingwen
-     * Date 2022-09-13 17:21:26
-     **/
-    @GetMapping("/findAll")
-    public ResponseResult findAll() {
-        return ResponseResult.success(dlFaceDatabaseService.list());
-    }
-
-    /**
-     * Description 根据id查询数据
-     * Author jingwen
-     * Date 2022-09-13 17:21:26
-     **/
-    @GetMapping("/findOne")
-    public ResponseResult findOne(@RequestParam Integer id) {
-        return ResponseResult.success(dlFaceDatabaseService.getById(id));
-    }
-
-    /**
      * Description 分页查询
      * Author jingwen
      * Date 2022-09-13 17:21:26
@@ -111,6 +93,7 @@ public class DlFaceDatabaseController {
      * Author: jingwen
      * Date: 2022/9/13 17:23
      **/
+    @SysLog(logModule=DlFaceDatabaseModule, logType = UPLOAD, logDesc = "上传人脸图片")
     @PostMapping("/uploadFaceDatabase")
     public ResponseResult uploadFaceImage(@RequestParam MultipartFile file){
         logger.info(DlFaceDatabaseModule+"--上传人脸图片");
@@ -123,11 +106,12 @@ public class DlFaceDatabaseController {
      * Author: jingwen
      * Date: 2022/9/14 11:48
      **/
+    @SysLog(logModule=DlFaceDatabaseModule, logType = DELETE, logDesc = "删除上传的人脸图片")
     @GetMapping("/deleteFaceImage")
-    public ResponseResult deleteFaceImage(@RequestParam String imageUrl){
-        logger.info(DlFaceDatabaseModule+"--删除上传的人脸图片:"+imageUrl);
-        dlFaceDatabaseService.updateImageAddressWhenDeleteFile(imageUrl);
-        fileUploadUtils.fileDelete(imageUrl);
+    public ResponseResult deleteFaceImage(@RequestParam String fileUrl){
+        logger.info(DlFaceDatabaseModule+"--删除上传的人脸图片:"+fileUrl);
+        dlFaceDatabaseService.updateImageAddressWhenDeleteFile(fileUrl);
+        fileUploadUtils.fileDelete(fileUrl);
         return ResponseResult.success();
     }
 
@@ -136,9 +120,14 @@ public class DlFaceDatabaseController {
      * Author: jingwen
      * Date: 2022/9/22 22:10
      **/
+    @SysLog(logModule=DlFaceDatabaseModule, logType = UPDATE, logDesc = "手动更新检测服务器人脸库")
     @GetMapping("/updateFaceDatabase")
     public ResponseResult updateFaceDatabase(){
-        detectFileUtils.remoteCall_update_face_dataset();
+        try{
+            detectFileUtils.remoteCall_update_face_dataset();
+        }catch(Exception e){
+            throw new ServiceException(HttpCode.CODE_400, "调用检测服务器异常");
+        }
         return ResponseResult.success();
     }
 }

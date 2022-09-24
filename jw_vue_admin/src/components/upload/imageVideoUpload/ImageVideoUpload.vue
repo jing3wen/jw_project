@@ -9,19 +9,19 @@
           :before-upload="onBeforeUpload"
           :on-success="handleUploadSuccess"
           :on-progress="uploadVideoProcess"
-          v-if="!imageUrl">
+          v-if="!fileUrl">
         <i class="el-icon-plus"></i>
       </el-upload>
-      <div class="el-upload-list el-upload-list--picture-card" v-if="imageUrl">
+      <div class="el-upload-list el-upload-list--picture-card" v-if="fileUrl">
         <div class="el-upload-list__item is-success" style="display:flex; justify-content: center;">
-          <el-image v-if="imageUrl && fileType === 'image'" :src="imageUrl" :fit="'contain'"
+          <el-image v-if="fileUrl && fileType === 'image'" :src="fileUrl" :fit="'contain'"
                     style="justify-content: center; align-items: center;"></el-image>
-          <video v-if="imageUrl && fileType === 'video'" :src="imageUrl"></video>
+          <video v-if="fileUrl && fileType === 'video'" :src="fileUrl"></video>
           <span class="el-upload-list__item-actions">
             <span class="el-upload-list__item-preview" >
               <i class="el-icon-zoom-in" @click="handleImagePreview()"></i>
             </span>
-            <span class="el-upload-list__item-delete" v-if="f_removeImageUrl">
+            <span class="el-upload-list__item-delete" v-if="f_removeFileUrl">
               <i class="el-icon-delete" @click="handleRemoveImage()"></i>
             </span>
           </span>
@@ -32,7 +32,7 @@
     </el-card>
     <span v-if="f_fileTypeLimit.length !== 0">只能上传  {{f_fileTypeLimit.toString()}}  文件，且大小不超过 {{f_fileSizeLimit}} MB</span>
     <el-dialog :visible="dialogImgVisible" :append-to-body="true" @close="dialogImgVisible = false">
-      <el-image :src="imageUrl" fit="'contain'" style="width:100%"></el-image>
+      <el-image :src="fileUrl" fit="'contain'" style="width:100%"></el-image>
     </el-dialog>
 
     <video-player :f_video-url="f_videoUrl"
@@ -48,7 +48,7 @@ import VideoPlayer from "@/components/video-player/VideoPlayer";
  * 图片上传组件
  */
 export default {
-  name: "ImageUpload",
+  name: "ImageVideoUpload",
   components:{VideoPlayer},
   props:{
     f_action: '',
@@ -60,29 +60,28 @@ export default {
       type: Number,
       default: 0,
     },
-    f_imageUrl:'',
-    f_removeImageUrl:'',
+    f_fileUrl:'',
+    f_removeFileUrl:'',
   },
   data() {
     return {
-      dialogImgVisible : false,
-      dialogImageUrl:'',
       loadProgress: 0, // 动态显示进度条
       progressFlag: false, // 关闭进度条
       fileType:'',
-
+      //图片预览
+      dialogImgVisible : false,
       //视频预览
       f_videoUrl:'',
       f_openVideo:false
     }
   },
   computed:{
-    imageUrl: {
+    fileUrl: {
       get() {
-        return this.f_imageUrl
+        return this.f_fileUrl
       },
       set(val) {
-        this.$emit('update:f_imageUrl', val)
+        this.$emit('update:f_fileUrl', val)
       }
     },
     config(){
@@ -123,13 +122,13 @@ export default {
     handleUploadSuccess(res){
       this.$message.success('上传成功')
       this.fileType = getFileType(res.data)
-      this.imageUrl = res.data
+      this.fileUrl = res.data
     },
     handleRemoveImage(){
-      this.request.get(this.f_removeImageUrl,  {params:{imageUrl: this.imageUrl}}).then(res =>{
+      this.request.get(this.f_removeFileUrl,  {params:{fileUrl: this.fileUrl}}).then(res =>{
         if(res.code === 200){
           this.$message.info("已清空上传图片")
-          this.imageUrl = ''
+          this.fileUrl = ''
         }else this.$message.error(res.msg)
       })
     },
@@ -137,11 +136,10 @@ export default {
     handleImagePreview(){
       if(this.fileType==='image') this.dialogImgVisible = true
       else if(this.fileType === 'video') {
-        this.f_videoUrl = this.imageUrl
+        this.f_videoUrl = this.fileUrl
         this.f_openVideo = true
       }
     },
-
     //进度条
     uploadVideoProcess(event, file, fileList) {
       this.progressFlag = true; // 显示进度条

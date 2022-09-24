@@ -54,7 +54,11 @@ request.interceptors.response.use(
         return res;
     },
     error => {
-        Element.Message.error('请求错误: '+error)
+        if (error.message.includes( 'timeout' )){
+            
+            Element.Message.error('网络请求超时');
+        }
+        else Element.Message.error('请求错误: '+error)
         return Promise.reject(error)
     }
 )
