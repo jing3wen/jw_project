@@ -28,16 +28,22 @@
 
 深度学习环境啥的建议自己配置
 
-1.  直接把整个项目下载下来，按如下目录
+1. 直接把整个项目下载下来，按如下目录
+
+  **facenet-retinaface-pytorch** 是人脸检测项目，
+
+  **jw_server** 是java后端， 
+
+  **jw_vue_admin** 是vue前端
 ![输入图片说明](%E7%B3%BB%E7%BB%9F%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88/%E7%9B%AE%E5%BD%95.png)
 
-facenet-retinaface-pytorch是人脸检测项目，jw_server是java后端， jw_vue_admin是vue前端
+2. webStorm或者别的开发软件打开vue项目，安装依赖，运行
 
-2.  webStorm或者别的开发软件打开vue项目，安装依赖，运行，
-IDEA打开jw_server，安装maven依赖，直接运行项目
-pyCharm打开facenet-retinaface-pytorch，运行 socket_to_java.py，开启python的socket服务器
+   IDEA打开jw_server，安装maven依赖，直接运行项目
 
-3.浏览器输入输入 [http://localhost:10090/login](http://)，开始运行项目吧🤣🤣🤣
+   PyCharm打开facenet-retinaface-pytorch，运行 socket_to_java.py，开启python的socket服务器
+
+3. 浏览器输入输入 [http://localhost:10090/login](http://)，开始运行项目吧🤣🤣🤣
 
 #### 使用说明
 
