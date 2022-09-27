@@ -1,6 +1,8 @@
 package com.jw_server.core.utils.socketToPython;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jw_server.core.constants.HttpCode;
+import com.jw_server.core.exception.ServiceException;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -59,6 +61,10 @@ public class DetectFileUtils {
             return res;
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO 后期开发写一些异常常量字
+            if(e.getMessage().equals("Connection refused: connect")){
+                throw new RuntimeException("Connection refused: connect");
+            }
         } finally {
             try {if(socket!=null) socket.close();} catch (IOException e) {}
             System.out.println("远程接口调用结束.");

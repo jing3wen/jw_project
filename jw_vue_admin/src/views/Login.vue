@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       user: {
-        username: "jingwen",
+        username: "演示用户",
         password: "123456",
       },
       rules: {

@@ -1,3 +1,7 @@
+//演示用户标志
+export const showRole = '演示角色'
+
+
 
 export const initPassword = '123456'
 

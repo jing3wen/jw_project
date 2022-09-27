@@ -3,6 +3,7 @@ package com.jw_server.controller.deeplearning;
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.core.common.ResponseResult;
 import com.jw_server.core.constants.HttpCode;
+import com.jw_server.core.exception.ServiceException;
 import com.jw_server.core.fileUpload.FileUploadUtils;
 import com.jw_server.dao.deeplearning.dto.QueryDlFaceDetectFileDTO;
 import com.jw_server.dao.deeplearning.entity.DlFaceDetectFile;
@@ -128,7 +129,12 @@ public class DlFaceDetectFileController {
         if(detectStatus == -1){
             return ResponseResult.error(HttpCode.CODE_400,"文件检测失败");
         }
-        dlFaceDetectFileService.asyncDetectedFile(detectFile);
+        try{
+            dlFaceDetectFileService.asyncDetectedFile(detectFile);
+        }catch(Exception e){
+            throw new ServiceException(HttpCode.CODE_400, "调用检测服务器异常");
+        }
+
         return ResponseResult.error(HttpCode.CODE_202,"文件正在检测中, 请稍等");
     }
 }
