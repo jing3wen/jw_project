@@ -1,5 +1,7 @@
 ## jw_project  jw后台管理系统
 
+觉得好用就点个star吧 :pray: ，不喜欢的可以骂，没必要划走 :punch: 
+
  **目前已完成功能:** 
 
  **1. 一个简单的springboot+vue权限管理后台** 
