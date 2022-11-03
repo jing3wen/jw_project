@@ -96,5 +96,16 @@ public class SysMenuController {
         return ResponseResult.success(sysMenuService.getMenuPageList(querySysMenuDTO));
     }
 
+
+    /**
+     * Description: 根据用户id查询该用户的路由信息(目录和子菜单)
+     * Author: jingwen
+     * Date: 2022/11/3 20:17
+     **/
+    @GetMapping("/getMenusAndDirectoryByUserId")
+    public ResponseResult getMenusAndDirectoryByUserId(Integer userId){
+        return ResponseResult.success(sysMenuService.selectMenusAndDirectoryByUserId(userId,true));
+    }
+
 }
 

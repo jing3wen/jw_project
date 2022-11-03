@@ -22,4 +22,10 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      **/
     List<SysRole> selectAllRoleByUserId(Integer userId);
 
+
+    /**
+     * 根据用户id查询所有角色名
+     */
+    List<String> selectRoleNameListByUserId(Integer userId);
+
 }

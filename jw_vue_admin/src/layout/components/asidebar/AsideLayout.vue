@@ -49,7 +49,7 @@ export default {
   data(){
     return{
       isCollapse:false,
-      menus: this.$store.state.user.currentLoginUser.menuAndDirectoryList,
+      menus: this.$store.state.user.menuAndDirectoryTree,
 
     }
   },

@@ -13,4 +13,14 @@
             ur.user_id = #{userId};
 
     </select>
+    <select id="selectRoleNameListByUserId" resultType="java.lang.String">
+        SELECT
+            DISTINCT r.role_name
+        FROM
+            sys_user_role ur
+                LEFT JOIN sys_role r ON ur.role_id = r.id
+        WHERE
+            ur.user_id = #{userId}
+            AND r.is_deleted=0 AND r.status=1;
+    </select>
 </mapper>

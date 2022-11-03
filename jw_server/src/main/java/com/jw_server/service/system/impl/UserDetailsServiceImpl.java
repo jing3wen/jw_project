@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -36,9 +37,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private SysUserMapper sysUserMapper;
 
     @Resource
-    private SysUserRoleMapper sysUserRoleMapper;
-
-    @Resource
     private SysRoleMapper sysRoleMapper;
 
     @Resource
@@ -50,6 +48,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 查询用户信息
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysUser::getUsername, username);
+        queryWrapper.select(SysUser::getId,
+                SysUser::getUsername,
+                SysUser::getPassword,
+                SysUser::getNickname,
+                SysUser::getAvatar,
+                SysUser::getStatus);
         SysUser queryUser = sysUserMapper.selectOne(queryWrapper);
         /*
          * Description:
@@ -73,42 +77,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     public UserDetailsVO createLoginSysUserVO(SysUser queryUser){
         //查询用户所有角色信息
-        List<String> roleList = new ArrayList<>();
-        List<Integer> roleIds = sysUserRoleMapper.selectRoleIdByUserId(queryUser.getId());
-        for(Integer roleId : roleIds){
-            LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(SysRole::getId, roleId);
-            queryWrapper.eq(SysRole::getStatus, "1");
-            queryWrapper.select(SysRole::getRoleName);
-            if(sysRoleMapper.selectOne(queryWrapper)!=null){
-                roleList.add(sysRoleMapper.selectOne(queryWrapper).getRoleName());
-            }
-
-        }
-
-        //查询所有菜单信息（目录，菜单，按钮）
-        List<SysMenuVO> menuVOList = sysMenuService.selectMenusByUserId(queryUser.getId(), false);
+        List<String> roleList = sysRoleMapper.selectRoleNameListByUserId(queryUser.getId());
         //存储所有权限按钮
-        List<String> permissionList = new ArrayList<>();
-        //存储菜单目录树
-        List<SysMenuVO> menuAndDirectoryTree = new ArrayList<>();
-        if(menuVOList.size()>0){
-            //取出所有菜单信息的按钮
-            List<SysMenuVO> permissionMenuVOList = menuVOList.stream().filter(menuVO -> menuVO.getMenuType().equals("button")).collect(Collectors.toList());
-            for (SysMenuVO permissionMenuVO: permissionMenuVOList){
-                //防止数据库中有错误的数据
-                if(StrUtil.isNotEmpty(permissionMenuVO.getPerms()))
-                    permissionList.add(permissionMenuVO.getPerms());
-            }
-
-            //取出所有菜单信息的目录和菜单，并构建成菜单树
-            List<SysMenuVO> menuAndDirectoryList = menuVOList.stream()
-                    .filter(menuVO -> menuVO.getMenuType().equals("directory")||menuVO.getMenuType().equals("menu"))
-                    .collect(Collectors.toList());
-            menuAndDirectoryTree = sysMenuService.buildTree(menuAndDirectoryList);
-        }
-
-
+        List<String> permissionList = sysMenuService.selectPermissionsByUserId(queryUser.getId());
         // 把数据封装成UserDetails返回
         return UserDetailsVO.builder()
                 .id(queryUser.getId())
@@ -118,7 +89,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .avatarUrl(queryUser.getAvatar())
                 .roleList(roleList)
                 .permissionList(permissionList)
-                .menuAndDirectoryList(menuAndDirectoryTree)
                 .build();
     }
 }

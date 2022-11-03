@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       user: {
-        username: "演示用户",
+        username: "jingwen",
         password: "123456",
       },
       rules: {
@@ -62,11 +62,9 @@ export default {
           this.request.post("/api/login/userLogin", this.user).then(res => {
             if(res.code === 200) {
               this.$store.commit("user/loginUser", res.data)
-              //动态设置当前登录用户的路由
-              setRoute()
               this.$message.success("登录成功")
-              this.loginLoading = false
-              this.$router.push("/index")
+              //加载路由信息
+              this.getMenusAndDirectoryByUserId()
             }
             else {
               this.$message.error(res.msg)
@@ -79,6 +77,22 @@ export default {
     },
     openRegisterDrawer(){
       this.$store.commit('user/changeRegisterDrawerVisable')
+    },
+    getMenusAndDirectoryByUserId(){
+      this.request.get('/api/sysMenu/getMenusAndDirectoryByUserId',
+          {params: {userId : this.$store.state.user.currentLoginUser.id}}
+      ).then(res=>{
+        if(res.code === 200) {
+          this.$store.state.user.menuAndDirectoryTree = res.data
+          //动态设置当前登录用户的路由
+          setRoute()
+          this.loginLoading = false
+          this.$router.push("/index")
+        }else {
+          this.$message.error(res.msg)
+        }
+
+      })
     }
   }
 }

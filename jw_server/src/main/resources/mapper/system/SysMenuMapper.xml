@@ -14,11 +14,25 @@
         WHERE
             ur.user_id=#{userId}
           AND r.is_deleted=0 AND r.status=1
-          AND m.is_deleted=0 AND m.status=1
+          AND m.is_deleted=0 AND m.visible=1
           AND m.menu_type = 'button';
 
     </select>
+    <select id="selectMenusAndDirectoryByUserId" resultType="com.jw_server.dao.system.entity.SysMenu">
+        SELECT
+            DISTINCT m.id, m.parent_id, m.menu_name, m.menu_type, m.icon, m.path, m.component, m.is_frame, m.menu_sort
+        FROM
+            sys_user_role ur
+                LEFT JOIN sys_role r ON ur.role_id=r.id
+                LEFT JOIN sys_role_menu rm ON ur.role_id=rm.role_id
+                LEFT JOIN sys_menu m ON rm.menu_id = m.id
 
+        WHERE
+            ur.user_id=#{userId}
+          AND r.is_deleted=0 AND r.status=1
+          AND m.is_deleted=0 AND m.visible=1
+          AND m.menu_type IN ('menu','directory');
+    </select>
 
 
 </mapper>

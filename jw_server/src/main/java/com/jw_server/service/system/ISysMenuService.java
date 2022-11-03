@@ -35,7 +35,14 @@ public interface ISysMenuService extends IService<SysMenu> {
      * @param buildTree
      * @return
      */
-    List<SysMenuVO> selectMenusByUserId(Integer userId, Boolean buildTree);
+    List<SysMenuVO> selectMenusAndDirectoryByUserId(Integer userId, Boolean buildTree);
+
+    /**
+     * Description: 根据用户id查询所有权限按钮
+     * Author: jingwen
+     * Date: 2022/11/3 18:06
+     **/
+    List<String> selectPermissionsByUserId(Integer userId);
 
     /**
      * @Description 根据输入的所有数据构建树

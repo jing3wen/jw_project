@@ -25,6 +25,8 @@ import com.jw_server.dao.system.vo.UserDetailsVO;
 import com.jw_server.service.system.ISysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +39,7 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 
 /**
@@ -63,6 +66,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Value("${jwt.data.jwtTtl}")
     private String tokenTime;
 
+    private static final Log logger = LogFactory.getLog(SysUserServiceImpl.class);
+
 
     /**
      * Description: 用户登录方法，校验验证码功能在LoginController中完成，所以该方法只是认证username和password
@@ -78,7 +83,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         try {
             authenticateResult = authenticationManager.authenticate(authenticationToken);
         } catch (Exception e) {
-//            System.out.println(e);
+            logger.error(e);
             if(e.getMessage().equals("用户名不存在"))
                 throw new ServiceException(HttpCode.CODE_403,"用户名不存在");
             else if(e.getMessage().equals("用户已被停用"))
@@ -214,13 +219,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LoginUserVO loginUserVO = LoginUserVO.builder()
                 .id(userDetailsVO.getId())
                 .username(userDetailsVO.getUsername())
-                .password(userDetailsVO.getPassword())
                 .nickname(userDetailsVO.getNickname())
                 .avatarUrl(userDetailsVO.getAvatarUrl())
                 .roleList(userDetailsVO.getRoleList())
                 .token(userDetailsVO.getToken())
                 .permissionList(userDetailsVO.getPermissionList())
-                .menuAndDirectoryList(userDetailsVO.getMenuAndDirectoryList())
                 .build();
         return loginUserVO;
     }

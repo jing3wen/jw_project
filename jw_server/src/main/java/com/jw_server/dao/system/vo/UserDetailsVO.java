@@ -41,9 +41,6 @@ public class UserDetailsVO implements UserDetails {
     // permissions只有权限按钮，没有权限菜单
     private List<String> permissionList;
 
-    // 用户权限菜单信息, 不含权限按钮
-    private List<SysMenuVO> menuAndDirectoryList;
-
 
     @JSONField(serialize = false)  // authorities不加入到redis中，不然编译会出bug，
     private List<SimpleGrantedAuthority> authorities;

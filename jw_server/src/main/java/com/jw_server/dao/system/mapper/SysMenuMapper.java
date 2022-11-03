@@ -17,10 +17,20 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
 
     /**
-     * Description: 根据用户id查村权限按钮，多表查询sys_user_role, sys_role, sys_role_menu, sys_menu
+     * Description: 根据用户id查询权限按钮，多表查询sys_user_role, sys_role, sys_role_menu, sys_menu
      * Author: jingwen
      * Date: 2022/8/30 20:36
      **/
     List<String> selectPermissionsByUserId(Integer userId);
+
+
+    /**
+     * Description: 根据用户id查询目录和子菜单，多表查询 sys_user_role, sys_role, sys_role_menu, sys_menu
+     * Author: jingwen
+     * Date: 2022/11/3 19:46
+     **/
+    List<SysMenu> selectMenusAndDirectoryByUserId(Integer userId);
+
+
 
 }

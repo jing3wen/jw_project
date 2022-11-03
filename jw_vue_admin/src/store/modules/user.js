@@ -6,6 +6,8 @@ const state = {
     currentLoginUser:{
 
     },  //存储当前登录的用户信息
+
+    menuAndDirectoryTree:[]  //存储当前登录用户的目录和子菜单
 }
 
 const getters = {
@@ -22,7 +24,8 @@ const mutations = {
     logout(state) {
         //重置登陆用户状态
         state.currentLoginUser = {}
-        //重置标签栏
+        state.menuAndDirectoryTree = []
+            //重置标签栏
         store.commit('layout/resetTab')
     }
 }

@@ -22,7 +22,6 @@ public class LoginUserVO {
 
     private String username;
 
-    private String password;
 
     private String nickname;
 
@@ -35,6 +34,4 @@ public class LoginUserVO {
     // permissions只有权限按钮，没有权限菜单
     private List<String> permissionList;
 
-    // 用户权限菜单信息, 不含权限按钮
-    private List<SysMenuVO> menuAndDirectoryList;
 }

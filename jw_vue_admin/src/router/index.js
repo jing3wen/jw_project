@@ -35,7 +35,7 @@ const router = new VueRouter({
 export const setRoute = () =>{
 
     //返回的数据为列表
-    const userMenus = readForestBFS(store.state.user.currentLoginUser.menuAndDirectoryList, 'menu')
+    const userMenus = readForestBFS(store.state.user.menuAndDirectoryTree, 'menu')
     if(userMenus.length > 0){
         // 获取当前的路由对象名称数组
         const currentRouteNames = router.getRoutes().map(v => v.name)

@@ -17,11 +17,6 @@ import java.util.List;
 public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
 
     /**
-     * 根据用户id查询所有角色id
-     */
-    List<Integer> selectRoleIdByUserId(Integer userId);
-
-    /**
      * Description: 根据用户id删除所有绑定的角色
      * Author: jingwen
      * Date: 2022/9/6 9:04

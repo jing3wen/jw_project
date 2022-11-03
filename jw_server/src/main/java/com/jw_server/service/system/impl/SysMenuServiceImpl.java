@@ -33,6 +33,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     private SysUserRoleMapper sysUserRoleMapper;
     @Resource
     private SysRoleMenuMapper sysRoleMenuMapper;
+    @Resource
+    private SysMenuMapper sysMenuMapper;
 
 
     public List<SysMenuVO> getMenuPageList(QuerySysMenuDTO querySysMenuDTO) {
@@ -89,38 +91,21 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     /**
-     * 根据用户id查询所有菜单(目录，菜单，按钮)，根据参数是否判断需要构建成树结构
+     * 根据用户id查询所有  目录和子菜单，根据参数是否判断需要构建成树结构
      * @param userId
      * @param buildTree
      * @return
      */
     @Override
-    public List<SysMenuVO> selectMenusByUserId(Integer userId, Boolean buildTree) {
-        //查询该用户的所有角色ids
-        List<Integer> roleIds = sysUserRoleMapper.selectRoleIdByUserId(userId);
-        //根据所有角色ids查询关联的菜单id
-        List<Integer> menuIds = new ArrayList<>();
-        for(Integer roleId : roleIds){
-             List<Integer> ids= sysRoleMenuMapper.selectMenuByRoleId(roleId);
-             ids.forEach(mid->{
-                 menuIds.add(mid);
-             });
-        }
-        //去除关联的菜单id列表中重复数据
-        List<Integer> distinctMenuIds = menuIds.stream().distinct().collect(Collectors.toList());
-
-        //查询菜单表中所有未删除的数据
-        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysMenu::getIsDeleted,"0");
-        List<SysMenu> menuList = list(queryWrapper);
+    public List<SysMenuVO> selectMenusAndDirectoryByUserId(Integer userId, Boolean buildTree) {
+        //根据用户id查询所有子菜单和目录
+        List<SysMenu> menuList = sysMenuMapper.selectMenusAndDirectoryByUserId(userId);
         List<SysMenuVO> menuVOList = new ArrayList<>();
 
         for (SysMenu menu: menuList){
-            if(distinctMenuIds.contains(menu.getId())){
-                SysMenuVO menuVO = new SysMenuVO();
-                BeanUtil.copyProperties(menu, menuVO);
-                menuVOList.add(menuVO);
-            }
+            SysMenuVO menuVO = new SysMenuVO();
+            BeanUtil.copyProperties(menu, menuVO);
+            menuVOList.add(menuVO);
         }
         if(buildTree)
             return buildTree(menuVOList);
@@ -128,6 +113,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return menuVOList;
     }
 
+    /**
+     * Description: 根据用户id查询所有权限按钮
+     * Author: jingwen
+     * Date: 2022/11/3 18:06
+     **/
+    public List<String> selectPermissionsByUserId(Integer userId){
+
+        return sysMenuMapper.selectPermissionsByUserId(userId);
+    }
 
 
     /**
@@ -155,10 +149,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             buildChildTree(root, menuVOList);
         }
 
-        //对根节点按menuSort排序
-//        rootNodelist = rootNodelist.stream()
-//                .sorted(Comparator.comparingInt(menu -> (menu.getMenuSort() == null ? 0 : menu.getMenuSort())))
-//                .collect(Collectors.toList());
         return rootNodelist;
     }
 
