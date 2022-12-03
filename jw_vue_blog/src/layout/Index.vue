@@ -7,11 +7,14 @@
       </el-header>
       <!-- 主要的 -->
       <el-main class="layout-main">
-        <div class="fade-transform-box">
-          <Transition name="fade-transform" mode="out-in">
-            <MainContext></MainContext>
-          </Transition>
-        </div>
+<!--        <div class="fade-transform-box">-->
+<!--          <router-view v-slot="{ Component }">-->
+<!--            <transition name="fade-transform" mode="out-in">-->
+<!--              <component :is="Component" />-->
+<!--            </transition>-->
+<!--          </router-view>-->
+<!--        </div>-->
+        <router-view></router-view>
       </el-main>
       <!-- 页尾\页脚 -->
       <el-footer class="layout_footer">
@@ -30,11 +33,11 @@
 import Header from "./header/Header";
 import Copyright from "./footer/Copyright";
 import BackTop from "./BackTop";
-import MainContext from "./mainContext/MainContext";
+
 
 export default {
   name: "Index",
-  components:{MainContext, BackTop, Copyright, Header},
+  components:{BackTop, Copyright, Header},
   data(){
     return {
 

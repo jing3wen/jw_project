@@ -19,5 +19,16 @@ app.use(ElementPlus, { locale })
 for (let iconName in ELIcons) {
     app.component(iconName, ELIcons[iconName])
 }
+
+
+//创建v-highlight全局指令
+app.directive('highlight', function (el) {
+    let blocks = el.querySelectorAll('pre code');
+    blocks.forEach((block) => {
+        hljs.highlightBlock(block)
+        // 从这开始是设置行号
+        block.innerHTML = `<ol><li>${block.innerHTML.replace(/\n/g, `</li><li class="line">`)}</li></ol>`;
+    })
+})
 app.config.globalProperties.request = request
 app.use(store).use(router).mount('#app')
