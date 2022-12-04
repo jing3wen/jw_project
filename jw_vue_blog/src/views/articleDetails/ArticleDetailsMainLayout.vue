@@ -16,20 +16,20 @@
               <p class="articleInfo">
                 <!-- 作者 -->
                 <span><el-icon><User /></el-icon>
-                  {{articleInfo.userName}}
+                  {{articleInfo.nickName}}
                 </span>
                 <!-- 时间 -->
                 <span><el-icon><Timer /></el-icon>
-                  {{articleInfo.publishTime}}
+                  {{articleInfo.createTime}}
                 </span>
                 <!-- 分类 -->
                 <span><el-icon><FolderOpened /></el-icon>
-                  {{articleInfo.articleClassifyName}}
+                  {{articleInfo.categoryName}}
                 </span>
                 <!-- 浏览量 -->
                 <span>
                   <el-icon><View /></el-icon>
-                  {{articleInfo.click}}
+                  {{articleInfo.viewCounts}}
                 </span>
               </p>
             </div>
@@ -42,6 +42,9 @@
             </div>
             <!-- 文章尾部 -->
             <div class="articleFloot">
+              <p v-if="(articleInfo.updateTime)">
+                作者最后更新时间: {{articleInfo.updateTime}}
+              </p>
               <p>
                 版权声明：本站所提供的图文等内容部分源于网络，仅供学习参考，如有侵权，联系删除。转载本站内容请注明相关出处。
               </p>
@@ -52,15 +55,19 @@
           </div>
 
           <!-- 评论区 判断作者是否开启评论 -->
-          <CommentSection v-if="articleInfo.commentState === 1" :f_articleInfo="articleInfo"></CommentSection>
+          <div v-if="articleInfo.commentAllowed === '1'">
+            <CommentSection v-if="articleInfo.commentAllowed === '1'" :f_articleInfo="articleInfo"></CommentSection>
+          </div>
+          <div v-else class="commentBox" >
+            <span>作者已关闭评论区</span>
+          </div>          
         </el-col>
         <el-col class="hidden-sm-and-down" :md="6" :lg="6" :xl="6">
           <!-- 其他内容 -->
 
           <!-- 搜索功能 -->
           <SearchCard></SearchCard>
-          <!-- Featured精选 -->
-          <Featured></Featured>
+        
         </el-col>
       </el-row>
     </el-col>
@@ -74,7 +81,7 @@
 import SearchCard from "@/components/searchCard/SearchCard";
 import Featured from "@/components/featured/Featured";
 import CommentSection from "../../components/commentSection/CommentSection";
-import {formatDate} from "../../utils/common";
+import {getYearMonthDay} from "../../utils/common";
 import {useRoute} from "vue-router";
 
 export default {
@@ -102,35 +109,52 @@ export default {
       }
       //TODO 文章浏览量+1，可以由后端业务代码完成
       // 点击的文章浏览量+1
-      this.request.get("/api/article/updateArticleClick", {params}).then(res => {
+      // this.request.get("/api/article/updateArticleClick", {params}).then(res => {
 
-      })
+      // })
       //查询该文章数据
-      this.request.get("http://localhost:80/article/showArticleInfo", {params}).then(res => {
+      this.request.get("http://localhost:9090/blogArticle/front/getBlogFrontArticleDetails", {params}).then(res => {
+        
         // 查询的文章数据
-        let article = res[0];
+        let article = res.data;
 
+        if(!this.verifyArticleVisible(article)){
+          this.$notify({
+            title: '您无权查看该文章',
+            message: '该文章作者设置为仅自己可见',
+            type: 'error',
+            position: 'top-left',
+            offset: 100,
+          })
+          return
+        }
         // 网页标题 = 当前文章标题
         document.title = article.articleTitle
-        // 时间戳格式化
-        let time = article.publishTime; // 当前发布文章的时间戳
-        const date = new Date(time); // 初始化日期
-        const month = date.getMonth() + 1; // 获取月份
-        const day = date.getDate(); // 获取具体日
-        article.publishTime = formatDate(time) +
-            ("(" +
-                (month < 10 ? ("0" + month) : month) // 三元表达式 日期小于10加上0 例如01
-                +
-                "-" + day + ")"); // 简化时间 输出格式例如 3天前(7.28)
+        // 时间格式化
+        article.createTime = getYearMonthDay(article.createTime)
         // 图片 根url
         const url = process.env.VUE_APP_URL;
         // 缩略图 判断是点击上传的还是，网络图片
-        if (article.articleImgLitimg !== "" && !article.articleImgLitimg.includes('http') && !article.articleImgLitimg.includes('https')) {
-          article.articleImgLitimg = url + article.articleImgLitimg
+        if (article.articleCover !== "" && !article.articleCover.includes('http') && !article.articleCover.includes('https')) {
+          article.articleCover = url + article.articleCover
         }
         this.articleInfo = article
       })
 
+    },
+    verifyArticleVisible(article){
+      //TODO 验证当前文章是否只有自己能查看
+      //当前文章所有人可看
+      if(article.articleVisible === '1'){
+        return true
+      }
+      //当前文章只有自己（或管理员）能查看
+      let loginUserId=7
+      let loginRole = 'user'
+      if(loginUserId === article.userId || loginRole=== 'admin'){
+          return true
+      }
+      return false
     },
 
 
@@ -199,5 +223,17 @@ export default {
   box-sizing: border-box;
   overflow: hidden;
   align-items: center;
+}
+
+.commentBox {
+  height: auto;
+  overflow: hidden;
+  background-color: white;
+  padding: 25px;
+  color: #474749;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bolder;
 }
 </style>

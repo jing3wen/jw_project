@@ -24,15 +24,24 @@ public class MyPageVO<T> {
 
     private List<T> records;
 
-    public MyPageVO setMyPageVO(Long pages, Long current, Long size, Long total,List<T> records) {
-        MyPageVO myPageVO = new MyPageVO();
-        myPageVO.setPages(pages);
-        myPageVO.setCurrent(current);
-        myPageVO.setSize(size);
-        myPageVO.setTotal(total);
-        myPageVO.setRecords(records);
-        return myPageVO;
+    public MyPageVO(IPage<T> iPage){
+        this.pages = iPage.getPages();
+        this.current = iPage.getCurrent();
+        this.size = iPage.getSize();
+        this.total = iPage.getTotal();
+        this.records = iPage.getRecords();
     }
+
+    public MyPageVO(Long pages, Long current, Long size, Long total,List<T> records) {
+        this.pages = pages;
+        this.current = current;
+        this.size = size;
+        this.total = total;
+        this.records = records;
+
+    }
+
+
 
 
 }

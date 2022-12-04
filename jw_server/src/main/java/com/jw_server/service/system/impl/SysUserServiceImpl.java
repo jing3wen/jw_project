@@ -183,7 +183,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         });
 
 
-        MyPageVO<SysUserVO> myPageVO = new MyPageVO<SysUserVO>().setMyPageVO(userIPage.getPages(),
+        MyPageVO<SysUserVO> myPageVO = new MyPageVO(userIPage.getPages(),
                 userIPage.getCurrent(),
                 userIPage.getSize(),
                 userIPage.getTotal(),

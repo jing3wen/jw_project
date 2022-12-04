@@ -62,6 +62,9 @@ public class IpUtils {
         } catch (Exception e) {
             ipAddress = "";
         }
+        if(ipAddress .equals("0:0:0:0:0:0:0:1") ){
+            ipAddress = "127.0.0.1";
+        }
         return ipAddress;
     }
 

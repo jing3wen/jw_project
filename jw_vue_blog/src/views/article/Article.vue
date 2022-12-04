@@ -8,34 +8,41 @@
       <div class="titleWrapper">
         <h3 class="title"><b>最新</b></h3>
       </div>
-      <div class="articleBox" v-for="item in articleInfo">
+      <div class="articleBox" v-for="item in articleList">
         <a :href="'/articleDetails/'+item.articleId">
-          <h4 class="title"><span>{{item.articleTitle}}</span></h4>
+          <h4 class="title">
+            <span>{{item.articleTitle}}</span>
+          </h4>
           <div class="article">
-            <img v-if="item.articleImgLitimg" class="focus" :src="item.articleImgLitimg"
+            <img v-if="item.articleCover" class="focus" :src="item.articleCover"
                  :alt="item.articleTitle">
             <!-- 内容样式根据有没有图片改变 -->
-            <div class="textBox" :class="[item.articleImgLitimg ? '':'textBox2']">
-              <p style="margin-bottom: 25px;">{{item.articleDase}}</p>
+            <div class="textBox" :class="[item.articleCover ? '':'textBox2']">
+              <p style="margin-bottom: 25px;">{{item.articleSummary}}</p>
               <!--<p>Bpvank · 11月前 · 分类</p>-->
-              <p class="hidden-sm-and-up">{{item.userName}} · {{item.publishTime}} ·
-                {{item.articleClassifyName}}</p>
+              <p class="hidden-sm-and-up">{{item.nickName}} · {{item.createTime}} ·
+                {{item.categoryName}}</p>
               <p class="articleMessage hidden-xs-only">
+                <el-tag v-if="item.isTop === '1'">  
+                  <span style="font-weight:bold; color: red;">
+                    <el-icon><CollectionTag /></el-icon>顶置
+                  </span>     
+                </el-tag>
                 <span>
                   <el-icon><User /></el-icon>
-                  {{item.userName}}
+                  {{item.nickName}}
                 </span>
                 <span>
                   <el-icon><FolderOpened /></el-icon>
-                  {{item.articleClassifyName}}
+                  {{item.categoryName}}
                 </span>
                 <span>
                   <el-icon><Timer /></el-icon>
-                  {{item.publishTime}}
+                  {{item.createTime}}
                 </span>
                 <span>
                   <el-icon><View /></el-icon>
-                  {{item.click}}
+                  {{item.viewCounts}}
                 </span>
               </p>
             </div>
@@ -59,14 +66,14 @@
 </template>
 
 <script>
-import {formatDate} from "../../utils/common";
+import {getYearMonthDay} from "../../utils/common";
 
 export default {
   name: "Article",
   data() {
     return{
       // 展示文章信息
-      articleInfo: [],
+      articleList: [],
       total: 0, //总条数
       pageSize: 10, //每页显示行数
       currentPage: 1, //当前页码
@@ -81,30 +88,30 @@ export default {
       this.loading = true;
 
       var params = {
-        'currentPage': this.currentPage,
+        'pageNum': this.currentPage,
         'pageSize': this.pageSize,
       }
-      this.request.get("/api/article/page/showAll", {params}).then(res => {
+      this.request.get("http://localhost:9090/blogArticle/front/getBlogFrontArticlePage", {params}).then(res => {
         // 先清空数据
-        this.articleInfo = [];
-        res.data.list.forEach(element => {
-          // 时间戳格式化
-          element.publishTime = formatDate(element.publishTime);
+        this.articleList = [];
+        res.data.records.forEach(element => {
+          // 时间格式化
+          element.createTime = getYearMonthDay(element.createTime);
           // 图片 根url
           const url = process.env.VUE_APP_URL;
           // 缩略图 判断是点击上传的还是，网络图片
-          if (element.articleImgLitimg != "" && !element.articleImgLitimg.includes('http') && !element.articleImgLitimg.includes('https')) {
-            element.articleImgLitimg = url + element.articleImgLitimg
+          if (element.articleCover != "" && !element.articleCover.includes('http') && !element.articleCover.includes('https')) {
+            element.articleCover = url + element.articleCover
           }
           // 添加
-          this.articleInfo.push(element)
+          this.articleList.push(element)
         });
         //JSON.parse 将从后台得到的数据转换为标准JSON格式
         //前台展示的是需要数组，JSON.parse转换后的数据，element-plus可以解析
         // state.tableData = res.data.data.list;
         this.total = res.data.total;
         this.pageSize = res.data.pageSize;
-        this.currentPage = res.data.currentPage;
+        this.currentPage = res.data.pageNum;
         this.loading = false
       })
     }

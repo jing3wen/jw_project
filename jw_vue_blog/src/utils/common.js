@@ -53,3 +53,9 @@ export function formatDate(timestamp) {
     return '刚刚';
 }
 
+
+//截取事件的年月日 2022-12-02 18:56:44 -> 2022-12-02
+export function getYearMonthDay(date){
+    return date.split(' ')[0]
+}
+
