@@ -1,6 +1,6 @@
 <template>
   <!-- 卡片/搜索功能 -->
-  <el-card class="search_card">
+  <el-card class="search_card card-hover-transition">
     <div class="search_img_box">
       <img :src="url">
     </div>
@@ -63,6 +63,7 @@ export default {
 </script>
 
 <style scoped>
+
 .el-card {
   border-radius: 10px;
   margin-bottom: 20px;

@@ -8,7 +8,7 @@
       <div class="titleWrapper">
         <h3 class="title"><b>最新</b></h3>
       </div>
-      <div class="articleBox" v-for="item in articleList">
+      <el-card class="articleBox card-hover-transition" v-for="item in articleList">
         <a :href="'/articleDetails/'+item.articleId">
           <h4 class="title">
             <span>{{item.articleTitle}}</span>
@@ -23,10 +23,10 @@
               <p class="hidden-sm-and-up">{{item.nickName}} · {{item.createTime}} ·
                 {{item.categoryName}}</p>
               <p class="articleMessage hidden-xs-only">
-                <el-tag v-if="item.isTop === '1'">  
+                <el-tag v-if="item.isTop === '1'">
                   <span style="font-weight:bold; color: red;">
                     <el-icon><CollectionTag /></el-icon>顶置
-                  </span>     
+                  </span>
                 </el-tag>
                 <span>
                   <el-icon><User /></el-icon>
@@ -48,7 +48,7 @@
             </div>
           </div>
         </a>
-      </div>
+      </el-card>
       <!--
     total 总行数
     page-size	每页显示条目个数
@@ -178,6 +178,7 @@ export default {
   padding: 20px 0;
   background-color: white;
   border-bottom: 1px solid #eee;
+  margin-top: 12px;
 }
 
 .boutique_article .articleBox .title {

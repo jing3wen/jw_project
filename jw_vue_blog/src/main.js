@@ -5,6 +5,7 @@ import store from './store'
 
 //自定义样式
 import './assets/css/index.css'
+import './assets/css/common.css'
 //插件
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'

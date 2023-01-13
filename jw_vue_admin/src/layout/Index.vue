@@ -10,7 +10,7 @@
       <el-main style="padding-top: 0px">
         <div class="fade-transform-box">
           <transition name="fade-transform" mode="out-in">
-            <router-view></router-view>
+            <router-view :key="$route.fullPath" ></router-view>
           </transition>
         </div>
       </el-main>

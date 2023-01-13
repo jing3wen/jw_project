@@ -63,13 +63,13 @@ router.beforeEach((to, from, next) => {
     NProgress.start()
     // 获取当前的路由对象名称数组
     const currentRouteNames = router.getRoutes().map(v => v.name)
-    if(to.path == '/login'){
+    if(to.path === '/login'){
         if(store.state.user.currentLoginUser.token){
             Element.Message.info('该用户已登录')
             next('/index')
         }
         next()
-    }else if(to.path=='/404'){
+    }else if(to.path==='/404'){
         next()
     } else if (!store.state.user.currentLoginUser.id){    //验证当前用户是否登录
         Element.Message.warning('请登录')

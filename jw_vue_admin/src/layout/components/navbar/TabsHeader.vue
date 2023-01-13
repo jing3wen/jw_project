@@ -11,7 +11,7 @@
           {{ item.name }}
           <i
               class="el-icon-close"
-              v-if="item.path != '/'"
+              v-if="item.path !== '/' && item.path !=='/index'"
               @click.stop="removeTab(item)"/>
         </span>
     </div>
@@ -57,7 +57,7 @@ export default {
       this.$store.commit("layout/removeTab", tab);
       //如果删除的是当前页则返回上一标签页
       if (tab.path === this.$route.path) {
-        var tabList = this.$store.state.layout.tabList;
+        const tabList = this.$store.state.layout.tabList;
         this.$router.push({ path: tabList[tabList.length - 1].path });
       }
     },

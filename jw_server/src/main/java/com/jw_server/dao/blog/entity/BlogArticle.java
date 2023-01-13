@@ -49,7 +49,7 @@ public class BlogArticle implements Serializable {
     @ApiModelProperty("文章内容")
     private String articleContent;
 
-    @ApiModelProperty("可见（0代表仅自己可见，1表示所有人可见）")
+    @ApiModelProperty("是否可见（0代表仅自己可见，1表示所有人可见）")
     private String articleVisible;
 
     @ApiModelProperty("浏览数量")
@@ -73,9 +73,11 @@ public class BlogArticle implements Serializable {
     private LocalDateTime createTime;
 
     @ApiModelProperty("更新者")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
     @ApiModelProperty("更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 

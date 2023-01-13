@@ -1,18 +1,19 @@
 package com.jw_server.controller.blog;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jw_server.core.aop.logAspect.SysLog;
+import com.jw_server.dao.blog.dto.QueryBlogAdminCategoryPageDTO;
+import com.jw_server.dao.blog.entity.BlogCategory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogCategoryService;
-import com.jw_server.dao.blog.entity.BlogCategory;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.core.common.ResponseResult;
+
 import java.util.List;
 
+import static com.jw_server.core.constants.LogModuleConst.BlogCategoryModule;
 import static com.jw_server.core.constants.LogTypeConst.*;
 
 
@@ -27,71 +28,64 @@ public class BlogCategoryController {
 
     @Resource
     private IBlogCategoryService blogCategoryService;
+
+
+
     /**
-     * Description 新增
-     * Author jingwen
-     * Date 2022-12-03 16:13:45
+     * Description 查询所有文章分类
+    * Author jingwen
+    * Date 2022-12-03 16:13:45
+    **/
+    @GetMapping("/front/getAllCategory")
+    public ResponseResult getAllCategory() {
+        return ResponseResult.success(blogCategoryService.getAllCategory());
+    }
+
+
+    /**
+     * Description: 新增文章类别
+     * Author: jingwen
+     * Date: 2023/1/12 22:09
      **/
-    @SysLog(logModule="", logType = ADD, logDesc = "新增")
-    @PostMapping("/add")
-    public ResponseResult add(@RequestBody BlogCategory blogCategory) {
-        blogCategoryService.save(blogCategory);
+    @SysLog(logModule=BlogCategoryModule, logType = ADD, logDesc = "后台新增博客文章类别")
+    @PostMapping("/admin/addBlogCategory")
+    public ResponseResult addBlogCategory(@RequestBody BlogCategory blogCategory) {
+        blogCategoryService.addOrUpdateBlogCategory(blogCategory);
         return ResponseResult.success();
     }
 
     /**
-     * Description 更新
-     * Author jingwen
-     * Date 2022-12-03 16:13:45
+     * Description: 更新文章类别
+     * Author: jingwen
+     * Date: 2023/1/12 22:09
      **/
-    @SysLog(logModule="", logType = UPDATE, logDesc = "更新")
-    @PostMapping("/update")
-    public ResponseResult update(@RequestBody BlogCategory blogCategory) {
-        blogCategoryService.updateById(blogCategory);
+    @SysLog(logModule=BlogCategoryModule, logType = UPDATE, logDesc = "后台更新博客文章类别")
+    @PostMapping("/admin/updateBlogCategory")
+    public ResponseResult updateBlogCategory(@RequestBody BlogCategory blogCategory) {
+        blogCategoryService.addOrUpdateBlogCategory(blogCategory);
         return ResponseResult.success();
     }
 
     /**
-     * Description 批量删除
-     * Author jingwen
-     * Date 2022-12-03 16:13:45
+     * Description: 后台批量删除博客文章类别
+     * Author: jingwen
+     * Date: 2023/1/12 22:36
      **/
-    @SysLog(logModule="", logType = DELETE, logDesc = "删除")
-    @PostMapping("/deleteBatch")
+    @SysLog(logModule=BlogCategoryModule, logType = DELETE, logDesc = "后台批量删除博客文章类别")
+    @DeleteMapping("/admin/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
-        blogCategoryService.removeByIds(ids);
+        blogCategoryService.deleteCategoryByIds(ids);
         return ResponseResult.success();
     }
 
     /**
-     * Description 查询所有数据
+     * Description 后台查询博客类别分页
      * Author jingwen
-     * Date 2022-12-03 16:13:45
+     * Date 2023/1/12 22:09
      **/
-    @GetMapping("/findAll")
-    public ResponseResult findAll() {
-        return ResponseResult.success(blogCategoryService.list());
-    }
-
-    /**
-     * Description 根据id查询数据
-     * Author jingwen
-     * Date 2022-12-03 16:13:45
-     **/
-    @GetMapping("/findOne")
-    public ResponseResult findOne(@RequestParam Integer id) {
-        return ResponseResult.success(blogCategoryService.getById(id));
-    }
-
-    /**
-     * Description 分页查询
-     * Author jingwen
-     * Date 2022-12-03 16:13:45
-     **/
-    @PostMapping("/getPageList")
-    public ResponseResult getPageList(@RequestParam Integer pageNum,@RequestParam Integer pageSize) {
-        QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
-        return ResponseResult.success(blogCategoryService.page(new Page<>(pageNum, pageSize), queryWrapper));
+    @PostMapping("/admin/getBlogCategoryPageList")
+    public ResponseResult getBlogCategoryPageList(@RequestBody QueryBlogAdminCategoryPageDTO queryCategoryDTO) {
+        return ResponseResult.success(blogCategoryService.getBlogCategoryPageList(queryCategoryDTO));
     }
 
 }

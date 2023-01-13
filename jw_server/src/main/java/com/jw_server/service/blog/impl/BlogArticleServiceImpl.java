@@ -1,12 +1,18 @@
 package com.jw_server.service.blog.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.core.utils.IpUtils;
 import com.jw_server.core.utils.RedisUtils;
+import com.jw_server.dao.blog.dto.BlogAdminAddArticleDTO;
+import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import com.jw_server.dao.blog.mapper.BlogArticleMapper;
+import com.jw_server.dao.blog.vo.BlogAdminArticlePageVO;
+import com.jw_server.dao.blog.vo.BlogAdminUpdateArticleVO;
 import com.jw_server.dao.blog.vo.BlogFrontArticleDetailsVO;
 import com.jw_server.dao.blog.vo.BlogFrontArticlePageVO;
 import com.jw_server.service.blog.IBlogArticleService;
@@ -33,6 +39,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     @Resource
     private BlogArticleMapper blogArticleMapper;
+
 
     @Resource
     private RedisUtils redisUtils;
@@ -64,5 +71,43 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             frontArticleDetailsVO =  blogArticleMapper.getBlogFrontArticleDetails(articleId);
         }
         return frontArticleDetailsVO;
+    }
+
+    /**
+     * 博客后台新增文章
+     **/
+    @Override
+    public void addBlogArticle(BlogAdminAddArticleDTO blogAdminAddArticleDTO) {
+        BlogArticle addArticle = new BlogArticle();
+        BeanUtil.copyProperties(blogAdminAddArticleDTO, addArticle);
+        save(addArticle);
+    }
+
+    /**
+     * 博客后台查询文章列表
+     **/
+    @Override
+    public MyPageVO<BlogAdminArticlePageVO> getAdminBlogArticlePage(QueryBlogAdminArticlePageDTO queryArticleDTO) {
+
+        IPage<BlogAdminArticlePageVO> page = blogArticleMapper.getAdminBlogArticlePage(
+                new Page<>(queryArticleDTO.getPageNum(), queryArticleDTO.getPageSize()),
+                queryArticleDTO);
+        return new MyPageVO<>(page);
+    }
+
+    /**
+     * 后台查询需要编辑的文章信息
+     **/
+    @Override
+    public BlogAdminUpdateArticleVO getUpdateArticle(Integer articleId) {
+        return blogArticleMapper.getUpdateArticle(articleId);
+    }
+
+    /**
+     * 后台更新文章信息
+     **/
+    @Override
+    public void updateBlogArticle(BlogArticle updateArticle) {
+        updateById(updateArticle);
     }
 }

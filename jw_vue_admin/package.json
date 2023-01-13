@@ -8,9 +8,12 @@
   },
   "dependencies": {
     "@riophae/vue-treeselect": "^0.4.0",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^1.0.2",
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.4.5",
+    "mavon-editor": "^2.10.4",
     "nprogress": "^0.2.0",
     "sass": "1.32.13",
     "sass-loader": "10.2.0",

@@ -4,8 +4,8 @@
     <el-form class="query-form pl-10" :model="queryForm">
       <el-input style="width: 200px" suffix-icon="el-icon-search" placeholder="请输入用户名"
                 v-model="queryForm.name" @keyup.enter.native="search"></el-input>
-      <el-button type="primary" class="ml-5" @click="search">搜索</el-button>
-      <el-button type="warning" class="ml-5"  @click="reset">重置</el-button>
+      <el-button type="primary" plain class="ml-5" @click="search">搜索</el-button>
+      <el-button type="warning" plain class="ml-5"  @click="reset">重置</el-button>
     </el-form>
 
     <!-- 新增，批量删除，数据导入，导出按钮组 -->
@@ -62,21 +62,15 @@
 
 
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="40%" @close="clickCancel">
-      <el-form :model="dialogForm" label-width="100px">
-        <el-form-item label="用户名">
+      <el-form :model="dialogForm" rules="dialogFormRules" ref="dialogForm" label-width="100px">
+        <el-form-item label="用户名" prop="username">
           <el-input v-model="dialogForm.username" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="昵称">
+        <el-form-item label="昵称" prop="nickname">
           <el-input v-model="dialogForm.nickname" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱" prop="email">
           <el-input v-model="dialogForm.email" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="电话">
-          <el-input v-model="dialogForm.phone" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="地址">
-          <el-input v-model="dialogForm.address" autocomplete="off"></el-input>
         </el-form-item>
 
 <!--        <el-row>-->
@@ -130,9 +124,20 @@ export default {
         id:null,
         username: '',
         nickname: '',
-        email: '',
-        phone: '',
-        address: '',
+        email:'',
+      },
+      dialogFormRules:{
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 2, max: 50, message: '用户名称长度必须介于 2 和 50 之间', trigger: 'blur' }
+        ],
+        nickname:[
+          { required: true, message: '请输入用户昵称', trigger: 'blur' },
+          { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+        ],
+        email: [
+          { type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}
+        ],
       },
     }
   },
@@ -144,11 +149,7 @@ export default {
   },
   methods: {
     getPageList(){
-      this.request.post('/api/sysFile/getPageList',{
-        params:{
-          pageNum: this.queryForm.pageNum,
-          pageSize: this.queryForm.pageSize
-        }}).then(res =>{
+      this.request.post('/api/sysFile/getPageList',this.queryForm).then(res =>{
         if(res.code === 200){
           this.tableData = res.data.records
           this.total = res.data.total
@@ -185,17 +186,23 @@ export default {
       this.openDialog = true
     },
     addOrUpdate(){
-      let url = this.dialogForm.id == null ? '/api/sysFile/add':'/api/sysFile/update'
-      this.request.post(url,this.dialogForm).then(res =>{
-        if(res.code === 200) {
-          this.$message.success("保存成功")
-          this.getPageList()
-          this.openDialog = false
-        } else this.$message.error(res.msg)
+      this.$refs['dialogForm'].validate((valid) => {
+        if (valid){
+          let url = this.dialogForm.id == null ? '/api/sysFile/add':'/api/sysFile/update'
+          this.request.post(url,this.dialogForm).then(res =>{
+            if(res.code === 200) {
+              this.$message.success("保存成功")
+              this.getPageList()
+              this.openDialog = false
+            } else this.$message.error(res.msg)
+          })
+        }else {
+          return false;
+        }
       })
     },
     clickCancel(){
-      this.$message.info('操作已取消')
+      // this.$message.info('操作已取消')
       this.resetDialogForm()
       this.openDialog = false
     },
@@ -224,9 +231,9 @@ export default {
     //重置表单, 重置验证状态
     resetDialogForm(){
       //重置验证状态
-      // if(this.$refs['userForm']){
-      //   this.$refs['userForm'].resetFields()
-      // }
+      if(this.$refs['dialogForm']){
+        this.$refs['dialogForm'].resetFields()
+      }
       //重置表单
       this.dialogForm = this.$options.data().dialogForm
     },

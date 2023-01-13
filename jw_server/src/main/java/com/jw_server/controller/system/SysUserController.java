@@ -98,16 +98,6 @@ public class SysUserController {
     }
 
     /**
-     * Description 查询所有数据
-     * Author jingwen
-     * Date 2022-08-29 16:21:58
-     **/
-    @GetMapping("/findAll")
-    public ResponseResult findAll() {
-        return ResponseResult.success(sysUserService.list());
-    }
-
-    /**
      * Description 根据id查询数据
      * Author jingwen
      * Date 2022-08-29 16:21:58

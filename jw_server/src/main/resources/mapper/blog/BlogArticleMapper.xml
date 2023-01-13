@@ -19,8 +19,9 @@
     <update id="updateArticleViewCounts" parameterType="java.lang.Integer">
         UPDATE blog_article AS ba
         SET ba.view_counts = ba.view_counts+1
-        WHERE ba.article_id= #{articleId};
+        WHERE ba.article_id= #{articleId}
     </update>
+
 
     <select id="getBlogFrontArticleDetails" parameterType="java.lang.Integer" resultType="com.jw_server.dao.blog.vo.BlogFrontArticleDetailsVO">
         SELECT
@@ -34,5 +35,38 @@
                 LEFT JOIN blog_category AS bc ON ba.category_id = bc.category_id
         WHERE
             ba.article_check='1' AND ba.is_deleted='0' AND ba.article_id = #{articleId};
+    </select>
+
+    <update id="updateArticleCommentCounts" parameterType="java.lang.Integer">
+        UPDATE blog_article AS ba
+        SET ba.comment_counts = ba.comment_counts + #{updateNumber}
+        WHERE ba.article_id= #{articleId}
+    </update>
+
+    <select id="getAdminBlogArticlePage" resultType="com.jw_server.dao.blog.vo.BlogAdminArticlePageVO">
+        SELECT
+            ba.article_id, su.nickname, bc.category_name, ba.is_top,
+            ba.article_cover, ba.article_title, ba.article_visible, ba.view_counts,
+            ba.comment_allowed, ba.comment_counts, ba.article_check, ba.create_time
+        FROM
+            `blog_article` AS ba
+            LEFT JOIN sys_user AS su ON ba.user_id = su.id
+            LEFT JOIN blog_category AS bc ON ba.category_id = bc.category_id
+        WHERE
+            ba.is_deleted='0'
+            <if test="queryArticleDTO.categoryName != null and queryArticleDTO.categoryName !=''">
+                AND bc.category_name like concat('%',#{queryArticleDTO.categoryName},'%')
+            </if>
+        ORDER BY is_top DESC
+    </select>
+    <select id="getUpdateArticle" resultType="com.jw_server.dao.blog.vo.BlogAdminUpdateArticleVO">
+        SELECT
+            ba.article_id, ba.user_id, ba.category_id, ba.is_top,
+            ba.article_cover, ba.article_title, ba.article_summary, ba.article_content,
+            ba.article_visible, ba.comment_allowed, ba.article_check
+        FROM
+            `blog_article` AS ba
+        WHERE
+            ba.article_id = #{articleId}
     </select>
 </mapper>

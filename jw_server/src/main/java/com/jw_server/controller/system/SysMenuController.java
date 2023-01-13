@@ -76,15 +76,6 @@ public class SysMenuController {
         return ResponseResult.success(sysMenuService.sysMenuList());
     }
 
-    /**
-     * Description 根据id查询数据
-     * Author jingwen
-     * Date 2022-08-30 18:58:10
-     **/
-    @GetMapping("/findOne")
-    public ResponseResult findOne(@RequestParam Integer id) {
-        return ResponseResult.success(sysMenuService.getById(id));
-    }
 
     /**
      * Description 分页查询

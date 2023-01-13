@@ -38,5 +38,20 @@ public class LogModuleConst {
      */
     public static final String DlFaceDetectFileModule = "人脸检测模块";
 
+    /**
+     * 博客文章模块
+     **/
+    public static final String BlogArticleModule = "博客文章模块";
+
+    /**
+     * 博客文章类别模块
+     **/
+    public static final String BlogCategoryModule = "博客文章类别模块";
+
+    /**
+     * 博客文章评论模块
+     **/
+    public static final String BlogCommentModule = "博客文章评论模块";
+
 
 }

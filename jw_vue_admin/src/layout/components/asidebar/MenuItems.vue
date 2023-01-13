@@ -1,9 +1,9 @@
 <template>
-  <el-menu-item v-if="menu.menuType == 'menu'" :key="menu.id" :index="menu.path">
+  <el-menu-item v-if="menu.menuType === 'menu' && menu.visible==='1'" :key="menu.id" :index="menu.path">
     <i :class="menu.icon"></i>
     <span slot="title">{{menu.menuName}}</span>
   </el-menu-item>
-  <el-submenu v-else :index="menu.id  + ''">
+  <el-submenu v-else-if="menu.visible==='1'" :index="menu.id  + ''">
     <template slot="title">
       <i :class="menu.icon"></i>
       <span slot="title">{{menu.menuName}}</span>

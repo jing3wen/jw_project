@@ -8,7 +8,7 @@
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
 
           <!-- 文章内容 -->
-          <div class="articleBox">
+          <div class="articleDetailBox">
             <!-- 文章头部 -->
             <div class="articleHead">
               <p class="round"></p>
@@ -56,18 +56,18 @@
 
           <!-- 评论区 判断作者是否开启评论 -->
           <div v-if="articleInfo.commentAllowed === '1'">
-            <CommentSection v-if="articleInfo.commentAllowed === '1'" :f_articleInfo="articleInfo"></CommentSection>
+            <CommentSection :f_articleInfo="articleInfo"></CommentSection>
           </div>
-          <div v-else class="commentBox" >
+          <div v-else class="commentCloseBox" >
             <span>作者已关闭评论区</span>
-          </div>          
+          </div>
         </el-col>
         <el-col class="hidden-sm-and-down" :md="6" :lg="6" :xl="6">
           <!-- 其他内容 -->
 
           <!-- 搜索功能 -->
           <SearchCard></SearchCard>
-        
+
         </el-col>
       </el-row>
     </el-col>
@@ -107,14 +107,10 @@ export default {
         // route.params.id 跳转到当前路由携带着文章id
         articleId: useRoute().params.id
       }
-      //TODO 文章浏览量+1，可以由后端业务代码完成
-      // 点击的文章浏览量+1
-      // this.request.get("/api/article/updateArticleClick", {params}).then(res => {
 
-      // })
       //查询该文章数据
       this.request.get("http://localhost:9090/blogArticle/front/getBlogFrontArticleDetails", {params}).then(res => {
-        
+
         // 查询的文章数据
         let article = res.data;
 
@@ -157,14 +153,12 @@ export default {
       return false
     },
 
-
-
   }
 }
 </script>
 
 <style scoped>
-.articleBox {
+.articleDetailBox {
   height: auto;
   overflow: hidden;
   background-color: white;
@@ -225,7 +219,7 @@ export default {
   align-items: center;
 }
 
-.commentBox {
+.commentCloseBox {
   height: auto;
   overflow: hidden;
   background-color: white;

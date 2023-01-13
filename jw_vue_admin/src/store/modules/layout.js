@@ -29,11 +29,11 @@ const mutations = {
     },
     // 移除标签
     removeTab(state, tab) {
-        if(tab.name == "主页" || tab.path == '/index' || tab.path == '/Index'){
+        if(tab.name == "主页" || tab.path == '/index'){
             Element.Message.warning('该标签为主页, 不能移除')
 
         }else {
-            var index = state.tabList.findIndex(item => item.name === tab.name);
+            const index = state.tabList.findIndex(item => item.name === tab.name);
             state.tabList.splice(index, 1);
         }
 

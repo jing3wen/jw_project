@@ -1,15 +1,15 @@
 <template>
-  <div class="articleCategoriesBox" v-loading="loading" element-loading-text="玩命加载中...">
+  <div class="articleCategoriesBox card-hover-transition" v-loading="loading" element-loading-text="玩命加载中...">
     <div class="articleCategories_title">
       <h3 class="title"><b>文章分类</b></h3>
     </div>
     <div class="articleCategories_content">
       <ul>
-        <li v-for="item in classifyInfo">
+        <li v-for="item in categoryList">
           <el-icon>
             <ArrowRight />
           </el-icon>
-          <a :title="item.classifyName" :href="'/classify/'+item.classifyId">{{item.classifyName}}</a>
+          <a :title="item.categoryName" :href="'/classify/'+item.categoryId">{{item.categoryName}}</a>
         </li>
       </ul>
     </div>
@@ -21,7 +21,7 @@ export default {
   name: "ArticleCategories",
   data(){
     return{
-      classifyInfo:[],
+      categoryList:[],
       loading: false,
     }
   },
@@ -31,8 +31,8 @@ export default {
   methods: {
     loadData(){
       this.loading = true;
-      this.request.get("/api/showAllClassifyInfo").then(res => {
-        this.classifyInfo = res.data
+      this.request.get("http://localhost:9090/blogCategory/front/getAllCategory").then(res => {
+        this.categoryList = res.data
         this.loading = false;
       })
 }

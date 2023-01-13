@@ -23,7 +23,7 @@
               @selection-change="handleSelectionChange"
               >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="menuName" label="名称" width="170px">
+      <el-table-column prop="menuName" label="名称" width="200px">
         <template slot-scope="scope">
           <span v-if="scope.row.menuType==='directory'" >{{scope.row.menuName}}</span>
           <el-tag type="primary" v-if="scope.row.menuType ==='menu'" style="font-weight:bolder">{{scope.row.menuName}}</el-tag>
@@ -42,6 +42,18 @@
       <el-table-column prop="perms" label="权限按钮" width="300px" align="center">
         <template slot-scope="scope">
           <el-tag type="danger" v-if="scope.row.menuType ==='button'" style="font-weight:bold">{{scope.row.perms}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="visible" label="隐藏" width="200px" align="center">
+        <template slot-scope="scope">
+          <el-switch
+              v-model="scope.row.visible"
+              :active-value="'0'"
+              :inactive-value="'1'"
+              active-color="#13ce66"
+              @change="changeMenuVisible(scope.row)"
+              v-permission="['system:sysMenu:update']">
+          </el-switch>
         </template>
       </el-table-column>
       <el-table-column prop="remark" label="备注" width="300px" align="center" :show-overflow-tooltip="true"></el-table-column>
@@ -300,6 +312,20 @@ export default {
         this.dialogForm.parentId = row.id
       }
 
+    },
+    //编辑菜单是否可见
+    changeMenuVisible(row){
+      // 注意新增前将表单置空
+      this.resetDialogForm()
+      this.dialogForm = JSON.parse(JSON.stringify(row))
+      this.request.post('/api/sysMenu/update',this.dialogForm).then(res =>{
+        if(res.code === 200) {
+          this.$message.success("操作成功")
+          this.getMenuList()
+          this.getPageList()
+        }
+        else this.$message.error(res.msg)
+      })
     },
     //重置表单
     resetDialogForm(){

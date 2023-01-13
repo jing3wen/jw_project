@@ -36,25 +36,6 @@ public class SysLoginLogController {
         return ResponseResult.success();
     }
 
-    /**
-     * Description 查询所有数据
-     * Author jingwen
-     * Date 2022-09-11 17:06:04
-     **/
-    @GetMapping("/findAll")
-    public ResponseResult findAll() {
-        return ResponseResult.success(sysLoginLogService.list());
-    }
-
-    /**
-     * Description 根据id查询数据
-     * Author jingwen
-     * Date 2022-09-11 17:06:04
-     **/
-    @GetMapping("/findOne")
-    public ResponseResult findOne(@RequestParam Integer id) {
-        return ResponseResult.success(sysLoginLogService.getById(id));
-    }
 
     /**
      * Description 分页查询

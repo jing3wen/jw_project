@@ -1,5 +1,6 @@
 <template>
-  <div class="featured" v-loading="loading" element-loading-text="玩命加载中...">
+  <!-- 精选 -->
+  <div class="featured card-hover-transition" v-loading="loading" element-loading-text="玩命加载中...">
     <div class="featured_title">
       <h3 class="title"><b>精选</b></h3>
     </div>

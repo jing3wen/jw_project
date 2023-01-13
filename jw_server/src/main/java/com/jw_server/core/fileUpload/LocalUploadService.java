@@ -53,8 +53,10 @@ public class LocalUploadService {
         // 判断配置的文件目录是否存在，若不存在则创建一个新的文件目录
         File parentFile = uploadFile.getParentFile();
         if(!parentFile.exists()) {
+            logger.info("创建文件夹--"+parentFile);
             parentFile.mkdirs();
         }
+        logger.info("存储文件--"+uploadFile.getPath());
         file.transferTo(uploadFile);
         return "/static/upload/"+path+fileName;
     }

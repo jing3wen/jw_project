@@ -85,16 +85,6 @@ public class SysRoleController {
     }
 
     /**
-     * Description 根据id查询数据
-     * Author jingwen
-     * Date 2022-08-31 11:17:21
-     **/
-    @GetMapping("/findOne")
-    public ResponseResult findOne(@RequestParam Integer id) {
-        return ResponseResult.success(sysRoleService.getById(id));
-    }
-
-    /**
      * Description 分页查询
      * Author jingwen
      * Date 2022-08-31 11:17:21

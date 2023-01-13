@@ -1,5 +1,5 @@
 <template>
-  <div class="websiteInfo">
+  <div class="websiteInfo card-hover-transition">
     <div class="titleWrapper" data-v-d40d816c="">
       <h3 class="title">站点信息</h3>
     </div>

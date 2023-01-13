@@ -50,9 +50,11 @@ public class BlogCategory implements Serializable {
     private LocalDateTime createTime;
 
     @ApiModelProperty("更新者")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
     @ApiModelProperty("更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 

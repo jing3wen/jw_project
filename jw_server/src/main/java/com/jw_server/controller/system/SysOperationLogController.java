@@ -37,26 +37,6 @@ public class SysOperationLogController {
     }
 
     /**
-     * Description 查询所有数据
-     * Author jingwen
-     * Date 2022-09-11 09:32:13
-     **/
-    @GetMapping("/findAll")
-    public ResponseResult findAll() {
-        return ResponseResult.success(sysOperationLogService.list());
-    }
-
-    /**
-     * Description 根据id查询数据
-     * Author jingwen
-     * Date 2022-09-11 09:32:13
-     **/
-    @GetMapping("/findOne")
-    public ResponseResult findOne(@RequestParam Integer id) {
-        return ResponseResult.success(sysOperationLogService.getById(id));
-    }
-
-    /**
      * Description 分页查询
      * Author jingwen
      * Date 2022-09-11 09:32:13

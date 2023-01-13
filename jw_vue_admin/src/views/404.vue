@@ -6,7 +6,7 @@
         <h1 style="font-size: 26px;">找不到网页</h1>
         <p></p>
         <div class="opera">
-          <el-button type="primary" @click="toPage('/Index')">返回主页</el-button>
+          <el-button type="primary" @click="toPage('/index')">返回主页</el-button>
           <el-button type="danger" @click="logout">点我退出</el-button>
         </div>
       </div>

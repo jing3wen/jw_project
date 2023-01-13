@@ -65,6 +65,7 @@ public class DlFaceDetectFile implements Serializable {
     private String updateBy;
 
     @ApiModelProperty("更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 
