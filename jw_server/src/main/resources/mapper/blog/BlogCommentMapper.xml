@@ -64,6 +64,7 @@
             OR bc.parent_id = #{commentId}
     </delete>
 
+
     <select id="getAdminCommentPageList" resultType="com.jw_server.dao.blog.vo.BlogAdminCommentPageVO">
         SELECT
             bc.comment_id, su1.nickname, su1.avatar, su2.nickname as to_nickname,
@@ -95,4 +96,12 @@
                  #{id}
             </foreach>
     </update>
+
+    <delete id="deleteCommentByArticleId" parameterType="java.lang.Integer">
+        DELETE
+        FROM
+            blog_comment AS bc
+        WHERE
+            bc.article_id = #{articleId}
+    </delete>
 </mapper>

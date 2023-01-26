@@ -12,6 +12,10 @@ public class LogModuleConst {
      */
     public static final String UserLoginModule = "登录模块";
 
+    /**
+     * 文件上传模块
+     **/
+    public static final String FileUploadModule = "文件上传模块";
 
     /**
     * 用户管理

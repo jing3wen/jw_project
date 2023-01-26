@@ -10,6 +10,7 @@ import com.jw_server.dao.deeplearning.entity.DlFaceDetectFile;
 import com.jw_server.service.deeplearning.IDlFaceDetectFileService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -103,8 +104,8 @@ public class DlFaceDetectFileController {
      * Date: 2022/9/22 19:13
      **/
     @SysLog(logModule = DlFaceDetectFileModule, logType = DELETE, logDesc = "删除上传的检测文件")
-    @GetMapping("/deleteFaceDetectFile")
-    public ResponseResult deleteFaceDetectFile(@RequestParam String fileUrl){
+    @DeleteMapping("/deleteFaceDetectFile")
+    public ResponseResult deleteFaceDetectFile(@RequestBody String fileUrl){
         logger.info(DlFaceDetectFileModule+"--删除上传的检测文件:"+fileUrl);
         fileUploadUtils.fileDelete(fileUrl);
         return ResponseResult.success();

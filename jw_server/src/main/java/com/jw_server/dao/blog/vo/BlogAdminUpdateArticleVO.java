@@ -19,6 +19,9 @@ public class BlogAdminUpdateArticleVO {
     //类别id
     private Integer categoryId;
 
+    //类别名称
+    private String categoryName;
+
     //顶置（0表示不顶置，1表示顶置）
     private String isTop;
 

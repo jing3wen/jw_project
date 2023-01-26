@@ -41,7 +41,7 @@ public class SysRoleController {
     @PreAuthorize("hasAuthority('system:sysRole:add')")
     @PostMapping("/add")
     public ResponseResult add(@RequestBody SysRole sysRole) {
-        sysRoleService.addSysRole(sysRole);
+        sysRoleService.addOrUpdateSysRole(sysRole);
         return ResponseResult.success();
     }
 
@@ -54,7 +54,7 @@ public class SysRoleController {
     @PreAuthorize("hasAuthority('system:sysRole:update')")
     @PostMapping("/update")
     public ResponseResult update(@RequestBody SysRole sysRole) {
-        sysRoleService.updateById(sysRole);
+        sysRoleService.addOrUpdateSysRole(sysRole);
         return ResponseResult.success();
     }
 

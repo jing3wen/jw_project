@@ -2,6 +2,8 @@ package com.jw_server.service.blog;
 
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.dao.blog.dto.BlogAdminAddArticleDTO;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleCheckDTO;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleTopDTO;
 import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -11,6 +13,7 @@ import com.jw_server.dao.blog.vo.BlogFrontArticleDetailsVO;
 import com.jw_server.dao.blog.vo.BlogFrontArticlePageVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 /**
@@ -62,4 +65,25 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Date: 2023/1/12 14:18
      **/
     void updateBlogArticle(BlogArticle updateArticle);
+
+    /**
+     * Description: 后台修改文章顶置状态
+     * Author: jingwen
+     * Date: 2023/1/26 12:48
+     **/
+    void updateArticleTop(BlogAdminUpdateArticleTopDTO updateTopDTO);
+
+    /**
+     * Description: 要注意同时删除文章评论和标签
+     * Author: jingwen
+     * Date: 2023/1/26 13:19
+     **/
+    void deleteBatchArticle(List<Integer> ids);
+
+    /**
+     * Description: 后台修改文章审核状态
+     * Author: jingwen
+     * Date: 2023/1/26 12:48
+     **/
+    void updateArticleCheck(BlogAdminUpdateArticleCheckDTO updateCheckDTO);
 }

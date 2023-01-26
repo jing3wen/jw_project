@@ -1,47 +1,74 @@
 <template>
   <el-container class="login-container">
+    <!--  登录表单  -->
     <div class="login-form">
       <el-card class="border-radius-25">
         <div class="login-form-title">
-          <img src="@/assets/image/layout/logo200.png" style="width: 33px"/>
+          <img src="../assets/image/layout/logo200.png" style="width: 33px" alt=""/>
           <b>后台管理系统</b>
         </div>
-        <el-form :model="user" :rules="rules" ref="userForm">
+        <el-form :model="loginUser" :rules="loginUserRules" ref="loginUser">
           <el-form-item prop="username">
-            <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="user.username" placeholder="用户名"></el-input>
+            <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="loginUser.username" placeholder="用户名"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-lock" show-password v-model="user.password" placeholder="密码" @keyup.enter.native="login" ></el-input>
+            <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-lock" show-password v-model="loginUser.password" placeholder="密码" @keyup.enter.native="login" ></el-input>
           </el-form-item>
           <el-form-item style="margin: 40px 0 30px; text-align: right">
             <el-button class="login-button" type="primary" round size="medium" autocomplete="off" @keyup.enter.native="login" @click="login" :loading="loginLoading">{{ loginLoading ? '登录中 ...' : '登 录' }}</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button class="register-button" type="text"  size="medium" autocomplete="off" @click="openRegisterDrawer">没有账号?点我注册</el-button>
+            <el-button class="register-button" type="text"  size="medium" autocomplete="off" @click="registerVisible = true">没有账号?点我注册</el-button>
           </el-form-item>
         </el-form>
       </el-card>
     </div>
-    <Register></Register>
+    <!--  注册抽屉  -->
+    <el-drawer
+        :visible="registerVisible"
+        direction="rtl"
+        ref="drawer"
+        :before-close="cancelRegisterForm"
+        size="20%"
+        class="drawerStyle"
+    >
+      <el-card class="border-radius-25 ml-5 mr-5">
+        <div class="drawer_register">
+          <div class="register-form-title"><b>jw后台管理系统注册</b></div>
+          <el-form :model="registerForm" :rules="registerFormRules" ref="registerForm" class="form">
+            <el-form-item prop="username">
+              <el-input style="margin: 10px 0" prefix-icon="el-icon-user" v-model="registerForm.username" placeholder="用户名"></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input style="margin: 10px 0" prefix-icon="el-icon-lock" show-password v-model="registerForm.password" placeholder="密码"></el-input>
+            </el-form-item>
+            <el-form-item prop="confirmPassword">
+              <el-input style="margin: 10px 0" prefix-icon="el-icon-lock" show-password v-model="registerForm.confirmPassword" placeholder="确认密码"></el-input>
+            </el-form-item>
+          </el-form>
+          <div class="drawer_buttons">
+            <el-button class="drawer_button" type="primary" round @click="registerUser" :loading="registerLoading">{{ registerLoading ? '注册中 ...' : '确 定' }}</el-button>
+            <el-button class="drawer_button" round @click="cancelRegisterForm">取 消</el-button>
+          </div>
+        </div>
+      </el-card>
+
+    </el-drawer>
   </el-container>
 </template>
 
 <script>
-import Register from "@/components/register/Register";
 import {setRoute} from "@/router";
 
 export default {
   name: "Login",
-  components:{
-    Register
-  },
   data() {
     return {
-      user: {
+      loginUser: {
         username: "jingwen",
         password: "123456",
       },
-      rules: {
+      loginUserRules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 10, message: '长度在 3 到 5 个字符', trigger: 'blur' }
@@ -52,14 +79,34 @@ export default {
         ],
       },
       loginLoading:false,
+
+      registerVisible:false,
+      //注册用户表单
+      registerForm: {},
+      registerFormRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 3, max: 10, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+        ],
+        confirmPassword:[
+          { required: true, message: '请确认密码', trigger: 'blur' },
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+        ]
+      },
+      registerLoading: false,
     }
   },
   methods: {
+    //登录
     login() {
-      this.$refs['userForm'].validate((valid) => {
+      this.$refs['loginUser'].validate((valid) => {
         if (valid) {  // 表单校验合法
           this.loginLoading = true
-          this.request.post("/api/login/userLogin", this.user).then(res => {
+          this.request.post("/api/login/userLogin", this.loginUser).then(res => {
             if(res.code === 200) {
               this.$store.commit("user/loginUser", res.data)
               this.$message.success("登录成功")
@@ -68,6 +115,7 @@ export default {
             }
             else {
               this.$message.error(res.msg)
+              this.loginLoading=false
             }
           })
         } else {
@@ -75,9 +123,7 @@ export default {
         }
       });
     },
-    openRegisterDrawer(){
-      this.$store.commit('user/changeRegisterDrawerVisable')
-    },
+    //获取登录用户路由信息
     getMenusAndDirectoryByUserId(){
       this.request.get('/api/sysMenu/getMenusAndDirectoryByUserId',
           {params: {userId : this.$store.state.user.currentLoginUser.id}}
@@ -91,8 +137,35 @@ export default {
         }else {
           this.$message.error(res.msg)
         }
-
       })
+    },
+
+    //注册表单隐藏
+    cancelRegisterForm(){
+      this.registerVisible = false
+      this.registerLoading = false
+    },
+    //注册用户
+    registerUser(){
+      this.$refs['registerForm'].validate((valid) => {
+        if (valid) {  // 表单校验合法
+          this.registerLoading = true
+          if (this.registerForm.password !== this.registerForm.confirmPassword) {
+            this.$message.error("两次输入的密码不一致")
+            this.registerLoading = false
+            return false
+          }
+          this.request.post("/api/sysUser/register", this.registerForm).then(res => {
+            if(res.code === 200) {
+              this.$message.success("注册成功")
+              this.cancelRegisterForm()
+            } else {
+              this.$message.error(res.msg)
+              this.registerLoading = false
+            }
+          })
+        }
+      });
     }
   }
 }
@@ -128,8 +201,22 @@ export default {
 .login-button {
   width: 100%;
 }
-.register-button{
 
+.drawer_register{
+  margin: 0 20px;
+}
+.register-form-title{
+  margin: 20px 0;
+  text-align: center;
+  font-size: 24px;
+}
+.drawer_buttons{
+  margin: 0 30% 0;
+  display:flex;
+}
+.drawer_button{
+  margin-left: 5px;
+  text-align: center;
 }
 
 </style>

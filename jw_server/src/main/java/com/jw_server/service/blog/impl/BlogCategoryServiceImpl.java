@@ -85,4 +85,13 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
         }
         removeByIds(ids);
     }
+
+    /**
+     * 后台根据文章类别名搜索类别列表
+     **/
+    @Override
+    public List<BlogFrontCategoryVO> searchBlogCategoryList(String categoryName) {
+        return blogCategoryMapper.searchBlogCategoryListByCategoryName(categoryName);
+    }
+
 }

@@ -151,8 +151,8 @@
 
 <script>
 import Pagination from "@/components/pagination/Pagination";
-import ImageVideoUpload from "@/components/upload/imageVideoUpload/ImageVideoUpload";
-import VideoPlayer from "@/components/video-player/VideoPlayer";
+import ImageVideoUpload from "@/components/file/upload/imageVideoUpload/ImageVideoUpload";
+import VideoPlayer from "@/components/file/video-player/VideoPlayer";
 import {detectFileTypeList, detectFileSizeLimit} from "@/assets/js/config";
 import {getFileType} from "@/assets/js/common"
 

@@ -107,8 +107,8 @@ public class DlFaceDatabaseController {
      * Date: 2022/9/14 11:48
      **/
     @SysLog(logModule=DlFaceDatabaseModule, logType = DELETE, logDesc = "删除上传的人脸图片")
-    @GetMapping("/deleteFaceImage")
-    public ResponseResult deleteFaceImage(@RequestParam String fileUrl){
+    @DeleteMapping("/deleteFaceImage")
+    public ResponseResult deleteFaceImage(@RequestBody String fileUrl){
         logger.info(DlFaceDatabaseModule+"--删除上传的人脸图片:"+fileUrl);
         dlFaceDatabaseService.updateImageAddressWhenDeleteFile(fileUrl);
         fileUploadUtils.fileDelete(fileUrl);

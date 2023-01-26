@@ -2,6 +2,8 @@ package com.jw_server.controller.blog;
 
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.dao.blog.dto.BlogAdminAddArticleDTO;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleCheckDTO;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleTopDTO;
 import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import org.springframework.web.bind.annotation.*;
@@ -81,14 +83,14 @@ public class BlogArticleController {
 
 
     /**
-     * Description: 批量删除文章
+     * Description: 批量删除文章，同时删除该文章评论和标签表关系
      * Author: jingwen
      * Date: 2023/1/11 16:20
      **/
-    @SysLog(logModule=BlogArticleModule, logType = DELETE, logDesc = "批量删除文章")
+    @SysLog(logModule=BlogArticleModule, logType = DELETE, logDesc = "批量删除文章,同时删除该文章评论和标签表关系")
     @DeleteMapping("/admin/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
-        blogArticleService.removeByIds(ids);
+        blogArticleService.deleteBatchArticle(ids);
         return ResponseResult.success();
     }
 
@@ -112,6 +114,31 @@ public class BlogArticleController {
     @PostMapping("/admin/updateArticle")
     public ResponseResult updateArticle(@RequestBody BlogArticle updateArticle) {
         blogArticleService.updateBlogArticle(updateArticle);
+        return ResponseResult.success();
+    }
+
+
+    /**
+     * Description: 后台修改文章顶置状态
+     * Author: jingwen
+     * Date: 2023/1/26 12:48
+     **/
+    @SysLog(logModule=BlogArticleModule, logType = UPDATE, logDesc = "后台修改文章顶置状态")
+    @PostMapping("/admin/updateArticleTop")
+    public ResponseResult updateArticleTop(@RequestBody BlogAdminUpdateArticleTopDTO updateTopDTO) {
+        blogArticleService.updateArticleTop(updateTopDTO);
+        return ResponseResult.success();
+    }
+
+    /**
+     * Description: 后台修改文章审核状态
+     * Author: jingwen
+     * Date: 2023/1/26 12:48
+     **/
+    @SysLog(logModule=BlogArticleModule, logType = UPDATE, logDesc = "后台审核文章")
+    @PostMapping("/admin/updateArticleCheck")
+    public ResponseResult updateArticleCheck(@RequestBody BlogAdminUpdateArticleCheckDTO updateCheckDTO) {
+        blogArticleService.updateArticleCheck(updateCheckDTO);
         return ResponseResult.success();
     }
 }

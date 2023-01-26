@@ -14,5 +14,6 @@ public class QueryBlogAdminArticlePageDTO extends MyPageDTO {
     //文章类别名称
     private String categoryName;
 
-
+    //文章审核状态
+    private String articleCheck;
 }

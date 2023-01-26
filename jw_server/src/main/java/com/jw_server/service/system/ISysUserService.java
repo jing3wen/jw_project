@@ -8,6 +8,7 @@ import com.jw_server.dao.system.dto.ResetPasswordDTO;
 import com.jw_server.dao.system.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jw_server.dao.system.vo.LoginUserVO;
+import com.jw_server.dao.system.vo.SysUserVO;
 
 
 /**
@@ -51,7 +52,7 @@ public interface ISysUserService extends IService<SysUser> {
      * Author: jingwen
      * Date: 2022/9/2 16:40
      **/
-    MyPageVO getUserPageList(QuerySysUserDTO querySysUserDTO);
+    MyPageVO<SysUserVO> getUserPageList(QuerySysUserDTO querySysUserDTO);
 
 
     /**

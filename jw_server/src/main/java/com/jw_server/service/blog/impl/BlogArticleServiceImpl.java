@@ -2,15 +2,20 @@ package com.jw_server.service.blog.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.core.utils.IpUtils;
 import com.jw_server.core.utils.RedisUtils;
 import com.jw_server.dao.blog.dto.BlogAdminAddArticleDTO;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleCheckDTO;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleTopDTO;
 import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import com.jw_server.dao.blog.mapper.BlogArticleMapper;
+import com.jw_server.dao.blog.mapper.BlogCategoryMapper;
+import com.jw_server.dao.blog.mapper.BlogCommentMapper;
 import com.jw_server.dao.blog.vo.BlogAdminArticlePageVO;
 import com.jw_server.dao.blog.vo.BlogAdminUpdateArticleVO;
 import com.jw_server.dao.blog.vo.BlogFrontArticleDetailsVO;
@@ -24,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,6 +45,12 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     @Resource
     private BlogArticleMapper blogArticleMapper;
+
+    @Resource
+    private BlogCategoryMapper blogCategoryMapper;
+
+    @Resource
+    private BlogCommentMapper blogCommentMapper;
 
 
     @Resource
@@ -100,7 +112,12 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      **/
     @Override
     public BlogAdminUpdateArticleVO getUpdateArticle(Integer articleId) {
-        return blogArticleMapper.getUpdateArticle(articleId);
+        BlogAdminUpdateArticleVO updateArticleVO = blogArticleMapper.getUpdateArticle(articleId);
+        if (updateArticleVO.getCategoryId() != null){
+            updateArticleVO.setCategoryName(
+                    blogCategoryMapper.getCategoryNameById(updateArticleVO.getCategoryId()));
+        }
+        return updateArticleVO;
     }
 
     /**
@@ -109,5 +126,42 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Override
     public void updateBlogArticle(BlogArticle updateArticle) {
         updateById(updateArticle);
+    }
+
+    /**
+     * 后台修改文章顶置状态
+     **/
+    @Override
+    public void updateArticleTop(BlogAdminUpdateArticleTopDTO updateTopDTO) {
+        update(new LambdaUpdateWrapper<BlogArticle>()
+                .eq(BlogArticle::getArticleId, updateTopDTO.getArticleId())
+                .set(BlogArticle::getIsTop, updateTopDTO.getIsTop()));
+    }
+
+    /**
+     * 要注意同时删除文章评论和标签
+     **/
+    @Override
+    public void deleteBatchArticle(List<Integer> ids) {
+
+        ids.forEach(deleteArticleId->{
+            //删除评论
+            blogCommentMapper.deleteCommentByArticleId(deleteArticleId);
+
+            //删除标签
+
+        });
+        //删除文章
+        removeBatchByIds(ids);
+    }
+
+    /**
+     * 后台修改文章审核状态
+     **/
+    @Override
+    public void updateArticleCheck(BlogAdminUpdateArticleCheckDTO updateCheckDTO) {
+        update(new LambdaUpdateWrapper<BlogArticle>()
+                .eq(BlogArticle::getArticleId, updateCheckDTO.getArticleId())
+                .set(BlogArticle::getArticleCheck, updateCheckDTO.getArticleCheck()));
     }
 }

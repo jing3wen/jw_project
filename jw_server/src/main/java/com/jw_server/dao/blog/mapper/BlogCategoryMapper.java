@@ -35,4 +35,18 @@ public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
      **/
     IPage<BlogAdminCategoryPageVO> getBlogCategoryPageList(Page<BlogAdminCategoryPageVO> page,
                                                            @Param("queryCategoryDTO") QueryBlogAdminCategoryPageDTO queryCategoryDTO);
+
+    /**
+     * Description: 后台根据文章类别名搜索类别列表
+     * Author: jingwen
+     * Date: 2023/1/25 17:00
+     **/
+    List<BlogFrontCategoryVO> searchBlogCategoryListByCategoryName(String categoryName);
+
+    /**
+     * Description: 根据类别id搜索类别名
+     * Author: jingwen
+     * Date: 2023/1/26 12:18
+     **/
+    String getCategoryNameById(Integer categoryId);
 }

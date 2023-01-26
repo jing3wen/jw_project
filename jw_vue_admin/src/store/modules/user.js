@@ -1,7 +1,6 @@
 // 登陆用户相关设置
 import store from '../index'
 const state = {
-    registerDrawerVisable: false,
 
     currentLoginUser:{
 
@@ -15,9 +14,7 @@ const getters = {
 }
 
 const mutations = {
-    changeRegisterDrawerVisable(state){
-        state.registerDrawerVisable = !state.registerDrawerVisable
-    },
+
     loginUser(state, loginUserInfo){
         state.currentLoginUser = loginUserInfo
     },

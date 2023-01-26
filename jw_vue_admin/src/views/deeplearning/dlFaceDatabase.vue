@@ -107,7 +107,7 @@
 <script>
 import Pagination from "@/components/pagination/Pagination";
 import {faceSizeLimit, faceTypeList} from "@/assets/js/config";
-import ImageVideoUpload from "@/components/upload/imageVideoUpload/ImageVideoUpload";
+import ImageVideoUpload from "@/components/file/upload/imageVideoUpload/ImageVideoUpload";
 
 export default {
   name: "dlFaceDatabase",

@@ -1,5 +1,6 @@
 package com.jw_server.service.system.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -60,22 +61,23 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public void addSysRole(SysRole sysRole) {
-        LambdaQueryWrapper<SysRole> querySameRoleCode = new LambdaQueryWrapper<>();
-        //不用查询所有数据，查主键id就行了
-        querySameRoleCode.select(SysRole::getId);
-        querySameRoleCode.eq(SysRole::getRoleCode, sysRole.getRoleCode());
-        if(sysRoleMapper.selectOne(querySameRoleCode)!=null){
+    public void addOrUpdateSysRole(SysRole sysRole) {
+        //查询是否存在相同角色编码 (不用查询所有数据，查主键id就行了)
+        SysRole findSameRoleCode = sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>()
+                .select(SysRole::getId)
+                .eq(SysRole::getRoleCode, sysRole.getRoleCode()));
+
+        if(ObjectUtil.isNotEmpty(findSameRoleCode) && !(findSameRoleCode.getId().equals(sysRole.getId()))){
             throw new ServiceException(HttpCode.CODE_400,"存在相同标识符角色，请更改唯一标识符");
         }
 
-        LambdaQueryWrapper<SysRole> querySameRoleName = new LambdaQueryWrapper<>();
-        //不用查询所有数据，查主键id就行了
-        querySameRoleName.select(SysRole::getId);
-        querySameRoleName.eq(SysRole::getRoleName, sysRole.getRoleName());
-        if(sysRoleMapper.selectOne(querySameRoleName)!=null){
+        //查询是否存在相同角色名 (不用查询所有数据，查主键id就行了)
+        SysRole findSameRoleName = sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>()
+                .select(SysRole::getId)
+                .eq(SysRole::getRoleName, sysRole.getRoleName()));
+        if(ObjectUtil.isNotEmpty(findSameRoleName) && !(findSameRoleName.getId().equals(sysRole.getId()))){
             throw new ServiceException(HttpCode.CODE_400,"存在相同角色名，请更改角色名");
         }
-        sysRoleMapper.insert(sysRole);
+        saveOrUpdate(sysRole);
     }
 }

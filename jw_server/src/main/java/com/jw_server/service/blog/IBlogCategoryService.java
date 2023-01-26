@@ -46,4 +46,12 @@ public interface IBlogCategoryService extends IService<BlogCategory> {
      * Date: 2023/1/12 23:45
      **/
     void deleteCategoryByIds(List<Integer> ids);
+
+    /**
+     * Description: 后台根据文章类别名搜索类别列表
+     * Author: jingwen
+     * Date: 2023/1/25 16:53
+     **/
+    List<BlogFrontCategoryVO> searchBlogCategoryList(String categoryName);
+
 }

@@ -1,6 +1,7 @@
 package com.jw_server.service.system.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -133,7 +134,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 检查是否有同名用户, 只需要随便查找一个属性（主键）即可
         SysUser findSameUserNameUser = getUserByUserName(username);
 
-        if (findSameUserNameUser != null){
+        if (ObjectUtil.isNotEmpty(findSameUserNameUser)){
             throw new ServiceException(HttpCode.CODE_600,"用户名已存在, 请修改用户名");
         }
         //对密码进行加密
@@ -143,10 +144,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return ResponseResult.success();
     }
 
+    /**
+     * 检查是否有同名用户, 只需要随便查找一个属性（主键）即可
+     **/
     @Override
     public SysUser getUserByUserName(String username){
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getUsername, username);
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<SysUser>()
+                .select(SysUser::getId)
+                .eq(SysUser::getUsername, username);
         SysUser sysUser;
         try {
             sysUser = getOne(queryWrapper);
@@ -158,7 +163,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public MyPageVO getUserPageList(QuerySysUserDTO querySysUserDTO) {
+    public MyPageVO<SysUserVO> getUserPageList(QuerySysUserDTO querySysUserDTO) {
         //查询条件
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
         if(StrUtil.isNotEmpty(querySysUserDTO.getUsername())){
@@ -183,12 +188,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         });
 
 
-        MyPageVO<SysUserVO> myPageVO = new MyPageVO(userIPage.getPages(),
+        return (MyPageVO<SysUserVO>) new MyPageVO(userIPage.getPages(),
                 userIPage.getCurrent(),
                 userIPage.getSize(),
                 userIPage.getTotal(),
                 userVOList);
-        return myPageVO;
     }
 
     @Override

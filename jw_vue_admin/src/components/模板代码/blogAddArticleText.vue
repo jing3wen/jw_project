@@ -3,9 +3,8 @@
   <div class="addArticle_box">
     <h3>
       <el-icon style="margin-right: 10px;" name="edit"></el-icon>
-      编辑文章
+      新增文章
     </h3>
-
     <div class="editor-form">
       <el-row :gutter="20">
         <el-col :xs="24" :sm="24" :md="24" :lg="17" :xl="17">
@@ -75,7 +74,7 @@
           </el-row>
           <div class="write_abstract" style="text-align: center;background: none;">
             <el-button text @click="previewArticleDialogFormVisible = true">预览</el-button>
-            <el-button style="width: 50%;" plain color="#2fa7b9" @click="updateArticle">修改</el-button>
+            <el-button style="width: 50%;" plain color="#2fa7b9" @click="addArticle">发布</el-button>
             <p>注：普通用户提交文章需要等待管理员审核</p>
           </div>
         </el-col>
@@ -90,9 +89,12 @@
 
 <script>
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import ImageVideoUpload from "../file/upload/imageVideoUpload/ImageVideoUpload"
+import {uploadImageSizeLimit, uploadImageTypeList} from "../../assets/js/config";
+
 export default {
-  name: "blogUpdateArticleText",
-  components: { Editor, Toolbar },
+  name: "blogAddArticleText",
+  components: { Editor, Toolbar, ImageVideoUpload },
   data() {
     return {
       //Editor编辑器配置
@@ -118,7 +120,6 @@ export default {
         commentAllowed: '1', // 文章是否允许评论(0表示不能评论，1表示可以评论)
         articleCheck: '1', //文章审核状态（1表示通过，0表示未通过）TODO 此处默认审核通过，后续可更改
       },
-      articleIsChange: false, //判断文章是否修改
       // 分类信息
       categoryList: [],
       // 缩略图上传到服务器的路径
@@ -128,13 +129,14 @@ export default {
     }
   },
   created() {
-    //获取待编辑的文章信息
-    this.getUpdateArticle()
+    //查看是否有缓存数据
+    this.getCachedArticle()
     //获取所有文章类别
     this.getAllCategory()
     //加载编辑器
     this.createEditorConfig()
   },
+
   beforeDestroy() {
     const editor = this.editor
     if (editor == null) return
@@ -144,6 +146,18 @@ export default {
     this.cacheArticleWhenChangeVue()
   },
   methods: {
+    //查看是否有缓存数据
+    getCachedArticle(){
+      const article = sessionStorage.getItem('add-article')
+      if (article){
+        this.$notify({
+          title: '提示',
+          message: '已自动恢复到上次编辑状态',
+          type:'success'
+        });
+        this.article = JSON.parse(article)
+      }
+    },
     //获取所有文章分类
     getAllCategory(){
       this.request.get('/api/blogCategory/front/getAllCategory').then(res =>{
@@ -154,51 +168,27 @@ export default {
         }
       })
     },
-    //根据url路径获取待编辑的文章内容
-    getUpdateArticle(){
-      //获取url中的文章id
-      const path = this.$route.path;
-      const index = path.lastIndexOf("\/")
-      const articleId = parseInt(path.substring(index + 1,path.length))
-      if (articleId) {
-        this.request.get("/api/blogArticle/admin/getUpdateArticle", {params: {articleId: articleId}}).then(res => {
-          this.article = res.data
-          //缓存 数据库版本article
-          sessionStorage.setItem('update-oldArticleId-'+this.article.articleId, JSON.stringify(this.article))
-          //检测浏览器中是否缓存了 新版本article
-          const newArticle = sessionStorage.getItem('update-newArticleId-'+this.article.articleId)
-          if(newArticle){
-            this.$notify({
-              title: '提示',
-              message: '已自动恢复到上次编辑状态',
-              type:'success'
-            });
-            this.article = JSON.parse(newArticle)
-          }
-        })
-      }
-    },
     // 新增或编辑文章
-    updateArticle() {
+    addArticle() {
       // 判断内容是否填写完整
       if (this.article.articleTitle !== "" && this.article.articleSummary !== "" &&
           this.article.categoryId !== "" && this.article.articleVisible !== "" &&
           this.article.commentAllowed !== "") {
-        // 更新文章
-        this.request.post("/api/blogArticle/admin/updateArticle", this.article).then((res) => {
+        // 添加文章
+        this.article.userId = this.$store.state.user.currentLoginUser.id
+        this.request.post("/api/blogArticle/admin/addBlogArticle", this.article).then((res) => {
           if (res.code === 200) {
             //重置编辑器表单
             this.$notify({
               title: '提示',
-              message: this.article.commentAllowed === '1' ? "文章更新成功（已开启默认审核通过）" :
-                  "文章更新成功，等待管理员审核",
+              message: this.article.commentAllowed === '1' ? "文章发布成功（已开启默认审核通过）" :
+                  "文章提交成功，等待管理员审核",
               type: 'success',
             })
             //任务已提交，清空缓存
-            sessionStorage.removeItem('update-oldArticleId-'+this.article.articleId)
-            sessionStorage.removeItem('update-newArticleId-'+this.article.articleId)
-            this.$store.commit('layout/removeTab', '编辑文章')
-            this.resetArticleForm()
+            sessionStorage.removeItem('add-article')
+            this.$store.commit('layout/removeTab', '新增文章')
+            this.resetWriteForm()
             this.$router.push('/blog/blogArticle')
           }
         })
@@ -206,37 +196,32 @@ export default {
         this.$message.error('除缩略图之外的内容都是必填项哦~')
       }
     },
-    /**
-     * 销毁组件时需要判断内容是否被修改，若修改则缓存内容
-     * oldArticle表示数据库中的文章内容
-     * newArticle表示当前页面的内容
-     **/
-    cacheArticleWhenChangeVue(){
-      const oldArticle = JSON.parse(sessionStorage.getItem('update-oldArticleId-'+this.article.articleId))
-      const newArticle = this.article
-      if (!(oldArticle.categoryId === newArticle.categoryId &&
-          oldArticle.isTop === newArticle.isTop &&
-          oldArticle.articleCover === newArticle.articleCover &&
-          oldArticle.articleTitle === newArticle.articleTitle &&
-          oldArticle.articleSummary === newArticle.articleSummary &&
-          oldArticle.articleContent === newArticle.articleContent &&
-          oldArticle.articleVisible === newArticle.articleVisible &&
-          oldArticle.commentAllowed === newArticle.commentAllowed &&
-          oldArticle.articleCheck === newArticle.articleCheck)) {
+    //当摧毁组件时判断页面是否已经写入数据，若写入就缓存该数据
+    cacheArticleWhenChangeVue() {
+      if (!(this.article.articleId === null &&
+          this.article.userId === '' &&
+          this.article.categoryId === '' &&
+          this.article.isTop === '' &&
+          this.article.articleCover === '' &&
+          this.article.articleTitle === '' &&
+          this.article.articleSummary === '' &&
+          (this.article.articleContent === '' || this.article.articleContent === '<p><br></p>') &&
+          this.article.articleVisible === '1' &&
+          this.article.commentAllowed === '1' &&
+          this.article.articleCheck === '1')) {
         this.$notify({
           title: '提示',
-          message: '发现文章修改，已自动缓存数据',
-          type:'success'
+          message: '已自动缓存数据',
+          type: 'success'
         });
-        sessionStorage.setItem('update-newArticleId-'+this.article.articleId, JSON.stringify(this.article))
-      }else {
+        sessionStorage.setItem('add-article', JSON.stringify(this.article))
+      } else {
         //防止用户手动恢复到默认状态后 还存在缓存数据
-        sessionStorage.removeItem('update-oldArticleId-'+this.article.articleId)
-        sessionStorage.removeItem('update-newArticleId-'+this.article.articleId)
+        sessionStorage.removeItem('add-article')
       }
     },
     //重置表单, 重置验证状态
-    resetArticleForm(){
+    resetWriteForm(){
       //重置验证状态
       // if(this.$refs['userForm']){
       //   this.$refs['userForm'].resetFields()
@@ -263,7 +248,7 @@ export default {
         // 注意 springBoot 中的 MultipartFile 默认属性为"file" 要更改为file
         fieldName: 'file',
         // 上传图片的配置
-        server: "/api/fileUpload/blog/article/image",
+        server: "/api/file/fileUpload/blog/article/image",
         // 单个文件的最大体积限制，默认为 2M
         maxFileSize: 5 * 1024 * 1024, // 5M
         headers: {
@@ -287,7 +272,7 @@ export default {
         // 注意 springBoot 中的 MultipartFile 默认属性为"file" 要更改为file
         fieldName: 'file',
         // 上传视频的配置
-        server: "/api/fileUpload/blog/article/video",
+        server: "/api/file/fileUpload/blog/article/video",
         // 单个文件的最大体积限制，默认为 20M
         maxFileSize: 100 * 1024 * 1024, // 100M
         headers: {
@@ -353,11 +338,12 @@ export default {
     previewArticleCloseDialog(visible) {
       this.previewArticleDialogFormVisible = visible;
     },
+
   },
 
 }
 </script>
-<style src="@wangeditor/editor/dist/css/style.css"></style>
+<style src="../../../node_modules/@wangeditor/editor/dist/css/style.css"></style>
 <style scoped>
 .addArticle_box {
   width: 100%;

@@ -1,6 +1,9 @@
 //一些公共的函数代码
 
-// 判断文件类别
+// 默认上传文件配置
+import {defaultUploadImageSizeLimit, defaultUploadImageTypeList,
+        defaultUploadVideoSizeLimit, defaultUploadVideoTypeList} from "./config";
+
 function getFileType(fileName) {
     // 后缀获取
     let suffix = '';
@@ -68,4 +71,21 @@ function getFileType(fileName) {
     return 'other';
 }
 
-export {getFileType}
+//上传时根据文件名 加载 上传默认限制
+function getUploadFileSizeLimitByFilename(filename) {
+    if(getFileType(filename) === 'image') {
+        return defaultUploadImageSizeLimit
+    }else if(getFileType(filename) === 'video') {
+        return defaultUploadVideoSizeLimit
+    }
+}
+function getUploadFileTypeLimitByFilename(filename) {
+    if(getFileType(filename) === 'image') {
+        return defaultUploadImageTypeList
+    }if(getFileType(filename) === 'video') {
+        return defaultUploadVideoTypeList
+    }
+}
+export {getFileType,
+    getUploadFileSizeLimitByFilename,
+    getUploadFileTypeLimitByFilename}

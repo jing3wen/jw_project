@@ -66,4 +66,12 @@ public interface BlogCommentMapper extends BaseMapper<BlogComment> {
      * Date: 2023/1/13 14:32
      **/
     void updateCommentCheckBatch(List<Integer> ids);
+
+
+    /**
+     * Description: 根据文章ID删除所有评论
+     * Author: jingwen
+     * Date: 2023/1/26 13:24
+     **/
+    void deleteCommentByArticleId(Integer articleId);
 }

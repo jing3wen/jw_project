@@ -88,5 +88,16 @@ public class BlogCategoryController {
         return ResponseResult.success(blogCategoryService.getBlogCategoryPageList(queryCategoryDTO));
     }
 
+
+    /**
+     * Description: 后台根据文章类别名搜索类别列表
+     * Author: jingwen
+     * Date: 2023/1/25 16:53
+     **/
+    @GetMapping("/admin/searchBlogCategoryList")
+    public ResponseResult searchBlogCategoryList(@RequestParam String categoryName) {
+        return ResponseResult.success(blogCategoryService.searchBlogCategoryList(categoryName));
+    }
+
 }
 

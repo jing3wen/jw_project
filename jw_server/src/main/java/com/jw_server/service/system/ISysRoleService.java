@@ -42,5 +42,5 @@ public interface ISysRoleService extends IService<SysRole> {
      * Author: jingwen
      * Date: 2022/9/6 19:14
      **/
-    void addSysRole(SysRole sysRole);
+    void addOrUpdateSysRole(SysRole sysRole);
 }

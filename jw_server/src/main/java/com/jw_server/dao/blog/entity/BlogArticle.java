@@ -61,7 +61,7 @@ public class BlogArticle implements Serializable {
     @ApiModelProperty("评论数量")
     private Integer commentCounts;
 
-    @ApiModelProperty("文章审核状态（1表示通过，0表示未通过）")
+    @ApiModelProperty("文章审核状态（1表示通过，0表示未审核, f表示未通过）")
     private String articleCheck;
 
     @ApiModelProperty("是否删除(0代表存在 1代表删除)")
