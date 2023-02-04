@@ -7,10 +7,7 @@ import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleTopDTO;
 import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.jw_server.dao.blog.vo.BlogAdminArticlePageVO;
-import com.jw_server.dao.blog.vo.BlogAdminUpdateArticleVO;
-import com.jw_server.dao.blog.vo.BlogFrontArticleDetailsVO;
-import com.jw_server.dao.blog.vo.BlogFrontArticlePageVO;
+import com.jw_server.dao.blog.vo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -86,4 +83,11 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Date: 2023/1/26 12:48
      **/
     void updateArticleCheck(BlogAdminUpdateArticleCheckDTO updateCheckDTO);
+
+    /**
+     * Description: 前台获取热门文章————浏览量最多的3篇文章
+     * Author: jingwen
+     * Date: 2023/1/28 13:54
+     **/
+    List<BlogFrontHotArticleVO> getHotArticle(Integer pageNum, Integer pageSize);
 }

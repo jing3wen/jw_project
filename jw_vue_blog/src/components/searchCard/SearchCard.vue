@@ -41,7 +41,7 @@ export default {
   methods: {
     //生成随机数，用户改变搜索框上方的背景图
     showSearchCardImg(){
-      const nonce = Math.floor(Math.random() * 7+1);
+      const nonce = Math.floor(Math.random() * 6+1);
       const nonce2 = (nonce < 10 ? '0' + nonce : nonce);
       this.url = require('../../assets/image/banner/banner'+ nonce2 +'.png')
     },

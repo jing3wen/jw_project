@@ -1,97 +1,98 @@
 <template>
-  <div class="main_content">
-    <div>
-      <div class="content_title">
-        <h3>关于我</h3>
+  <div class="about-container">
+    <div class="main_content">
+      <div>
+        <div class="content_title">
+          <h3>关于我</h3>
+        </div>
+        <div class="content_box">
+          <!-- <p>本人学识渊博，经验丰富，代码风骚，效率恐怖。AI、UI设计、前后端无不精通，熟练掌握各种语言的框架。</p>
+          <p>会DDOS一秒钟死一个站，会注入，会上传，会XSS，会破解，会嗅探，会开发，会业务，会运维，会渗透。互联网内，我无处不在。</p>
+          <p>全国漏洞认识深刻，熟练掌握各种操作系统内核。认真学习过《黑客攻防技术宝典》，《逆向工程》，《游戏waigua攻防艺术》等专业书籍。深山苦练十余载，一天只睡2小时。</p>
+          <p>听指挥，执行快，脾气好，不喷人，操作虎，意识强，渗透快，shell多，能过狗，能过盾。</p>
+          <p>千里之外取服务器首级，瞬息之间爆管理员狗头，压安全狗如压草芥。电话通知出Bug后，秒登vpn，千里之外定位问题，瞬息之间修复上线。</p>
+          <p>只有你想不到的，没有我做不到的。</p>
+          <br>
+          <p><b>以上都是吹的，哈哈。</b></p>
+          <br> -->
+          <p>我是一名设计爱好者、斜杠青年、伪文青，同时也是一位即将步入IT行业的程序猿。</p>
+          <p>目前就读软件开发专业。平时不忙时，喜欢偶发性改改UI、写写一些稀奇古怪的界面。</p>
+          <p>如你所见，这是我的个人网站。前后台用户界面由我独立设计与开发。</p>
+          <p>毕竟我只是一位设计爱好者，在审美设计上也有许多的缺陷和不足。如果你有一些好的想法、创意或者寻求帮助的话，可以发邮件给我
+            (<a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=478292420@qq.com"
+                target="_blank" data-v-634963c2="">478292420 @qq.com</a>)。</p>
+          <p>Bvpank与您一同成长！最后，祝自由快乐!</p>
+        </div>
       </div>
-      <div class="content_box">
-        <!-- <p>本人学识渊博，经验丰富，代码风骚，效率恐怖。AI、UI设计、前后端无不精通，熟练掌握各种语言的框架。</p>
-        <p>会DDOS一秒钟死一个站，会注入，会上传，会XSS，会破解，会嗅探，会开发，会业务，会运维，会渗透。互联网内，我无处不在。</p>
-        <p>全国漏洞认识深刻，熟练掌握各种操作系统内核。认真学习过《黑客攻防技术宝典》，《逆向工程》，《游戏waigua攻防艺术》等专业书籍。深山苦练十余载，一天只睡2小时。</p>
-        <p>听指挥，执行快，脾气好，不喷人，操作虎，意识强，渗透快，shell多，能过狗，能过盾。</p>
-        <p>千里之外取服务器首级，瞬息之间爆管理员狗头，压安全狗如压草芥。电话通知出Bug后，秒登vpn，千里之外定位问题，瞬息之间修复上线。</p>
-        <p>只有你想不到的，没有我做不到的。</p>
-        <br>
-        <p><b>以上都是吹的，哈哈。</b></p>
-        <br> -->
-        <p>我是一名设计爱好者、斜杠青年、伪文青，同时也是一位即将步入IT行业的程序猿。</p>
-        <p>目前就读软件开发专业。平时不忙时，喜欢偶发性改改UI、写写一些稀奇古怪的界面。</p>
-        <p>如你所见，这是我的个人网站。前后台用户界面由我独立设计与开发。</p>
-        <p>毕竟我只是一位设计爱好者，在审美设计上也有许多的缺陷和不足。如果你有一些好的想法、创意或者寻求帮助的话，可以发邮件给我
-          (<a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=478292420@qq.com"
-              target="_blank" data-v-634963c2="">478292420 @qq.com</a>)。</p>
-        <p>Bvpank与您一同成长！最后，祝自由快乐!</p>
+      <div>
+        <div class="content_title">
+          <h3>关于本站</h3>
+        </div>
+        <div class="content_box">
+          <p>学习过程中开发的一个小型项目，没有任何由来。喜欢的就多多支持一下吧！</p>
+          <p><b>建站时间：</b>2022年7月20日</p>
+          <p><b>开发技术：</b><b>前端：</b>H5、css3、原生js、vue3.0、Element Plus &nbsp;&nbsp;&nbsp;&nbsp; <b>后端：</b>Java
+            &nbsp;&nbsp;&nbsp;&nbsp;<b>数据库：</b>Mysql 8.0</p>
+        </div>
       </div>
-    </div>
-    <div>
-      <div class="content_title">
-        <h3>关于本站</h3>
+      <div>
+        <div class="content_title">
+          <h3>特别鸣谢</h3>
+        </div>
+        <div class="content_box">
+          <p><b><a href="https://www.wangeditor.com/">wangEditor：</a></b>开源 Web 富文本编辑器，开箱即用，配置简单</p>
+          <p><b><a href="https://element-plus.gitee.io/zh-CN/">Vue.js：</a></b>渐进式 JavaScript 框架</p>
+          <p><b><a href="https://v3.cn.vuejs.org/">Element Plus：</a></b>基于 Vue 3，面向设计师和开发者的组件库</p>
+          <p><b><a href="https://echarts.apache.org/zh/index.html">Apache ECharts：</a></b>一个基于 JavaScript 的开源可视化图表库</p>
+        </div>
       </div>
-      <div class="content_box">
-        <p>学习过程中开发的一个小型项目，没有任何由来。喜欢的就多多支持一下吧！</p>
-        <p><b>建站时间：</b>2022年7月20日</p>
-        <p><b>开发技术：</b><b>前端：</b>H5、css3、原生js、vue3.0、Element Plus &nbsp;&nbsp;&nbsp;&nbsp; <b>后端：</b>Java
-          &nbsp;&nbsp;&nbsp;&nbsp;<b>数据库：</b>Mysql 8.0</p>
-      </div>
-    </div>
-    <div>
-      <div class="content_title">
-        <h3>特别鸣谢</h3>
-      </div>
-      <div class="content_box">
-        <p><b><a href="https://www.wangeditor.com/">wangEditor：</a></b>开源 Web 富文本编辑器，开箱即用，配置简单</p>
-        <p><b><a href="https://element-plus.gitee.io/zh-CN/">Vue.js：</a></b>渐进式 JavaScript 框架</p>
-        <p><b><a href="https://v3.cn.vuejs.org/">Element Plus：</a></b>基于 Vue 3，面向设计师和开发者的组件库</p>
-        <p><b><a href="https://echarts.apache.org/zh/index.html">Apache ECharts：</a></b>一个基于 JavaScript 的开源可视化图表库</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="message_box">
-    <div class="titleWrapper">
-      <h3 class="title"><b>留言</b></h3>
     </div>
 
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <p>◎ 欢迎参与讨论，请在这里发表您的看法和观点。留言头像采用“腾讯QQ”的头像</p>
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-        <el-input v-model="message.name" size="large" placeholder="昵称" />
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-        <el-input v-model.number="message.qq" size="large" placeholder="QQ号" />
-      </el-col>
-      <el-col :span="24">
-        <el-input v-model="message.content" :autosize="{ minRows: 4, maxRows: 5 }" type="textarea"
-                  placeholder="留言内容" maxlength="50" />
-      </el-col>
-      <el-col :xs="24" :sm="18" :md="18" :lg="18" :xl="18">
-        <el-input v-model="message.code" size="large" placeholder="验证码">
-          <template #append>
-            <VerificationCode ref="player" @getVerificationCode="getVerificationCode" title="看不清？点击换一张"></VerificationCode>
-          </template>
-        </el-input>
-      </el-col>
-      <el-col :span="24" :sm="6" :md="6" :lg="6" :xl="6">
-        <el-button color="#2fa7b9" plain size="large" style="width:100%;text-align: right;" @click="submit">发布留言
-        </el-button>
-      </el-col>
-    </el-row>
-  </div>
+    <div class="message_box">
+      <div class="titleWrapper">
+        <h3 class="title"><b>留言</b></h3>
+      </div>
 
-  <div class="message_content" v-loading="loading" element-loading-text="玩命加载中...">
-    <div class="titleWrapper">
-      <h3 class="title"><b>最新留言</b></h3>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <p>◎ 欢迎参与讨论，请在这里发表您的看法和观点。留言头像采用“腾讯QQ”的头像</p>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+          <el-input v-model="message.name" size="large" placeholder="昵称" />
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+          <el-input v-model.number="message.qq" size="large" placeholder="QQ号" />
+        </el-col>
+        <el-col :span="24">
+          <el-input v-model="message.content" :autosize="{ minRows: 4, maxRows: 5 }" type="textarea"
+                    placeholder="留言内容" maxlength="50" />
+        </el-col>
+        <el-col :xs="24" :sm="18" :md="18" :lg="18" :xl="18">
+          <el-input v-model="message.code" size="large" placeholder="验证码">
+            <template #append>
+              <VerificationCode ref="player" @getVerificationCode="getVerificationCode" title="看不清？点击换一张"></VerificationCode>
+            </template>
+          </el-input>
+        </el-col>
+        <el-col :span="24" :sm="6" :md="6" :lg="6" :xl="6">
+          <el-button color="#2fa7b9" plain size="large" style="width:100%;text-align: right;" @click="submit">发布留言
+          </el-button>
+        </el-col>
+      </el-row>
     </div>
-    <div>
-      <ul>
-        <li class="item" v-for="item in messageInfo">
-          <div class="userInfo">
-            <img :src="item.messageQQ" alt="">
-            <span># {{item.messageName}}</span>
-            <l>{{item.messageDate}}</l>
-            <span @click="reply(item.messageId,item.replyContent)" class="operation">
+
+    <div class="message_content" v-loading="loading" element-loading-text="玩命加载中...">
+      <div class="titleWrapper">
+        <h3 class="title"><b>最新留言</b></h3>
+      </div>
+      <div>
+        <ul>
+          <li class="item" v-for="item in messageInfo">
+            <div class="userInfo">
+              <img :src="item.messageQQ" alt="">
+              <span># {{item.messageName}}</span>
+              <l>{{item.messageDate}}</l>
+              <span @click="reply(item.messageId,item.replyContent)" class="operation">
               <span v-if="userInfo.userType ===0 && item.messageId !== replyId">
                   <el-icon><ChatDotSquare /></el-icon>
                   <span v-if="item.replyContent ==='' || item.replyContent ==null">回复</span>
@@ -102,47 +103,49 @@
                   取消回复
               </span>
           </span>
-            <el-popconfirm confirm-button-text="确定" cancel-button-text="取消" :icon="Delete_icon"
-                           icon-color="#F56C6C" confirm-button-type="danger" :title="'确定删除该评论吗？'"
-                           @confirm="deleteMessage(item.messageId)">
-              <template #reference>
+              <el-popconfirm confirm-button-text="确定" cancel-button-text="取消" :icon="Delete_icon"
+                             icon-color="#F56C6C" confirm-button-type="danger" :title="'确定删除该评论吗？'"
+                             @confirm="deleteMessage(item.messageId)">
+                <template #reference>
                 <span v-if="userInfo.userType ===0" class="operation">
                     <el-icon><Delete /></el-icon>
                     删除
                 </span>
-              </template>
-            </el-popconfirm>
-          </div>
-          <div class="commentGroup">
-            <p class="detailText">{{item.content}}</p>
-          </div>
+                </template>
+              </el-popconfirm>
+            </div>
+            <div class="commentGroup">
+              <p class="detailText">{{item.content}}</p>
+            </div>
 
-          <div v-show="item.messageId === replyId" class="comment_reply_box">
-            <el-row :gutter="20">
-              <el-col :span="20">
-                <el-input v-model="replyContent" maxlength="100" size="large"
-                          :placeholder="'回复@' + item.messageName+ ':'" show-word-limit />
-              </el-col>
-              <el-col :span="4">
-                <el-button plain color="#2fa7b9" size="large" style="width: 100%;"
-                           @click="submitReply(item.messageId)">提交
-                </el-button>
-              </el-col>
-            </el-row>
-          </div>
+            <div v-show="item.messageId === replyId" class="comment_reply_box">
+              <el-row :gutter="20">
+                <el-col :span="20">
+                  <el-input v-model="replyContent" maxlength="100" size="large"
+                            :placeholder="'回复@' + item.messageName+ ':'" show-word-limit />
+                </el-col>
+                <el-col :span="4">
+                  <el-button plain color="#2fa7b9" size="large" style="width: 100%;"
+                             @click="submitReply(item.messageId)">提交
+                  </el-button>
+                </el-col>
+              </el-row>
+            </div>
 
-          <div class="otherInfo" v-if="item.replyContent !== null && item.replyContent !== ''"><strong
-              style="color:#2FA7B9">Bpvank</strong>：{{item.replyContent}}</div>
-        </li>
-      </ul>
+            <div class="otherInfo" v-if="item.replyContent !== null && item.replyContent !== ''"><strong
+                style="color:#2FA7B9">Bpvank</strong>：{{item.replyContent}}</div>
+          </li>
+        </ul>
+      </div>
+      <!--    <el-pagination class="showPaging" background layout="prev, pager, next" :total="total" :page-size="pageSize"-->
+      <!--                   :disabled="disabled" @current-change="changePage" v-model:currentPage="currentPage"-->
+      <!--                   @size-change="handleSizeChange" :pager-count="3" :hide-on-single-page="true" />-->
+      <!--    <el-pagination class="hidePaging" background layout="prev, pager, next, jumper" :total="total"-->
+      <!--                   :page-size="pageSize" :disabled="disabled" @current-change="changePage" v-model:currentPage="currentPage"-->
+      <!--                   @size-change="handleSizeChange" :pager-count="3" :hide-on-single-page="true" />-->
     </div>
-<!--    <el-pagination class="showPaging" background layout="prev, pager, next" :total="total" :page-size="pageSize"-->
-<!--                   :disabled="disabled" @current-change="changePage" v-model:currentPage="currentPage"-->
-<!--                   @size-change="handleSizeChange" :pager-count="3" :hide-on-single-page="true" />-->
-<!--    <el-pagination class="hidePaging" background layout="prev, pager, next, jumper" :total="total"-->
-<!--                   :page-size="pageSize" :disabled="disabled" @current-change="changePage" v-model:currentPage="currentPage"-->
-<!--                   @size-change="handleSizeChange" :pager-count="3" :hide-on-single-page="true" />-->
   </div>
+
 </template>
 
 <script>
@@ -184,7 +187,7 @@ export default {
     }
   },
   created() {
-    this.loadData();
+    // this.loadData();
     const tokenStr = sessionStorage.getItem("userInfo");
     if (tokenStr) {
       this.userInfo = JSON.parse(tokenStr).data[0]
@@ -338,6 +341,10 @@ export default {
 </script>
 
 <style scoped>
+.about-container{
+  width: 60%;
+  margin: 0 auto;
+}
 .main_content,
 .message_box,
 .message_content {

@@ -107,15 +107,16 @@
     <el-card class="mt-10">
       <div class="article-editor">
         <h3 style="flex: 1">文章内容:</h3>
-        <el-button type="danger" plain class="ml-10" @click="" v-if="article.articleId == null">
-          保存草稿
-        </el-button>
+<!--        <el-button type="danger" plain class="ml-10" @click="" v-if="article.articleId == null">-->
+<!--          保存草稿-->
+<!--        </el-button>-->
         <el-button type="primary" plain class="ml-10" @click="addArticle()">
           发布文章
         </el-button>
       </div>
       <mavon-editor
           v-model="article.articleContent"
+          codeStyle="rainbow"
           ref="md"
           @imgAdd="uploadImage"
           @imgDel="deleteUploadImage"

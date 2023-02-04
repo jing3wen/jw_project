@@ -5,12 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jw_server.dao.blog.vo.BlogAdminArticlePageVO;
-import com.jw_server.dao.blog.vo.BlogAdminUpdateArticleVO;
-import com.jw_server.dao.blog.vo.BlogFrontArticleDetailsVO;
-import com.jw_server.dao.blog.vo.BlogFrontArticlePageVO;
+import com.jw_server.dao.blog.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -63,4 +62,11 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticle> {
      * Date: 2023/1/12 12:24
      **/
     BlogAdminUpdateArticleVO getUpdateArticle(Integer articleId);
+
+    /**
+     * Description: 前台获取热门文章————浏览量最多的3篇文章
+     * Author: jingwen
+     * Date: 2023/1/28 14:05
+     **/
+    List<BlogFrontHotArticleVO> getHotArticle(Integer pageNum, Integer pageSize);
 }

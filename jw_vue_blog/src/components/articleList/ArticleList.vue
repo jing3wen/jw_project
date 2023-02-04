@@ -1,21 +1,20 @@
 <template>
   <div class="boutique_article">
     <div class="titleBox">
-      <h3>精品文章</h3>
+      <h3>最新文章</h3>
       <p>包含本站所有分类文章，提供技术、资源、生活等文章，阅读愉快~</p>
     </div>
     <div class="contentBox" v-loading="loading" element-loading-text="玩命加载中...">
       <div class="titleWrapper">
         <h3 class="title"><b>最新</b></h3>
       </div>
-      <el-card class="articleBox card-hover-transition" v-for="item in articleList">
+      <el-card class="articleBox card-hover-transition" v-for="item in articleList" :key="item.articleId">
         <a :href="'/articleDetails/'+item.articleId">
           <h4 class="title">
             <span>{{item.articleTitle}}</span>
           </h4>
           <div class="article">
-            <img v-if="item.articleCover" class="focus" :src="item.articleCover"
-                 :alt="item.articleTitle">
+            <img v-if="item.articleCover" class="focus" :src="item.articleCover" :alt="item.articleTitle">
             <!-- 内容样式根据有没有图片改变 -->
             <div class="textBox" :class="[item.articleCover ? '':'textBox2']">
               <p style="margin-bottom: 25px;">{{item.articleSummary}}</p>
@@ -37,7 +36,7 @@
                   {{item.categoryName}}
                 </span>
                 <span>
-                  <el-icon><Timer /></el-icon>
+                  <el-icon><Calendar /></el-icon>
                   {{item.createTime}}
                 </span>
                 <span>
@@ -49,69 +48,58 @@
           </div>
         </a>
       </el-card>
-      <!--
-    total 总行数
-    page-size	每页显示条目个数
-    current-change 改变页码时触发
-    currentPage:当前页码
- -->
-<!--      <el-pagination class="showPaging" background layout="prev, pager, next" :total="total" :page-size="pageSize"-->
-<!--                     :disabled="disabled" @current-change="changePage" v-model:currentPage="currentPage"-->
-<!--                     @size-change="handleSizeChange" :pager-count="3" :hide-on-single-page="true"  />-->
-<!--      <el-pagination class="hidePaging" background layout="prev, pager, next, jumper" :total="total"-->
-<!--                     :page-size="pageSize" :disabled="disabled" @current-change="changePage"-->
-<!--                     v-model:currentPage="currentPage" @size-change="handleSizeChange" :pager-count="3" :hide-on-single-page="true" />-->
+
+      <!-- 封装的分页组件 -->
+      <Pagination
+          :total="total"
+          v-model:f_pageNum="queryArticlePage.pageNum"
+          v-model:f_pageSize="queryArticlePage.pageSize"
+          @pageList = "getPageList">
+      </Pagination>
     </div>
   </div>
 </template>
 
 <script>
 import {getYearMonthDay} from "../../utils/common";
+import Pagination from "../pagination/Pagination";
 
 export default {
   name: "Article",
+  components: {Pagination},
   data() {
     return{
       // 展示文章信息
       articleList: [],
+
+      queryArticlePage:{
+        pageNum: 0, //当前页码
+        pageSize: 5, //每页显示行数
+      },
       total: 0, //总条数
-      pageSize: 10, //每页显示行数
-      currentPage: 1, //当前页码
-      loading:false
+      loading:false,
+
     }
   },
   created() {
-    this.loadData()
+    this.getPageList()
   },
   methods: {
-    loadData(){
+    getPageList(){
       this.loading = true;
-
-      var params = {
-        'pageNum': this.currentPage,
-        'pageSize': this.pageSize,
-      }
-      this.request.get("http://localhost:9090/blogArticle/front/getBlogFrontArticlePage", {params}).then(res => {
+      this.request.post("/api/blogArticle/front/getBlogFrontArticlePage", this.queryArticlePage).then(res => {
         // 先清空数据
         this.articleList = [];
         res.data.records.forEach(element => {
-          // 时间格式化
+          // 时间格式化, 后端传过来的时间yyyy-mm-dd hh-mm-ss -> yyyy-mm-dd
           element.createTime = getYearMonthDay(element.createTime);
-          // 图片 根url
-          const url = process.env.VUE_APP_URL;
-          // 缩略图 判断是点击上传的还是，网络图片
-          if (element.articleCover != "" && !element.articleCover.includes('http') && !element.articleCover.includes('https')) {
-            element.articleCover = url + element.articleCover
-          }
-          // 添加
           this.articleList.push(element)
         });
         //JSON.parse 将从后台得到的数据转换为标准JSON格式
         //前台展示的是需要数组，JSON.parse转换后的数据，element-plus可以解析
-        // state.tableData = res.data.data.list;
+        this.queryArticlePage.pageNum = res.data.current;
+        this.queryArticlePage.pageSize = res.data.size;
         this.total = res.data.total;
-        this.pageSize = res.data.pageSize;
-        this.currentPage = res.data.pageNum;
         this.loading = false
       })
     }
@@ -257,15 +245,7 @@ export default {
   }
 }
 
-/* 分页样式 */
-:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
-  background-color: #2fa7b9;
-}
 
-.el-pagination {
-  margin-top: 20px;
-  justify-content: center;
-}
 
 :deep(.el-table .cell) {
   -webkit-box-orient: vertical;

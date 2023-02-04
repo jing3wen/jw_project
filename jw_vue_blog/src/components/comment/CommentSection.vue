@@ -278,7 +278,7 @@ export default {
               }else{
                 this.$message.info("评论成功, 请等待审核")
               }
-              
+
               if (commentId === 0) {
                 // 正常评论
                 this.commentContent = ""

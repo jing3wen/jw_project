@@ -5,7 +5,7 @@
              mode="horizontal" active-text-color='#2FA7B9'>
       <img src="../../assets/image/logo.svg" style="cursor: pointer;width:140px;" alt="Bpvank" @click="router.push({path:'/'})">
       <div class="flex-grow" />
-      <el-menu-item index="/">
+      <el-menu-item index="/home">
         <span>首页</span>
       </el-menu-item>
       <el-menu-item index="/article">

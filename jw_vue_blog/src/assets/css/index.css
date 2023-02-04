@@ -12,9 +12,9 @@ html {
     height: 100%;
     /* 默认页面所有字体为微软雅黑 */
     font-family: "微软雅黑";
-    background: #f6f6f6;
+    /*background: #ffffff;*/
     text-align: justify;
-    background: url(../image/start.jpg);
+    background: url(../image/background3.jpg);
     background-size: 100%;
 }
 

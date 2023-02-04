@@ -16,10 +16,7 @@ import com.jw_server.dao.blog.entity.BlogArticle;
 import com.jw_server.dao.blog.mapper.BlogArticleMapper;
 import com.jw_server.dao.blog.mapper.BlogCategoryMapper;
 import com.jw_server.dao.blog.mapper.BlogCommentMapper;
-import com.jw_server.dao.blog.vo.BlogAdminArticlePageVO;
-import com.jw_server.dao.blog.vo.BlogAdminUpdateArticleVO;
-import com.jw_server.dao.blog.vo.BlogFrontArticleDetailsVO;
-import com.jw_server.dao.blog.vo.BlogFrontArticlePageVO;
+import com.jw_server.dao.blog.vo.*;
 import com.jw_server.service.blog.IBlogArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.logging.Log;
@@ -163,5 +160,14 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         update(new LambdaUpdateWrapper<BlogArticle>()
                 .eq(BlogArticle::getArticleId, updateCheckDTO.getArticleId())
                 .set(BlogArticle::getArticleCheck, updateCheckDTO.getArticleCheck()));
+    }
+
+    /**
+     * 前台获取热门文章————浏览量最多的3篇文章
+     **/
+    @Override
+    public List<BlogFrontHotArticleVO> getHotArticle(Integer pageNum, Integer pageSize) {
+
+        return blogArticleMapper.getHotArticle(pageNum, pageSize);
     }
 }

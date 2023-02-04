@@ -3,9 +3,15 @@ import {createRouter, createWebHistory} from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: '首页',
+    redirect:'/home',
+    name: 'index',
     component: () => import('../layout/Index'),
     children:[
+      {
+        path: '/home',
+        name: '首页',
+        component: () => import('../views/home/Home')
+      },
       {
         path: '/article',
         name: '文章',
@@ -24,17 +30,17 @@ const routes = [
         // 文章详情
         path: "/articleDetails/:id",
         name: '文章详情',
-        component: () => import('../views/articleDetails/ArticleDetailsMainLayout')
+        component: () => import('../views/articleDetails/ArticleDetails')
       },{
         // 关于我
         path: "/about",
         name: '关于我',
-        component: () => import('../views/about/AboutMainLayout')
+        component: () => import('../views/about/About')
       },{
         // 关于我
         path: "/friendLink",
         name: '友链',
-        component: () => import('../views/friendLink/FriendLinkMainLayout')
+        component: () => import('../views/friendLink/FriendLink')
       },
     ]
   },

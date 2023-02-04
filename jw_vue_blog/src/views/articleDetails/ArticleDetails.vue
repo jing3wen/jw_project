@@ -6,7 +6,6 @@
     <el-col :xs="24" :sm="22" :md="22" :lg="18" :xl="16">
       <el-row :gutter="20">
         <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-
           <!-- 文章内容 -->
           <div class="articleDetailBox">
             <!-- 文章头部 -->
@@ -19,7 +18,7 @@
                   {{articleInfo.nickName}}
                 </span>
                 <!-- 时间 -->
-                <span><el-icon><Timer /></el-icon>
+                <span><el-icon><Calendar /></el-icon>
                   {{articleInfo.createTime}}
                 </span>
                 <!-- 分类 -->
@@ -35,9 +34,23 @@
             </div>
             <!-- 文章内容 -->
             <div class="articleBody">
-              <div v-highlight v-html="articleInfo.articleContent" class="article"></div>
-              <!--       //TODO: 高亮自定义指令  标签注释掉         -->
-              <!-- <div v-html="articleInfo.articleContent" class="article"></div> -->
+              <!--
+              boxShadow="false"  关闭边框阴影
+              previewBackground="transparent"  清楚背景颜色
+              codeStyle="rainbow"   代码高亮风格rainbow
+              :subfield="false"   只显示一个框
+              :defaultOpen="'preview'"  只显示的框为预览框
+              :toolbarsFlag="false"  关闭工具栏
+              -->
+              <mavon-editor
+                  v-model="articleInfo.articleContent"
+                  :boxShadow="false"
+                  previewBackground="transparent"
+                  codeStyle="rainbow"
+                  :subfield="false"
+                  :defaultOpen="'preview'"
+                  :toolbarsFlag="false"
+              />
 
             </div>
             <!-- 文章尾部 -->
@@ -64,9 +77,11 @@
         </el-col>
         <el-col class="hidden-sm-and-down" :md="6" :lg="6" :xl="6">
           <!-- 其他内容 -->
+          <!--&lt;!&ndash; 站点信息 &ndash;&gt;-->
+          <WebsiteInfo></WebsiteInfo>
+          <!-- 精选文章 -->
+          <HotArticle></HotArticle>
 
-          <!-- 搜索功能 -->
-          <SearchCard></SearchCard>
 
         </el-col>
       </el-row>
@@ -78,15 +93,16 @@
 </template>
 
 <script>
-import SearchCard from "@/components/searchCard/SearchCard";
-import Featured from "@/components/featured/Featured";
-import CommentSection from "../../components/commentSection/CommentSection";
+import WebsiteInfo from "../../components/websiteInfo/WebsiteInfo";
+import CommentSection from "../../components/comment/CommentSection";
 import {getYearMonthDay} from "../../utils/common";
 import {useRoute} from "vue-router";
+import HotArticle from "../../components/hotArticle/HotArticle";
+
 
 export default {
   name: "ArticleDetails",
-  components:{SearchCard, Featured, CommentSection},
+  components:{HotArticle, CommentSection, WebsiteInfo},
   data() {
     return{
       articleInfo: {},
@@ -109,7 +125,7 @@ export default {
       }
 
       //查询该文章数据
-      this.request.get("http://localhost:9090/blogArticle/front/getBlogFrontArticleDetails", {params}).then(res => {
+      this.request.get("/api/blogArticle/front/getBlogFrontArticleDetails", {params}).then(res => {
 
         // 查询的文章数据
         let article = res.data;
@@ -128,12 +144,7 @@ export default {
         document.title = article.articleTitle
         // 时间格式化
         article.createTime = getYearMonthDay(article.createTime)
-        // 图片 根url
-        const url = process.env.VUE_APP_URL;
-        // 缩略图 判断是点击上传的还是，网络图片
-        if (article.articleCover !== "" && !article.articleCover.includes('http') && !article.articleCover.includes('https')) {
-          article.articleCover = url + article.articleCover
-        }
+
         this.articleInfo = article
       })
 
@@ -145,9 +156,9 @@ export default {
         return true
       }
       //当前文章只有自己（或管理员）能查看
-      let loginUserId=7
-      let loginRole = 'user'
-      if(loginUserId === article.userId || loginRole=== 'admin'){
+      let loginUserId = this.$store.state.currentLoginUser.userId
+      let loginRoleList = this.$store.state.currentLoginUser.roleList
+      if(loginUserId === article.userId || loginRoleList.includes('admin')){
           return true
       }
       return false

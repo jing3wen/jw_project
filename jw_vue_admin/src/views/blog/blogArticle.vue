@@ -90,6 +90,7 @@
     <el-dialog title="预览文章" :visible.sync="openDialog" width="60%">
       <mavon-editor
           v-model="previewArticle.articleContent"
+          codeStyle="rainbow"
           :subfield="false"
           :defaultOpen="'preview'"
           :toolbarsFlag="false"

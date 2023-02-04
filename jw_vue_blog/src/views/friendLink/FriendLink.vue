@@ -211,7 +211,7 @@ export default {
     }
   },
   created() {
-    this.loadData()
+    // this.loadData()
   },
   methods: {
     loadData() {
@@ -305,7 +305,8 @@ export default {
 }
 
 .main_centent {
-  width: 100%-50px;
+  width: 60%;
+  margin: 0 auto;
   height: auto;
   overflow: hidden;
   background-color: white;

@@ -1,6 +1,7 @@
 package com.jw_server.controller.blog;
 
 import com.jw_server.core.aop.logAspect.SysLog;
+import com.jw_server.core.common.MyPageDTO;
 import com.jw_server.dao.blog.dto.BlogAdminAddArticleDTO;
 import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleCheckDTO;
 import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleTopDTO;
@@ -40,10 +41,10 @@ public class BlogArticleController {
      * Author jingwen
      * Date 2022-12-03 16:11:56
      **/
-    @GetMapping("/front/getBlogFrontArticlePage")
-    public ResponseResult getBlogFrontArticlePage(@RequestParam Integer pageNum,@RequestParam Integer pageSize) {
+    @PostMapping("/front/getBlogFrontArticlePage")
+    public ResponseResult getBlogFrontArticlePage(@RequestBody MyPageDTO pageDTO) {
 
-        return ResponseResult.success(blogArticleService.getBlogFrontArticlePage(pageNum, pageSize));
+        return ResponseResult.success(blogArticleService.getBlogFrontArticlePage(pageDTO.getPageNum(), pageDTO.getPageSize()));
     }
 
     /**
@@ -56,6 +57,19 @@ public class BlogArticleController {
 
         return ResponseResult.success(blogArticleService.getBlogFrontArticleDetails(articleId,request));
     }
+
+    /**
+     * Description: 前台获取热门文章————浏览量最多的3篇文章
+     * Author: jingwen
+     * Date: 2023/1/28 13:54
+     **/
+    @GetMapping("/front/getHotArticle")
+    public ResponseResult getHotArticle() {
+
+        return ResponseResult.success(blogArticleService.getHotArticle(0, 3));
+    }
+
+
 
     /**
      * Description: 博客后台新增文章
