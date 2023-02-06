@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Description: 文章细节返回实体类
@@ -23,10 +24,16 @@ public class BlogFrontArticleDetailsVO {
     private Integer userId;
 
     @ApiModelProperty("作者昵称")
-    private String nickName;
+    private String nickname;
+
+    @ApiModelProperty("类别ID")
+    private Integer categoryId;
 
     @ApiModelProperty("类别名称")
     private String categoryName;
+
+    @ApiModelProperty("标签列表")
+    private List<FrontTagVO> tagList;
 
     @ApiModelProperty("顶置（0表示不顶置，1表示顶置）")
     private String isTop;
@@ -54,6 +61,9 @@ public class BlogFrontArticleDetailsVO {
 
     @ApiModelProperty("评论数量")
     private Integer commentCounts;
+
+    @ApiModelProperty("点赞数量")
+    private Integer likedCounts;
 
     @ApiModelProperty("文章审核状态（1表示通过，0表示未通过）")
     private String articleCheck;

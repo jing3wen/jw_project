@@ -16,7 +16,7 @@ import java.util.Collections;
 public class CodeGenerator {
 
     private static void generateCode(){
-        FastAutoGenerator.create("jdbc:mysql://localhost:3306/jw_project?serverTimezone=GMT%2b8", "你的用户名", "你的密码")
+        FastAutoGenerator.create("jdbc:mysql://localhost:3306/jw_project?serverTimezone=GMT%2b8", "root", "155416")
                 .globalConfig(builder -> {
                     builder.author("jingwen") // 设置作者
                             .enableSwagger() // 开启 swagger 模式
@@ -27,12 +27,12 @@ public class CodeGenerator {
                 .packageConfig(builder -> {
                     builder.parent("com.jw_server") // 设置父包名
                             .moduleName(null) // 设置父包模块名
-                            .controller("controller.deeplearning")
-                            .entity("dao.deeplearning.entity")
-                            .mapper("dao.deeplearning.mapper")
-                            .service("service.deeplearning")
-                            .serviceImpl("service.deeplearning.impl")
-                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "E:\\IDEA\\project\\jw_project\\jw_server\\src\\main\\resources\\mapper\\deeplearning\\")); // 设置mapperXml生成路径
+                            .controller("controller.blog")
+                            .entity("dao.blog.entity")
+                            .mapper("dao.blog.mapper")
+                            .service("service.blog")
+                            .serviceImpl("service.blog.impl")
+                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "E:\\IDEA\\project\\jw_project\\jw_server\\src\\main\\resources\\mapper\\blog\\")); // 设置mapperXml生成路径
                 }).
                 strategyConfig(builder -> {
                     builder.controllerBuilder()
@@ -46,7 +46,7 @@ public class CodeGenerator {
                             ;
                     builder.mapperBuilder()
                             .enableMapperAnnotation();  //mapper添加@Mapper
-                    builder.addInclude("dl_face_detect_file");// 设置需要生成的表名
+//                    builder.addInclude("blog_comment");// 设置需要生成的表名
 
 //                            .addTablePrefix("t_", "sys_"); // 设置过滤表前缀
                 })

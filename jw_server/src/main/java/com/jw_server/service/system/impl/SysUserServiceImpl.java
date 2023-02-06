@@ -188,7 +188,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         });
 
 
-        return (MyPageVO<SysUserVO>) new MyPageVO(userIPage.getPages(),
+        return new MyPageVO<>(userIPage.getPages(),
                 userIPage.getCurrent(),
                 userIPage.getSize(),
                 userIPage.getTotal(),
@@ -224,10 +224,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .id(userDetailsVO.getId())
                 .username(userDetailsVO.getUsername())
                 .nickname(userDetailsVO.getNickname())
-                .avatarUrl(userDetailsVO.getAvatarUrl())
+                .avatar(userDetailsVO.getAvatar())
                 .roleList(userDetailsVO.getRoleList())
                 .token(userDetailsVO.getToken())
                 .permissionList(userDetailsVO.getPermissionList())
+                .email(userDetailsVO.getEmail())
+                .phone(userDetailsVO.getPhone())
+                .sex(userDetailsVO.getSex())
+                .remark(userDetailsVO.getRemark())
                 .build();
         return loginUserVO;
     }

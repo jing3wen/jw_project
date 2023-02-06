@@ -34,20 +34,17 @@ public class BlogComment implements Serializable {
     @ApiModelProperty("文章ID")
     private Integer articleId;
 
+    @ApiModelProperty("楼层评论ID (0表示为第1级评论)")
+    private Integer floorCommentId;
+
+    @ApiModelProperty("回复的评论ID (0表示为第1级评论)")
+    private Integer replyCommentId;
+
+    @ApiModelProperty("回复的用户ID (0表示为第1级评论)")
+    private Integer replyUserId;
+
     @ApiModelProperty("评论内容")
     private String commentContent;
-
-    @ApiModelProperty("回复用户id")
-    private Integer toUserId;
-
-    @ApiModelProperty("父评论id")
-    private Integer parentId;
-
-    @ApiModelProperty("评论点赞数量")
-    private Integer commentAgree;
-
-    @ApiModelProperty("评论点踩数量")
-    private Integer commentDisagree;
 
     @ApiModelProperty("评论审核状态（1表示通过，0表示未通过）")
     private String commentCheck;
@@ -61,6 +58,7 @@ public class BlogComment implements Serializable {
     private LocalDateTime createTime;
 
     @ApiModelProperty("更新者")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
     @ApiModelProperty("更新时间")

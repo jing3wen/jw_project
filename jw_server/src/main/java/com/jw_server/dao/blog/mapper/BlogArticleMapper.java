@@ -39,7 +39,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticle> {
      * Author: jingwen
      * Date: 2022/12/4 13:54
      **/
-    BlogFrontArticleDetailsVO getBlogFrontArticleDetails(Integer articleId);
+    BlogFrontArticleDetailsVO getFrontArticleDetails(Integer articleId);
 
     /**
      * Description: 更新文章评论数

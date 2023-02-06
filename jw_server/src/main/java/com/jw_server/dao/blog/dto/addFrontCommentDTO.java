@@ -8,19 +8,22 @@ import lombok.Data;
  * DATE: 2023/1/4 21:47
  */
 @Data
-public class BlogFrontCommentDTO {
+public class addFrontCommentDTO {
 
     //文章ID
     private Integer articleId;
 
-    //父评论id
-    private Integer parentId;
-
     //评论用户ID
     private Integer userId;
 
+    //楼层评论id
+    private Integer floorCommentId;
+
+    //回复评论id
+    private Integer replyCommentId;
+
     //回复用户id
-    private Integer toUserId;
+    private Integer replyUserId;
 
     //评论内容
     private String commentContent;

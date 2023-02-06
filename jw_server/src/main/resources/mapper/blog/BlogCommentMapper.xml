@@ -2,56 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jw_server.dao.blog.mapper.BlogCommentMapper">
 
-    <select id="getBlogFrontParentCommentPageVO" resultType="com.jw_server.dao.blog.vo.BlogFrontCommentVO">
+    <select id="getFrontCommentPageVO" resultType="com.jw_server.dao.blog.vo.BlogFrontCommentVO">
         SELECT
-            bc.comment_id, bc.article_id, bc.parent_id, bc.user_id,
-            su1.nickname, su1.avatar, bc.comment_content, bc.to_user_id,
-            bc.comment_agree, bc.comment_disagree, bc.create_time
+            bc.comment_id, bc.article_id, bc.floor_comment_id, bc.user_id,
+            su1.nickname, su1.avatar, bc.reply_comment_id, bc.reply_user_id,
+            su2.nickname AS reply_nickname, bc.comment_content, bc.create_time
         FROM
             blog_comment AS bc
             LEFT JOIN sys_user AS su1 ON bc.user_id = su1.id
+            LEFT JOIN sys_user AS su2 ON bc.reply_user_id = su2.id
         WHERE
             bc.article_id = #{articleId}
-            AND bc.parent_id = #{parentId}
+            AND bc.floor_comment_id = #{floorCommentId}
             AND bc.comment_check = '1'
             AND bc.is_deleted='0'
-            ORDER BY bc.create_time DESC
-
-
-    </select>
-
-    <select id="getBlogFrontChildCommentPageVO" resultType="com.jw_server.dao.blog.vo.BlogFrontCommentVO">
-        SELECT
-            bc.comment_id, bc.article_id, bc.parent_id, bc.user_id,
-            su1.nickname, su1.avatar, bc.comment_content, bc.to_user_id,
-            su2.nickname as to_nickname, bc.comment_agree, bc.comment_disagree, bc.create_time
-        FROM
-            blog_comment AS bc
-            LEFT JOIN sys_user AS su1 ON bc.user_id = su1.id
-            LEFT JOIN sys_user AS su2 ON bc.to_user_id = su2.id
-        WHERE
-            bc.article_id = #{articleId}
-            AND bc.parent_id = #{parentId}
-            AND bc.comment_check = '1'
-            AND bc.is_deleted='0'
-            ORDER BY bc.create_time
-    </select>
-
-    <select id="getAllBlogFrontChildCommentPageVO" resultType="com.jw_server.dao.blog.vo.BlogFrontCommentVO">
-        SELECT
-            bc.comment_id, bc.article_id, bc.parent_id, bc.user_id,
-            su1.nickname, su1.avatar, bc.comment_content, bc.to_user_id,
-            su2.nickname as to_nickname, bc.comment_agree, bc.comment_disagree, bc.create_time
-        FROM
-            blog_comment AS bc
-            LEFT JOIN sys_user AS su1 ON bc.user_id = su1.id
-            LEFT JOIN sys_user AS su2 ON bc.to_user_id = su2.id
-        WHERE
-            bc.article_id = #{articleId}
-            AND bc.parent_id = #{parentId}
-            AND bc.comment_check = '1'
-            AND bc.is_deleted='0'
-            ORDER BY bc.create_time
+        ORDER BY bc.create_time
     </select>
 
 
@@ -83,6 +48,16 @@
                 AND bc.comment_check = #{queryCommentPageDTO.commentCheck}
             </if>
         ORDER BY bc.create_time DESC
+    </select>
+    <select id="getFrontCommentCounts" resultType="java.lang.Integer">
+        SELECT
+            Count(*)
+        FROM
+            blog_comment
+        WHERE
+            article_id = #{articleId}
+            AND comment_check = '1'
+            AND is_deleted='0'
     </select>
 
     <update id="updateCommentCheckBatch" parameterType="java.util.List">

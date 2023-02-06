@@ -5,6 +5,7 @@ import lombok.Data;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Description: 前台博客分页查询
@@ -21,10 +22,16 @@ public class BlogFrontArticlePageVO {
     private Integer userId;
 
     //用户昵称
-    private String nickName;
+    private String nickname;
+
+    //类别ID
+    private Integer categoryId;
 
     //类别名
     private String categoryName;
+
+    //标签名
+    private List<FrontTagVO> tagList;
 
     //是否顶置
     private String isTop;
@@ -43,6 +50,9 @@ public class BlogFrontArticlePageVO {
 
     //评论量
     private Integer commentCounts;
+
+    //点赞量
+    private Integer likedCounts;
 
     //创建时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -58,9 +58,6 @@ public class BlogArticle implements Serializable {
     @ApiModelProperty("是否允许评论(0表示不能评论，1表示可以评论)")
     private String commentAllowed;
 
-    @ApiModelProperty("评论数量")
-    private Integer commentCounts;
-
     @ApiModelProperty("文章审核状态（1表示通过，0表示未审核, f表示未通过）")
     private String articleCheck;
 

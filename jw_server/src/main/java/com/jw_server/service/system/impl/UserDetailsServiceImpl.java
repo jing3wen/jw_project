@@ -1,16 +1,12 @@
 package com.jw_server.service.system.impl;
 
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jw_server.core.constants.HttpCode;
 import com.jw_server.core.exception.ServiceException;
-import com.jw_server.dao.system.entity.SysRole;
 import com.jw_server.dao.system.entity.SysUser;
 import com.jw_server.dao.system.mapper.SysRoleMapper;
 import com.jw_server.dao.system.mapper.SysUserMapper;
-import com.jw_server.dao.system.mapper.SysUserRoleMapper;
-import com.jw_server.dao.system.vo.SysMenuVO;
 import com.jw_server.dao.system.vo.UserDetailsVO;
 import com.jw_server.service.system.ISysMenuService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Description:
@@ -53,6 +46,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 SysUser::getPassword,
                 SysUser::getNickname,
                 SysUser::getAvatar,
+                SysUser::getEmail,
+                SysUser::getPhone,
+                SysUser::getSex,
+                SysUser::getRemark,
                 SysUser::getStatus);
         SysUser queryUser = sysUserMapper.selectOne(queryWrapper);
         /*
@@ -86,9 +83,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .username(queryUser.getUsername())
                 .password(queryUser.getPassword())
                 .nickname(queryUser.getNickname())
-                .avatarUrl(queryUser.getAvatar())
+                .avatar(queryUser.getAvatar())
                 .roleList(roleList)
                 .permissionList(permissionList)
+                .email(queryUser.getEmail())
+                .phone(queryUser.getPhone())
+                .sex(queryUser.getSex())
+                .remark(queryUser.getRemark())
                 .build();
     }
 }

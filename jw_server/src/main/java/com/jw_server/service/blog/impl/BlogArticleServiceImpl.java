@@ -1,6 +1,7 @@
 package com.jw_server.service.blog.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -13,12 +14,12 @@ import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleCheckDTO;
 import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleTopDTO;
 import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
 import com.jw_server.dao.blog.entity.BlogArticle;
-import com.jw_server.dao.blog.mapper.BlogArticleMapper;
-import com.jw_server.dao.blog.mapper.BlogCategoryMapper;
-import com.jw_server.dao.blog.mapper.BlogCommentMapper;
+import com.jw_server.dao.blog.entity.BlogComment;
+import com.jw_server.dao.blog.mapper.*;
 import com.jw_server.dao.blog.vo.*;
 import com.jw_server.service.blog.IBlogArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jw_server.service.blog.IBlogCommentService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -49,20 +50,45 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Resource
     private BlogCommentMapper blogCommentMapper;
 
+    @Resource
+    private BlogArticleTagMapper blogArticleTagMapper;
+
 
     @Resource
     private RedisUtils redisUtils;
 
     @Override
-    public MyPageVO<BlogFrontArticlePageVO> getBlogFrontArticlePage(Integer pageNum, Integer pageSize) {
+    public MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(Integer pageNum, Integer pageSize) {
 
-        return new MyPageVO<>(blogArticleMapper.getFrontArticlePage(new Page<>(pageNum, pageSize)));
+        /*
+         * 先联表blog_article, sys_user, blog_category 查询出文章列表
+         *
+         * 再对每个文章进行遍历, 查询文章标签和点赞量
+         **/
+        IPage<BlogFrontArticlePageVO> articlePage = blogArticleMapper.getFrontArticlePage(new Page<>(pageNum, pageSize));
+        List<BlogFrontArticlePageVO> articleVOList = articlePage.getRecords();
+        if(CollectionUtil.isNotEmpty(articleVOList)){
+            articleVOList.forEach(articleVO->{
+                //封装文章标签
+                articleVO.setTagList(blogArticleTagMapper.getArticleTagsByArticleId(articleVO.getArticleId()));
+                //封装评论数量
+                articleVO.setCommentCounts(blogCommentMapper.getFrontCommentCounts(articleVO.getArticleId()));
+                //TODO 封装点赞量
+                articleVO.setLikedCounts(0);
+            });
+        }
+
+        return new MyPageVO<>(articlePage.getPages(),
+                articlePage.getCurrent(),
+                articlePage.getSize(),
+                articlePage.getTotal(),
+                articleVOList);
     }
 
     //TODO 后续可考虑把查询的文章放到缓存里面，修改文章时只用把redis里面的数据修改
     @Override
     @Transactional
-    public BlogFrontArticleDetailsVO getBlogFrontArticleDetails(Integer articleId, HttpServletRequest request) {
+    public BlogFrontArticleDetailsVO getFrontArticleDetails(Integer articleId, HttpServletRequest request) {
 
         BlogFrontArticleDetailsVO frontArticleDetailsVO;
         String viewIpAddress = IpUtils.getIpAddress(request);
@@ -72,12 +98,24 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             logger.info("ip地址:"+viewIpAddress+", 浏览文章 articleId="+articleId+"");
             logger.info("记录到redis中, redis过期时间8小时, 更新数据库:浏览量+1");
             blogArticleMapper.updateArticleViewCounts(articleId);
-            frontArticleDetailsVO = blogArticleMapper.getBlogFrontArticleDetails(articleId);
+            frontArticleDetailsVO = blogArticleMapper.getFrontArticleDetails(articleId);
+            //封装标签列表
+            frontArticleDetailsVO.setTagList(blogArticleTagMapper.getArticleTagsByArticleId(articleId));
+            //封装评论数量
+            frontArticleDetailsVO.setCommentCounts(blogCommentMapper.getFrontCommentCounts(frontArticleDetailsVO.getArticleId()));
+            //TODO 封装点赞量
+            frontArticleDetailsVO.setLikedCounts(0);
             redisUtils.setCacheObject(key, "浏览量"+frontArticleDetailsVO.getViewCounts(),8, TimeUnit.HOURS);
         }else {
             //当前ip 重复浏览文章，不更新文章浏览量
             logger.info("redis中查询到当前ip已经看过文章，不更新浏览量");
-            frontArticleDetailsVO =  blogArticleMapper.getBlogFrontArticleDetails(articleId);
+            frontArticleDetailsVO =  blogArticleMapper.getFrontArticleDetails(articleId);
+            //封装标签列表
+            frontArticleDetailsVO.setTagList(blogArticleTagMapper.getArticleTagsByArticleId(articleId));
+            //封装评论数量
+            frontArticleDetailsVO.setCommentCounts(blogCommentMapper.getFrontCommentCounts(frontArticleDetailsVO.getArticleId()));
+            //TODO 封装点赞量
+            frontArticleDetailsVO.setLikedCounts(0);
         }
         return frontArticleDetailsVO;
     }
@@ -101,6 +139,17 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         IPage<BlogAdminArticlePageVO> page = blogArticleMapper.getAdminBlogArticlePage(
                 new Page<>(queryArticleDTO.getPageNum(), queryArticleDTO.getPageSize()),
                 queryArticleDTO);
+        List<BlogAdminArticlePageVO> articleVOList = page.getRecords();
+        if(CollectionUtil.isNotEmpty(articleVOList)){
+            articleVOList.forEach(articleVO->{
+                //封装文章标签
+                articleVO.setTagList(blogArticleTagMapper.getArticleTagsByArticleId(articleVO.getArticleId()));
+                //封装评论数量
+                articleVO.setCommentCounts(blogCommentMapper.getFrontCommentCounts(articleVO.getArticleId()));
+                //TODO 封装点赞量
+                articleVO.setLikedCounts(0);
+            });
+        }
         return new MyPageVO<>(page);
     }
 

@@ -1,7 +1,7 @@
 package com.jw_server.service.blog;
 
 import com.jw_server.core.common.MyPageVO;
-import com.jw_server.dao.blog.dto.BlogFrontCommentDTO;
+import com.jw_server.dao.blog.dto.addFrontCommentDTO;
 import com.jw_server.dao.blog.dto.QueryBlogAdminCommentPageDTO;
 import com.jw_server.dao.blog.entity.BlogComment;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -24,14 +24,21 @@ public interface IBlogCommentService extends IService<BlogComment> {
      * Author: jingwen
      * Date: 2023/1/4 16:33
      **/
-    MyPageVO<BlogFrontCommentVO> getCommentByArticleId(Integer articleId, Integer pageNum, Integer pageSize);
+    MyPageVO<BlogFrontCommentVO> getFrontCommentByArticleId(Integer articleId, Integer floorCommentId, Integer pageNum, Integer pageSize);
+
+    /**
+     * Description: 获取文章评论总数量
+     * Author: jingwen
+     * Date: 2023/2/6 20:03
+     **/
+    Integer getFrontCommentCounts(Integer articleId);
 
     /**
      * Description: 新增一条评论，该文章评论数+1
      * Author: jingwen
      * Date: 2023/1/4 21:51
      **/
-    void addComment(BlogFrontCommentDTO blogFrontCommentDTO);
+    void addComment(addFrontCommentDTO addFrontCommentDTO);
 
     /**
      * Description: 删除评论 并且还删除该评论下的子评论

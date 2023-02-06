@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
-import com.jw_server.dao.blog.dto.BlogFrontCommentDTO;
+import com.jw_server.dao.blog.dto.addFrontCommentDTO;
 import com.jw_server.dao.blog.dto.QueryBlogAdminCommentPageDTO;
 import com.jw_server.dao.blog.entity.BlogComment;
 import com.jw_server.dao.blog.mapper.BlogArticleMapper;
@@ -39,13 +39,13 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
 
 
     /**
-     * 首先查询文章的第一级评论，
-     * 再分别查询该一级评论下的子评论
+     * 首先查询文章的第一级评论，(floorCommentId=0的评论)
+     * 再分别查询该一级评论下的二级评论分页
      **/
     @Override
-    public MyPageVO<BlogFrontCommentVO> getCommentByArticleId(Integer articleId, Integer pageNum, Integer pageSize) {
+    public MyPageVO<BlogFrontCommentVO> getFrontCommentByArticleId(Integer articleId, Integer floorCommentId, Integer pageNum, Integer pageSize) {
 
-        IPage<BlogFrontCommentVO> commentIPage = blogCommentMapper.getBlogFrontParentCommentPageVO(articleId,
+        IPage<BlogFrontCommentVO> commentIPage = blogCommentMapper.getFrontCommentPageVO(articleId,
                 0,
                 new Page<>(pageNum,pageSize));
 
@@ -54,9 +54,11 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
          * 开始查询二级评论
          **/
         parentList.forEach(parent -> {
-            //List<BlogFrontCommentVO> childList = getChildCommentByArticleId(articleId, parent.getCommentId(), 0, 3);
-            List<BlogFrontCommentVO> childList = blogCommentMapper.getAllBlogFrontChildCommentPageVO(articleId,parent.getCommentId());
-            parent.setToCommentList(childList);
+            IPage<BlogFrontCommentVO> childPage = blogCommentMapper.getFrontCommentPageVO(articleId,
+                    parent.getCommentId(),
+                    new Page<>(0, 5));
+            parent.setReplyCommentCounts(childPage.getTotal());
+            parent.setReplyCommentList(childPage.getRecords());
         });
 
         return new MyPageVO<>(commentIPage.getPages(),
@@ -67,27 +69,33 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     }
 
     /**
-     * 查询二级评论
-     * TODO 代码中有一些可以优化的地方，我的一级评论设置成分页，二级评论没有设置分页，后续可以改进
+     * 获取文章评论总数量
      **/
-    public List<BlogFrontCommentVO> getChildCommentByArticleId(Integer articleId, Integer parentId,Integer pageNum, Integer pageSize) {
+    @Override
+    public Integer getFrontCommentCounts(Integer articleId) {
 
-        return blogCommentMapper.getBlogFrontChildCommentPageVO(articleId,
-                parentId,
+        return blogCommentMapper.getFrontCommentCounts(articleId);
+    }
+
+    /**
+     * 查询二级评论分页
+     **/
+    public List<BlogFrontCommentVO> getChildCommentByArticleId(Integer articleId, Integer floorCommentId,Integer pageNum, Integer pageSize) {
+
+        return blogCommentMapper.getFrontCommentPageVO(articleId,
+                floorCommentId,
                 new Page<>(pageNum, pageSize)).getRecords();
     }
 
     /**
-     * 新增评论，更新文章评论数
+     * 新增评论
      **/
     @Override
-    public void addComment(BlogFrontCommentDTO blogFrontCommentDTO) {
+    public void addComment(addFrontCommentDTO addFrontCommentDTO) {
         //新增一条评论
         BlogComment addComment = new BlogComment();
-        BeanUtil.copyProperties(blogFrontCommentDTO,addComment);
+        BeanUtil.copyProperties(addFrontCommentDTO, addComment);
         save(addComment);
-        //更新评论数
-        blogArticleMapper.updateArticleCommentCounts(blogFrontCommentDTO.getArticleId(),+1);
     }
 
     /**
@@ -100,11 +108,11 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 .select(BlogComment::getArticleId)
                 .eq(BlogComment::getCommentId,commentId));
 
-        if(ObjectUtil.isNotEmpty(findOne)){
-            int deleteNum = blogCommentMapper.deleteComment(commentId);
-            logger.warn("用户删除了 "+ deleteNum +" 条文章评论, 开始更新文章评论数");
-            blogArticleMapper.updateArticleCommentCounts(findOne.getArticleId(), (-1)*deleteNum);
-        }
+//        if(ObjectUtil.isNotEmpty(findOne)){
+//            int deleteNum = blogCommentMapper.deleteComment(commentId);
+//            logger.warn("用户删除了 "+ deleteNum +" 条文章评论, 开始更新文章评论数");
+//            blogArticleMapper.updateArticleCommentCounts(findOne.getArticleId(), (-1)*deleteNum);
+//        }
     }
 
     /**

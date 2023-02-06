@@ -41,10 +41,10 @@ public class BlogArticleController {
      * Author jingwen
      * Date 2022-12-03 16:11:56
      **/
-    @PostMapping("/front/getBlogFrontArticlePage")
-    public ResponseResult getBlogFrontArticlePage(@RequestBody MyPageDTO pageDTO) {
+    @PostMapping("/front/getFrontArticlePage")
+    public ResponseResult getFrontArticlePage(@RequestBody MyPageDTO pageDTO) {
 
-        return ResponseResult.success(blogArticleService.getBlogFrontArticlePage(pageDTO.getPageNum(), pageDTO.getPageSize()));
+        return ResponseResult.success(blogArticleService.getFrontArticlePage(pageDTO.getPageNum(), pageDTO.getPageSize()));
     }
 
     /**
@@ -52,10 +52,10 @@ public class BlogArticleController {
      * Author jingwen
      * Date 2022-12-03 16:11:56
      **/
-    @GetMapping("/front/getBlogFrontArticleDetails")
-    public ResponseResult getBlogFrontArticleDetails(@RequestParam Integer articleId, HttpServletRequest request) {
+    @GetMapping("/front/getFrontArticleDetails")
+    public ResponseResult getFrontArticleDetails(@RequestParam Integer articleId, HttpServletRequest request) {
 
-        return ResponseResult.success(blogArticleService.getBlogFrontArticleDetails(articleId,request));
+        return ResponseResult.success(blogArticleService.getFrontArticleDetails(articleId,request));
     }
 
     /**

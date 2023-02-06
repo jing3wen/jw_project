@@ -112,7 +112,8 @@ public class SysUserController {
      * Description 分页查询
      * Author jingwen
      * Date 2022-08-29 16:21:58
-     **/@PreAuthorize("hasAuthority('system:sysUser:query')")
+     **/
+    @PreAuthorize("hasAuthority('system:sysUser:query')")
     @PostMapping("/getPageList")
     public ResponseResult getPageList(@RequestBody QuerySysUserDTO querySysUserDTO) {
         return ResponseResult.success(sysUserService.getUserPageList(querySysUserDTO));

@@ -27,23 +27,8 @@ public interface BlogCommentMapper extends BaseMapper<BlogComment> {
      * Author: jingwen 
      * Date: 2023/1/4 16:44
      **/
-    IPage<BlogFrontCommentVO> getBlogFrontParentCommentPageVO(Integer articleId, Integer parentId, Page<BlogFrontCommentVO> page);
+    IPage<BlogFrontCommentVO> getFrontCommentPageVO(Integer articleId, Integer floorCommentId, Page<BlogFrontCommentVO> page);
 
-    /**
-     * Description:
-     *  parentId ！= 0,（按评论时间升序）查询二级评论分页
-     * Author: jingwen
-     * Date: 2023/1/4 16:44
-     **/
-    IPage<BlogFrontCommentVO> getBlogFrontChildCommentPageVO(Integer articleId, Integer parentId, Page<BlogFrontCommentVO> page);
-
-
-    /**
-     * Description: 查询某条评论的所有二级评论
-     * Author: jingwen
-     * Date: 2023/1/8 20:59
-     **/
-    List<BlogFrontCommentVO> getAllBlogFrontChildCommentPageVO(Integer articleId, Integer parentId);
 
     /**
      * Description: 删除一条评论及子评论
@@ -51,6 +36,7 @@ public interface BlogCommentMapper extends BaseMapper<BlogComment> {
      * Date: 2023/1/13 14:31
      **/
     int deleteComment(Integer commentId);
+
 
     /**
      * Description: 后台查询评论分页
@@ -74,4 +60,11 @@ public interface BlogCommentMapper extends BaseMapper<BlogComment> {
      * Date: 2023/1/26 13:24
      **/
     void deleteCommentByArticleId(Integer articleId);
+
+    /**
+     * Description: 获取文章评论总数量
+     * Author: jingwen
+     * Date: 2023/2/6 20:43
+     **/
+    Integer getFrontCommentCounts(Integer articleId);
 }

@@ -26,14 +26,14 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2022/12/3 17:00
      **/
-    MyPageVO<BlogFrontArticlePageVO> getBlogFrontArticlePage(Integer pageNum, Integer pageSize);
+    MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(Integer pageNum, Integer pageSize);
 
     /**
      * Description: 浏览文章详细信息
      * Author: jingwen
      * Date: 2022/12/4 12:10
      **/
-    BlogFrontArticleDetailsVO getBlogFrontArticleDetails(Integer articleId, HttpServletRequest request);
+    BlogFrontArticleDetailsVO getFrontArticleDetails(Integer articleId, HttpServletRequest request);
 
     /**
      * Description: 博客后台新增文章

@@ -88,7 +88,7 @@ export default {
       return this.$store.state.user.currentLoginUser.nickname? this.$store.state.user.currentLoginUser.nickname:'未命名';
     },
     currentUseravatar(){
-      return this.$store.state.user.currentLoginUser.avatarUrl;
+      return this.$store.state.user.currentLoginUser.avatar;
     },
     loginUserRoleName(){
       let roleName = this.$store.state.user.currentLoginUser.roleList[0]

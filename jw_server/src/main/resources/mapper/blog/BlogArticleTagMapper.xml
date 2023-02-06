@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jw_server.dao.blog.mapper.BlogArticleTagMapper">
+
+    <select id="getArticleTagsByArticleId" resultType="com.jw_server.dao.blog.vo.FrontTagVO">
+        SELECT
+            bt.tag_id ,bt.tag_name
+        FROM
+            blog_article_tag AS bat
+            LEFT JOIN blog_tag AS bt ON bat.tag_id = bt.tag_id
+        WHERE
+            bt.status = '1'
+            AND bt.is_deleted = '0'
+            AND bat.article_id = #{articleId}
+    </select>
+</mapper>

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Description: 后台查询文章分页
@@ -21,6 +22,9 @@ public class BlogAdminArticlePageVO {
 
     //类别名
     private String categoryName;
+
+    //标签名
+    private List<FrontTagVO> tagList;
 
     //是否顶置
     private String isTop;
@@ -42,6 +46,9 @@ public class BlogAdminArticlePageVO {
 
     //评论量
     private Integer commentCounts;
+
+    //点赞量
+    private Integer likedCounts;
 
     //文章审核状态（1表示通过，0表示未通过）
     private String articleCheck;
