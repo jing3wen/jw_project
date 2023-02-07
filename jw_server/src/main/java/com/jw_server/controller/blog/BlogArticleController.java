@@ -40,7 +40,7 @@ public class BlogArticleController {
      **/
     @PostMapping("/front/getFrontArticlePage")
     public ResponseResult getFrontArticlePage(@RequestBody FrontQueryArticlePageDTO frontQueryArticlePageDTO) {
-
+        System.out.println(frontQueryArticlePageDTO.toString());
         return ResponseResult.success(blogArticleService.getFrontArticlePage(frontQueryArticlePageDTO));
     }
 

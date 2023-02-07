@@ -7,11 +7,13 @@
 
     <div style="background: var(--background);padding-top: 40px;" class="my-animation-slide-bottom">
       <!-- 标签 -->
-      <div class="sort-warp shadow-box" v-if="!$common.isEmpty(sort) && !$common.isEmpty(sort.labels)">
-        <div v-for="(label, index) in sort.labels" :key="index"
-             :class="{isActive: !$common.isEmpty(labelId) && parseInt(labelId) === label.id}"
-             @click="listArticle(label)">
-          <proTag :info="label.labelName+' '+label.countOfLabel"
+      <div class="sort-warp shadow-box" v-if="!$common.isEmpty(categoryList) && !$common.isEmpty(categoryId)">
+        <div v-for="(category, index) in categoryList" :key="index"
+             :class="{isActive: !$common.isEmpty(categoryId) && parseInt(categoryId) === category.categoryId}"
+             @click="listArticle(category)">
+          <!--    TODO 此处还统计了该类别下的文章数量      -->
+<!--          <proTag :info="category.categoryName+' '+label.countOfLabel"-->
+          <proTag :info="category.categoryName+' '"
                   :color="$constant.before_color_list[Math.floor(Math.random() * 6)]"
                   style="margin: 12px">
           </proTag>
@@ -22,7 +24,7 @@
       <div class="article-wrap">
         <articleList :articleList="articles"></articleList>
         <div class="pagination-wrap">
-          <div @click="pageArticles()" class="pagination" v-if="pagination.total !== articles.length">
+          <div @click="pageArticles()" class="pagination" v-if="total !== articles.length">
             下一页
           </div>
           <div v-else style="user-select: none">
@@ -52,17 +54,17 @@
 
     data() {
       return {
-        sortId: this.$route.query.sortId,
-        labelId: this.$route.query.labelId,
-        sort: null,
+        categoryId: this.$route.query.sortId,
+        tagId: this.$route.query.labelId,
+        categoryList: null,
         pagination: {
-          current: 1,
-          size: 10,
-          total: 0,
-          searchKey: "",
-          sortId: this.$route.query.sortId,
-          labelId: this.$route.query.labelId
+          pageNum: 1,
+          pageSize: 10,
+          categoryId: this.$route.query.sortId,
+          tagId: this.$route.query.labelId,
+          keywords: "",
         },
+        total: 0,
         articles: []
       }
     },
@@ -72,16 +74,15 @@
     watch: {
       $route() {
         this.pagination = {
-          current: 1,
-          size: 10,
-          total: 0,
-          searchKey: "",
-          sortId: this.$route.query.sortId,
-          labelId: this.$route.query.labelId
+          pageNum: 1,
+          pageSize: 10,
+          categoryId: this.$route.query.sortId,
+          tagId: this.$route.query.labelId,
+          keywords: "",
         };
         this.articles.splice(0, this.articles.length);
-        this.sortId = this.$route.query.sortId;
-        this.labelId = this.$route.query.labelId;
+        this.categoryId = this.$route.query.sortId;
+        this.tagId = this.$route.query.labelId;
         this.getSort();
         this.getArticles();
       }
@@ -97,30 +98,43 @@
 
     methods: {
       pageArticles() {
-        this.pagination.current = this.pagination.current + 1;
+        this.pagination.pageNum = this.pagination.pageNum + 1;
         this.getArticles();
       },
 
       getSort() {
-        let sortInfo = this.$store.state.sortInfo;
-        if (!this.$common.isEmpty(sortInfo)) {
-          let sortArray = sortInfo.filter(f => {
-            return f.id === parseInt(this.sortId);
+        // TODO 此处可以参考博客2.0用缓存
+        // let sortInfo = this.$store.state.sortInfo;
+        // if (!this.$common.isEmpty(sortInfo)) {
+        //   let sortArray = sortInfo.filter(f => {
+        //     return f.id === parseInt(this.sortId);
+        //   });
+        //   if (!this.$common.isEmpty(sortArray)) {
+        //     this.sort = sortArray[0];
+        //   }
+        // }
+        this.$http.get("http://localhost:9090/blogCategory/front/getAllCategory")
+          .then((res) => {
+            if (!this.$common.isEmpty(res.data)) {
+              this.categoryList = res.data;
+            }
+          })
+          .catch((error) => {
+            this.$message({
+              message: error.message,
+              type: "error"
+            });
           });
-          if (!this.$common.isEmpty(sortArray)) {
-            this.sort = sortArray[0];
-          }
-        }
+
       },
       listArticle(label) {
-        this.labelId = label.id;
+        this.categoryId = label.categoryId;
         this.pagination = {
-          current: 1,
-          size: 10,
-          total: 0,
-          searchKey: "",
-          sortId: this.$route.query.sortId,
-          labelId: label.id
+          pageNum: 1,
+          pageSize: 10,
+          categoryId: this.$route.query.sortId,
+          tagId: this.$route.query.labelId,
+          keywords: "",
         };
         this.articles.splice(0, this.articles.length);
         this.$nextTick(() => {
@@ -128,7 +142,7 @@
         });
       },
       getArticles() {
-        this.$http.post(this.$constant.baseURL + "/article/listArticle", this.pagination)
+        this.$http.post("http://localhost:9090/blogArticle/front/getFrontArticlePage", this.pagination)
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.articles = this.articles.concat(res.data.records);
