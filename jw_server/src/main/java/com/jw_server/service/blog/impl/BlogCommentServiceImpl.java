@@ -1,12 +1,11 @@
 package com.jw_server.service.blog.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
-import com.jw_server.dao.blog.dto.addFrontCommentDTO;
+import com.jw_server.dao.blog.dto.FrontAddCommentDTO;
 import com.jw_server.dao.blog.dto.QueryBlogAdminCommentPageDTO;
 import com.jw_server.dao.blog.entity.BlogComment;
 import com.jw_server.dao.blog.mapper.BlogArticleMapper;
@@ -39,33 +38,42 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
 
 
     /**
-     * 首先查询文章的第一级评论，(floorCommentId=0的评论)
-     * 再分别查询该一级评论下的二级评论分页
+     * floorCommentId = 0 表示查询一级评论分页
+     *  首先查询文章的第一级评论，(floorCommentId=0的评论)
+     *  再分别查询该一级评论下的二级评论分页
+     *
+     * floorCommentId != 0 表示查询二级评论分页
      **/
     @Override
     public MyPageVO<BlogFrontCommentVO> getFrontCommentByArticleId(Integer articleId, Integer floorCommentId, Integer pageNum, Integer pageSize) {
 
         IPage<BlogFrontCommentVO> commentIPage = blogCommentMapper.getFrontCommentPageVO(articleId,
-                0,
+                floorCommentId,
                 new Page<>(pageNum,pageSize));
 
-        List<BlogFrontCommentVO> parentList= commentIPage.getRecords();
-        /*
-         * 开始查询二级评论
-         **/
-        parentList.forEach(parent -> {
-            IPage<BlogFrontCommentVO> childPage = blogCommentMapper.getFrontCommentPageVO(articleId,
-                    parent.getCommentId(),
-                    new Page<>(0, 5));
-            parent.setReplyCommentCounts(childPage.getTotal());
-            parent.setReplyCommentList(childPage.getRecords());
-        });
+        //前台查询二级评论, 直接返回
+        if (floorCommentId!=0){
+            return new MyPageVO<>(commentIPage);
+        }else{
+            //前台查询一级评论,需要封装一级评论下的二级评论, 其实这个else可以省去,但是为了方便后续查看我还是写上了
+            List<BlogFrontCommentVO> parentList= commentIPage.getRecords();
+            /*
+             * 开始查询二级评论
+             **/
+            parentList.forEach(parent -> {
+                IPage<BlogFrontCommentVO> childPage = blogCommentMapper.getFrontCommentPageVO(articleId,
+                        parent.getCommentId(),
+                        new Page<>(0, 5));
+                parent.setReplyCommentCounts(childPage.getTotal());
+                parent.setReplyCommentList(childPage.getRecords());
+            });
 
-        return new MyPageVO<>(commentIPage.getPages(),
-                commentIPage.getCurrent(),
-                commentIPage.getSize(),
-                commentIPage.getTotal(),
-                parentList);
+            return new MyPageVO<>(commentIPage.getPages(),
+                    commentIPage.getCurrent(),
+                    commentIPage.getSize(),
+                    commentIPage.getTotal(),
+                    parentList);
+        }
     }
 
     /**
@@ -91,10 +99,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
      * 新增评论
      **/
     @Override
-    public void addComment(addFrontCommentDTO addFrontCommentDTO) {
+    public void addComment(FrontAddCommentDTO frontAddCommentDTO) {
         //新增一条评论
         BlogComment addComment = new BlogComment();
-        BeanUtil.copyProperties(addFrontCommentDTO, addComment);
+        BeanUtil.copyProperties(frontAddCommentDTO, addComment);
         save(addComment);
     }
 

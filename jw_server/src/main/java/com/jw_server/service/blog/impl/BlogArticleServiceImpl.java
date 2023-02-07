@@ -9,17 +9,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.core.utils.IpUtils;
 import com.jw_server.core.utils.RedisUtils;
-import com.jw_server.dao.blog.dto.BlogAdminAddArticleDTO;
-import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleCheckDTO;
-import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleTopDTO;
-import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
+import com.jw_server.dao.blog.dto.*;
 import com.jw_server.dao.blog.entity.BlogArticle;
-import com.jw_server.dao.blog.entity.BlogComment;
 import com.jw_server.dao.blog.mapper.*;
 import com.jw_server.dao.blog.vo.*;
 import com.jw_server.service.blog.IBlogArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jw_server.service.blog.IBlogCommentService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -57,15 +52,22 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Resource
     private RedisUtils redisUtils;
 
+    /**
+     * /根据文章类别查询文章列表
+     **/
     @Override
-    public MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(Integer pageNum, Integer pageSize) {
+    public MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(FrontQueryArticlePageDTO frontQueryArticlePageDTO) {
 
         /*
-         * 先联表blog_article, sys_user, blog_category 查询出文章列表
+         * 先联表blog_article, sys_user, blog_category 查询（筛选）出文章列表
          *
-         * 再对每个文章进行遍历, 查询文章标签和点赞量
+         *
+         * 再对每个文章进行遍历, 查询(筛选)文章标签和点赞量
          **/
-        IPage<BlogFrontArticlePageVO> articlePage = blogArticleMapper.getFrontArticlePage(new Page<>(pageNum, pageSize));
+        IPage<BlogFrontArticlePageVO> articlePage = blogArticleMapper.getFrontArticlePage(
+                new Page<>(frontQueryArticlePageDTO.getPageNum(), frontQueryArticlePageDTO.getPageSize()),
+                frontQueryArticlePageDTO);
+
         List<BlogFrontArticlePageVO> articleVOList = articlePage.getRecords();
         if(CollectionUtil.isNotEmpty(articleVOList)){
             articleVOList.forEach(articleVO->{
@@ -83,6 +85,22 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
                 articlePage.getSize(),
                 articlePage.getTotal(),
                 articleVOList);
+    }
+
+    /**
+     * 前台根据文章标签查询文章分页
+     *
+     * 先筛选出标签下的所有文章id，再对id进行分页查询
+     *
+     * 可以一次性查询，使用嵌套sql语句
+     **/
+    @Override
+    public MyPageVO<BlogFrontArticlePageVO> getFrontArticleByTag(FrontQueryArticlePageDTO frontQueryArticlePageDTO) {
+
+
+
+        IPage<BlogFrontArticlePageVO> page = blogArticleMapper.getFrontArticleByTag(frontQueryArticlePageDTO);
+        return null;
     }
 
     //TODO 后续可考虑把查询的文章放到缓存里面，修改文章时只用把redis里面的数据修改
@@ -124,9 +142,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 博客后台新增文章
      **/
     @Override
-    public void addBlogArticle(BlogAdminAddArticleDTO blogAdminAddArticleDTO) {
+    public void addBlogArticle(AdminAddArticleDTO adminAddArticleDTO) {
         BlogArticle addArticle = new BlogArticle();
-        BeanUtil.copyProperties(blogAdminAddArticleDTO, addArticle);
+        BeanUtil.copyProperties(adminAddArticleDTO, addArticle);
         save(addArticle);
     }
 
@@ -178,7 +196,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 后台修改文章顶置状态
      **/
     @Override
-    public void updateArticleTop(BlogAdminUpdateArticleTopDTO updateTopDTO) {
+    public void updateArticleTop(AdminUpdateArticleTopDTO updateTopDTO) {
         update(new LambdaUpdateWrapper<BlogArticle>()
                 .eq(BlogArticle::getArticleId, updateTopDTO.getArticleId())
                 .set(BlogArticle::getIsTop, updateTopDTO.getIsTop()));
@@ -205,7 +223,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 后台修改文章审核状态
      **/
     @Override
-    public void updateArticleCheck(BlogAdminUpdateArticleCheckDTO updateCheckDTO) {
+    public void updateArticleCheck(AdminUpdateArticleCheckDTO updateCheckDTO) {
         update(new LambdaUpdateWrapper<BlogArticle>()
                 .eq(BlogArticle::getArticleId, updateCheckDTO.getArticleId())
                 .set(BlogArticle::getArticleCheck, updateCheckDTO.getArticleCheck()));

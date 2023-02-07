@@ -26,7 +26,7 @@
       <!-- 评论数量 -->
       <div class="commentInfo-title">
         <span style="font-size: 1.15rem">Comments | </span>
-        <span>{{ total }} 条留言</span>
+        <span>{{ commentTotal }} 条留言</span>
       </div>
       <!-- 评论详情 -->
       <div id="comment-content" class="commentInfo-detail"
@@ -144,7 +144,8 @@
     data() {
       return {
         isGraffiti: false,
-        total: 0,
+        //所有评论总数
+        commentTotal: 0,
         replyDialogVisible: false,
         floorComment: {},
         replyComment: {},
@@ -155,31 +156,39 @@
           pageNum : 1,
           pageSize : 10,
         },
+        //一级评论总数
         floorCommentTotal:0,
-        childCommentCurrent:1,
       };
     },
-
     computed: {},
-
     created() {
       this.getComments(this.pagination);
       this.getTotal();
     },
     methods: {
-      toPage(page) {
-        this.pagination.floorCommentId = 0;
-        this.pagination.pageNum = page;
-        window.scrollTo({
-          top: document.getElementById('comment-content').offsetTop
-        });
-        this.getComments(this.pagination);
-      },
-      getTotal() {
-        this.$http.get("http://localhost:9090/blogComment/front/getFrontCommentCounts", {articleId: this.source})
+      //获取一级(二级)评论
+      getComments(pagination, floorComment = {}, isToPage = false) {
+        this.$http.get("http://localhost:9090/blogComment/front/getFrontComment", pagination)
           .then((res) => {
-            if (!this.$common.isEmpty(res.data)) {
-              this.total = res.data;
+            if (!this.$common.isEmpty(res.data) && !this.$common.isEmpty(res.data.records)) {
+              if (this.$common.isEmpty(floorComment)) {
+                //查询一级评论
+                this.comments = res.data.records;
+                this.floorCommentTotal = res.data.total
+                this.emoji(this.comments, true);
+              } else {
+                //查询floorComment的二级评论分页
+                if (isToPage === false) {
+                  //查询二级评论分页
+                  floorComment.replyCommentCounts = res.data.total;
+                  floorComment.replyCommentList = res.data.records;
+                } else {
+                  //二级评论翻页(展开)
+                  floorComment.replyCommentCounts = res.data.total;
+                  floorComment.replyCommentList = floorComment.replyCommentList.concat(res.data.records);
+                }
+                this.emoji(floorComment.replyCommentList, false);
+              }
             }
           })
           .catch((error) => {
@@ -189,13 +198,41 @@
             });
           });
       },
+      //获取评论总数
+      getTotal() {
+        this.$http.get("http://localhost:9090/blogComment/front/getFrontCommentCounts", {articleId: this.source})
+          .then((res) => {
+            if (!this.$common.isEmpty(res.data)) {
+              this.commentTotal = res.data;
+            }
+          })
+          .catch((error) => {
+            this.$message({
+              message: error.message,
+              type: "error"
+            });
+          });
+      },
+      //一级评论翻页
+      toPage(page) {
+        this.pagination.pageNum = page;
+        this.pagination.floorCommentId = 0;
+        window.scrollTo({
+          top: document.getElementById('comment-content').offsetTop
+        });
+        this.getComments(this.pagination);
+      },
+      //二级评论翻页
       toChildPage(floorComment) {
-        floorComment.childComments.current += 1;
+        //根据total, length，和pageSize计算出当前的pageNum
+        //计算出当前current  pageSize=5
+        let current = Math.floor(floorComment.replyCommentList.length / 5)
+        // 下一页 current+1
         let pagination = {
-          current: floorComment.childComments.current,
-          size: 5,
           articleId: this.source,
-          floorCommentId: floorComment.commentId
+          floorCommentId: floorComment.commentId,
+          pageNum: current+1,
+          pageSize: 5,
         }
         this.getComments(pagination, floorComment, true);
       },
@@ -216,41 +253,7 @@
           }
         });
       },
-      //获取评论
-      getComments(pagination, floorComment = {}, isToPage = false) {
 
-        //此处建议分开写，一级评论相关查询已经写完，下面写二级评论相关操作
-        //TODO 二级评论相关操作
-
-        this.$http.get("http://localhost:9090/blogComment/front/getFrontComment", this.pagination)
-          .then((res) => {
-            if (!this.$common.isEmpty(res.data) && !this.$common.isEmpty(res.data.records)) {
-              if (this.$common.isEmpty(floorComment)) {
-                //查询一级评论
-                this.comments = res.data.records;
-                this.floorCommentTotal = res.data.total
-                this.emoji(this.comments, true);
-              } else {
-                //查询floorComment的二级评论分页
-                if (isToPage === false) {
-                  //二级评论翻页
-                  floorComment.replyCommentList = res.data;
-                } else {
-                  //二级评论展开
-                  floorComment.replyCommentCounts = res.data.total;
-                  floorComment.replyCommentList = floorComment.replyCommentList.concat(res.data.records);
-                }
-                this.emoji(floorComment.replyCommentList, false);
-              }
-            }
-          })
-          .catch((error) => {
-            this.$message({
-              message: error.message,
-              type: "error"
-            });
-          });
-      },
       //回复涂鸦功能
       addGraffitiComment(graffitiComment) {
         this.submitComment(graffitiComment);
@@ -263,13 +266,8 @@
           commentContent: commentContent,
           commentCheck: this.$store.state.commentCheck,
         };
-
         this.$http.post("http://localhost:9090/blogComment/front/addComment", comment)
           .then((res) => {
-            this.$message({
-              type: 'success',
-              message: '保存成功！'
-            });
             //重置分页数据
             this.pagination = {
               articleId: this.source,
@@ -279,6 +277,17 @@
             }
             this.getComments(this.pagination);
             this.getTotal();
+            if(this.$store.state.commentCheck === '0'){
+              this.$message({
+                type: 'warning',
+                message: '管理员已开启评论审核, 审核通过后才能展示'
+              });
+            }else {
+              this.$message({
+                type: 'success',
+                message: '评论成功！'
+              });
+            }
           })
           .catch((error) => {
             this.$message({
@@ -289,7 +298,6 @@
       },
       //提交回复
       submitReply(commentContent) {
-
         let comment = {
           articleId: this.source,
           userId: this.$store.state.currentUser.id,
@@ -303,14 +311,26 @@
 
         this.$http.post("http://localhost:9090/blogComment/front/addComment", comment)
           .then((res) => {
+            //提交回复后，查询(回复评论)二级评论
             let pagination = {
               articleId: this.source,
               floorCommentId: floorComment.commentId,
-              current: 1,
-              size: 5,
+              pageNum: 1,
+              pageSize: 5,
             }
             this.getComments(pagination, floorComment);
             this.getTotal();
+            if(this.$store.state.commentCheck === '0'){
+              this.$message({
+                type: 'warning',
+                message: '管理员已开启评论审核, 审核通过后才能展示'
+              });
+            }else {
+              this.$message({
+                type: 'success',
+                message: '评论成功！'
+              });
+            }
           })
           .catch((error) => {
             this.$message({

@@ -1,10 +1,7 @@
 package com.jw_server.service.blog;
 
 import com.jw_server.core.common.MyPageVO;
-import com.jw_server.dao.blog.dto.BlogAdminAddArticleDTO;
-import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleCheckDTO;
-import com.jw_server.dao.blog.dto.BlogAdminUpdateArticleTopDTO;
-import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
+import com.jw_server.dao.blog.dto.*;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jw_server.dao.blog.vo.*;
@@ -22,11 +19,18 @@ public interface IBlogArticleService extends IService<BlogArticle> {
 
 
     /**
-     * Description: 前台查询文章列表
+     * Description: 前台查询文章列表/根据文章类别查询文章列表
      * Author: jingwen
      * Date: 2022/12/3 17:00
      **/
-    MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(Integer pageNum, Integer pageSize);
+    MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(FrontQueryArticlePageDTO frontQueryArticlePageDTO);
+
+    /**
+     * Description: 前台根据文章标签查询文章分页
+     * Author: jingwen
+     * Date: 2023/2/7 21:27
+     **/
+    MyPageVO<BlogFrontArticlePageVO> getFrontArticleByTag(FrontQueryArticlePageDTO frontQueryArticlePageDTO);
 
     /**
      * Description: 浏览文章详细信息
@@ -40,7 +44,7 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2023/1/9 21:19
      **/
-    void addBlogArticle(BlogAdminAddArticleDTO blogAdminAddArticleDTO);
+    void addBlogArticle(AdminAddArticleDTO adminAddArticleDTO);
 
     /**
      * Description: 博客后台查询文章列表
@@ -68,7 +72,7 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2023/1/26 12:48
      **/
-    void updateArticleTop(BlogAdminUpdateArticleTopDTO updateTopDTO);
+    void updateArticleTop(AdminUpdateArticleTopDTO updateTopDTO);
 
     /**
      * Description: 要注意同时删除文章评论和标签
@@ -82,7 +86,7 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2023/1/26 12:48
      **/
-    void updateArticleCheck(BlogAdminUpdateArticleCheckDTO updateCheckDTO);
+    void updateArticleCheck(AdminUpdateArticleCheckDTO updateCheckDTO);
 
     /**
      * Description: 前台获取热门文章————浏览量最多的3篇文章
@@ -90,4 +94,7 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Date: 2023/1/28 13:54
      **/
     List<BlogFrontHotArticleVO> getHotArticle(Integer pageNum, Integer pageSize);
+
+
+
 }

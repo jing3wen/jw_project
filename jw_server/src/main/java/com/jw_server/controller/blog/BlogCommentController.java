@@ -1,7 +1,7 @@
 package com.jw_server.controller.blog;
 
 import com.jw_server.core.aop.logAspect.SysLog;
-import com.jw_server.dao.blog.dto.addFrontCommentDTO;
+import com.jw_server.dao.blog.dto.FrontAddCommentDTO;
 import com.jw_server.dao.blog.dto.QueryBlogAdminCommentPageDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +32,10 @@ public class BlogCommentController {
      * Description: 前台查询文章评论
      * Author: jingwen 
      * Date: 2023/1/4 16:17
+     *
+     *
+     * floorCommentId = 0 表示查询一级评论分页
+     * floorCommentId != 0 表示查询二级评论分页
      **/
     @GetMapping("/front/getFrontComment")
     public ResponseResult getFrontComment(@RequestParam Integer articleId,
@@ -62,8 +66,8 @@ public class BlogCommentController {
      **/
     @SysLog(logModule=BlogCommentModule, logType = ADD, logDesc = "前台新增一条评论")
     @PostMapping("/front/addComment")
-    public ResponseResult addComment(@RequestBody addFrontCommentDTO addFrontCommentDTO) {
-        blogCommentService.addComment(addFrontCommentDTO);
+    public ResponseResult addComment(@RequestBody FrontAddCommentDTO frontAddCommentDTO) {
+        blogCommentService.addComment(frontAddCommentDTO);
         return ResponseResult.success();
     }
 

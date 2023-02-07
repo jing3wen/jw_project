@@ -8,7 +8,7 @@ import lombok.Data;
  * DATE: 2023/1/26 17:07
  */
 @Data
-public class BlogAdminUpdateArticleCheckDTO {
+public class AdminUpdateArticleCheckDTO {
 
     //文章id
     private Integer articleId;

@@ -8,7 +8,7 @@ import lombok.Data;
  * DATE: 2023/1/9 20:50
  */
 @Data
-public class BlogAdminAddArticleDTO {
+public class AdminAddArticleDTO {
 
     //作者id
     private Integer userId;
