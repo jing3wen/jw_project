@@ -1,7 +1,6 @@
 package com.jw_server.controller.blog;
 
 import com.jw_server.core.aop.logAspect.SysLog;
-import com.jw_server.core.common.MyPageDTO;
 import com.jw_server.dao.blog.dto.*;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +33,14 @@ public class BlogArticleController {
 
 
     /**
-     * Description 前台 分页查询所有文章列表/根据文章类别查询文章列表
+     * Description 前台 分页查询所有文章列表/根据文章类别查询文章列表/根据文章标签id查询文章列表
      * Author jingwen
      * Date 2022-12-03 16:11:56
      **/
     @PostMapping("/front/getFrontArticlePage")
-    public ResponseResult getFrontArticlePage(@RequestBody FrontQueryArticlePageDTO frontQueryArticlePageDTO) {
-        System.out.println(frontQueryArticlePageDTO.toString());
-        return ResponseResult.success(blogArticleService.getFrontArticlePage(frontQueryArticlePageDTO));
+    public ResponseResult getFrontArticlePage(@RequestBody BlogFrontQueryArticlePageDTO blogFrontQueryArticlePageDTO) {
+
+        return ResponseResult.success(blogArticleService.getFrontArticlePage(blogFrontQueryArticlePageDTO));
     }
 
     /**
@@ -66,18 +65,6 @@ public class BlogArticleController {
         return ResponseResult.success(blogArticleService.getHotArticle(0, 3));
     }
 
-    /**
-     * Description: 前台根据文章标签查询文章分页
-     * Author: jingwen
-     * Date: 2023/2/7 21:22
-     **/
-    @PostMapping("/front/getFrontArticleByTag")
-    public ResponseResult getFrontArticleByTag(@RequestBody FrontQueryArticlePageDTO frontQueryArticlePageDTO){
-
-
-        return ResponseResult.success(blogArticleService.getFrontArticleByTag(frontQueryArticlePageDTO));
-    }
-
 
     /**
      * Description: 博客后台新增文章
@@ -86,8 +73,8 @@ public class BlogArticleController {
      **/
     @SysLog(logModule=BlogArticleModule, logType = ADD, logDesc = "博客后台新增文章")
     @PostMapping("/admin/addBlogArticle")
-    public ResponseResult addBlogArticle(@RequestBody AdminAddArticleDTO adminAddArticleDTO) {
-        blogArticleService.addBlogArticle(adminAddArticleDTO);
+    public ResponseResult addBlogArticle(@RequestBody BlogAdminAddArticleDTO blogAdminAddArticleDTO) {
+        blogArticleService.addBlogArticle(blogAdminAddArticleDTO);
         return ResponseResult.success();
     }
 
@@ -98,9 +85,9 @@ public class BlogArticleController {
      * Date: 2023/1/9 21:18
      **/
     @PostMapping("/admin/getAdminBlogArticlePage")
-    public ResponseResult getAdminBlogArticlePage(@RequestBody QueryBlogAdminArticlePageDTO queryBlogAdminArticlePageDTO) {
+    public ResponseResult getAdminBlogArticlePage(@RequestBody BlogAdminQueryArticlePageDTO blogAdminQueryArticlePageDTO) {
 
-        return ResponseResult.success(blogArticleService.getAdminBlogArticlePage(queryBlogAdminArticlePageDTO));
+        return ResponseResult.success(blogArticleService.getAdminBlogArticlePage(blogAdminQueryArticlePageDTO));
     }
 
 
@@ -147,7 +134,7 @@ public class BlogArticleController {
      **/
     @SysLog(logModule=BlogArticleModule, logType = UPDATE, logDesc = "后台修改文章顶置状态")
     @PostMapping("/admin/updateArticleTop")
-    public ResponseResult updateArticleTop(@RequestBody AdminUpdateArticleTopDTO updateTopDTO) {
+    public ResponseResult updateArticleTop(@RequestBody BlogAdminUpdateArticleTopDTO updateTopDTO) {
         blogArticleService.updateArticleTop(updateTopDTO);
         return ResponseResult.success();
     }
@@ -159,7 +146,7 @@ public class BlogArticleController {
      **/
     @SysLog(logModule=BlogArticleModule, logType = UPDATE, logDesc = "后台审核文章")
     @PostMapping("/admin/updateArticleCheck")
-    public ResponseResult updateArticleCheck(@RequestBody AdminUpdateArticleCheckDTO updateCheckDTO) {
+    public ResponseResult updateArticleCheck(@RequestBody BlogAdminUpdateArticleCheckDTO updateCheckDTO) {
         blogArticleService.updateArticleCheck(updateCheckDTO);
         return ResponseResult.success();
     }

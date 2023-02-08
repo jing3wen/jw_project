@@ -30,7 +30,7 @@
               </div>
             </li>
             <li v-for="(menu, index) in $store.getters.navigationBar"
-                @click="$router.push({path: '/sort', query: {sortId: menu.id, labelId: menu.labels[0].id}})"
+                @click="$router.push({path: '/sort', query: {sortId: menu.id}})"
                 :key="index">
               <div class="my-menu">
                 📒 <span>{{ menu.sortName }}</span>

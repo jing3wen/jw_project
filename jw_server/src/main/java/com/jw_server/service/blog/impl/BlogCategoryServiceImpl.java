@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.core.constants.HttpCode;
 import com.jw_server.core.exception.ServiceException;
-import com.jw_server.dao.blog.dto.QueryBlogAdminCategoryPageDTO;
+import com.jw_server.dao.blog.dto.BlogAdminQueryCategoryPageDTO;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import com.jw_server.dao.blog.entity.BlogCategory;
 import com.jw_server.dao.blog.mapper.BlogArticleMapper;
@@ -41,6 +41,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     @Override
     public List<BlogFrontCategoryVO> getAllCategory() {
 
+
         return blogCategoryMapper.getAllCategory();
     }
 
@@ -48,7 +49,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
      * 后台查询博客类别分页
      **/
     @Override
-    public MyPageVO<BlogAdminCategoryPageVO> getBlogCategoryPageList(QueryBlogAdminCategoryPageDTO queryCategoryDTO) {
+    public MyPageVO<BlogAdminCategoryPageVO> getBlogCategoryPageList(BlogAdminQueryCategoryPageDTO queryCategoryDTO) {
 
         IPage<BlogAdminCategoryPageVO> page = blogCategoryMapper.getBlogCategoryPageList(
                 new Page<>(queryCategoryDTO.getPageNum(),queryCategoryDTO.getPageSize()),

@@ -15,4 +15,7 @@ public class BlogFrontCategoryVO {
 
     //类别名称
     private String categoryName;
+
+    //该类别下的文章数量
+    private Integer articleCounts;
 }

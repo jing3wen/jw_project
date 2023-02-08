@@ -56,7 +56,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * /根据文章类别查询文章列表
      **/
     @Override
-    public MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(FrontQueryArticlePageDTO frontQueryArticlePageDTO) {
+    public MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(BlogFrontQueryArticlePageDTO blogFrontQueryArticlePageDTO) {
 
         /*
          * 先联表blog_article, sys_user, blog_category 查询（筛选）出文章列表
@@ -65,8 +65,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
          * 再对每个文章进行遍历, 查询(筛选)文章标签和点赞量
          **/
         IPage<BlogFrontArticlePageVO> articlePage = blogArticleMapper.getFrontArticlePage(
-                new Page<>(frontQueryArticlePageDTO.getPageNum(), frontQueryArticlePageDTO.getPageSize()),
-                frontQueryArticlePageDTO);
+                new Page<>(blogFrontQueryArticlePageDTO.getPageNum(), blogFrontQueryArticlePageDTO.getPageSize()),
+                blogFrontQueryArticlePageDTO);
 
         List<BlogFrontArticlePageVO> articleVOList = articlePage.getRecords();
         if(CollectionUtil.isNotEmpty(articleVOList)){
@@ -87,21 +87,6 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
                 articleVOList);
     }
 
-    /**
-     * 前台根据文章标签查询文章分页
-     *
-     * 先筛选出标签下的所有文章id，再对id进行分页查询
-     *
-     * 可以一次性查询，使用嵌套sql语句
-     **/
-    @Override
-    public MyPageVO<BlogFrontArticlePageVO> getFrontArticleByTag(FrontQueryArticlePageDTO frontQueryArticlePageDTO) {
-
-
-
-        IPage<BlogFrontArticlePageVO> page = blogArticleMapper.getFrontArticleByTag(frontQueryArticlePageDTO);
-        return null;
-    }
 
     //TODO 后续可考虑把查询的文章放到缓存里面，修改文章时只用把redis里面的数据修改
     @Override
@@ -142,9 +127,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 博客后台新增文章
      **/
     @Override
-    public void addBlogArticle(AdminAddArticleDTO adminAddArticleDTO) {
+    public void addBlogArticle(BlogAdminAddArticleDTO blogAdminAddArticleDTO) {
         BlogArticle addArticle = new BlogArticle();
-        BeanUtil.copyProperties(adminAddArticleDTO, addArticle);
+        BeanUtil.copyProperties(blogAdminAddArticleDTO, addArticle);
         save(addArticle);
     }
 
@@ -152,7 +137,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 博客后台查询文章列表
      **/
     @Override
-    public MyPageVO<BlogAdminArticlePageVO> getAdminBlogArticlePage(QueryBlogAdminArticlePageDTO queryArticleDTO) {
+    public MyPageVO<BlogAdminArticlePageVO> getAdminBlogArticlePage(BlogAdminQueryArticlePageDTO queryArticleDTO) {
 
         IPage<BlogAdminArticlePageVO> page = blogArticleMapper.getAdminBlogArticlePage(
                 new Page<>(queryArticleDTO.getPageNum(), queryArticleDTO.getPageSize()),
@@ -196,7 +181,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 后台修改文章顶置状态
      **/
     @Override
-    public void updateArticleTop(AdminUpdateArticleTopDTO updateTopDTO) {
+    public void updateArticleTop(BlogAdminUpdateArticleTopDTO updateTopDTO) {
         update(new LambdaUpdateWrapper<BlogArticle>()
                 .eq(BlogArticle::getArticleId, updateTopDTO.getArticleId())
                 .set(BlogArticle::getIsTop, updateTopDTO.getIsTop()));
@@ -223,7 +208,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 后台修改文章审核状态
      **/
     @Override
-    public void updateArticleCheck(AdminUpdateArticleCheckDTO updateCheckDTO) {
+    public void updateArticleCheck(BlogAdminUpdateArticleCheckDTO updateCheckDTO) {
         update(new LambdaUpdateWrapper<BlogArticle>()
                 .eq(BlogArticle::getArticleId, updateCheckDTO.getArticleId())
                 .set(BlogArticle::getArticleCheck, updateCheckDTO.getArticleCheck()));

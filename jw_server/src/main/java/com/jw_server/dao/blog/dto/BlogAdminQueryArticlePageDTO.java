@@ -4,13 +4,16 @@ import com.jw_server.core.common.MyPageDTO;
 import lombok.Data;
 
 /**
- * Description:
+ * Description: 博客后台查询文章列表DTO
  * Author: jingwen
- * DATE: 2023/1/12 22:15
+ * DATE: 2023/1/10 11:20
  */
 @Data
-public class QueryBlogAdminCategoryPageDTO extends MyPageDTO {
+public class BlogAdminQueryArticlePageDTO extends MyPageDTO {
 
     //文章类别名称
     private String categoryName;
+
+    //文章审核状态
+    private String articleCheck;
 }

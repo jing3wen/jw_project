@@ -2,7 +2,7 @@ package com.jw_server.dao.blog.mapper;
 
 import com.jw_server.dao.blog.entity.BlogArticleTag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jw_server.dao.blog.vo.FrontTagVO;
+import com.jw_server.dao.blog.vo.BlogFrontTagVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -21,7 +21,6 @@ public interface BlogArticleTagMapper extends BaseMapper<BlogArticleTag> {
      * Author: jingwen
      * Date: 2023/2/4 15:29
      **/
-    List<FrontTagVO> getArticleTagsByArticleId(Integer articleId);
-
+    List<BlogFrontTagVO> getArticleTagsByArticleId(Integer articleId);
 
 }

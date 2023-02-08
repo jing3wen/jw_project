@@ -1,8 +1,8 @@
 package com.jw_server.controller.blog;
 
 import com.jw_server.core.aop.logAspect.SysLog;
-import com.jw_server.dao.blog.dto.FrontAddCommentDTO;
-import com.jw_server.dao.blog.dto.QueryBlogAdminCommentPageDTO;
+import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
+import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogCommentService;
@@ -66,7 +66,7 @@ public class BlogCommentController {
      **/
     @SysLog(logModule=BlogCommentModule, logType = ADD, logDesc = "前台新增一条评论")
     @PostMapping("/front/addComment")
-    public ResponseResult addComment(@RequestBody FrontAddCommentDTO frontAddCommentDTO) {
+    public ResponseResult addComment(@RequestBody BlogFrontAddCommentDTO frontAddCommentDTO) {
         blogCommentService.addComment(frontAddCommentDTO);
         return ResponseResult.success();
     }
@@ -115,7 +115,7 @@ public class BlogCommentController {
      * Date: 2023/1/13 11:00
      **/
     @PostMapping("/admin/getPageList")
-    public ResponseResult getPageList(@RequestBody QueryBlogAdminCommentPageDTO queryCommentPageDTO) {
+    public ResponseResult getPageList(@RequestBody BlogAdminQueryCommentPageDTO queryCommentPageDTO) {
 
         return ResponseResult.success(blogCommentService.getAdminCommentPageList(queryCommentPageDTO));
     }

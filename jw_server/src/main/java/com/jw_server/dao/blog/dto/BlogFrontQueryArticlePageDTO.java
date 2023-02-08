@@ -9,7 +9,7 @@ import lombok.Data;
  * DATE: 2023/2/7 21:06
  */
 @Data
-public class FrontQueryArticlePageDTO extends MyPageDTO {
+public class BlogFrontQueryArticlePageDTO extends MyPageDTO {
 
     //类别
     private Integer categoryId;

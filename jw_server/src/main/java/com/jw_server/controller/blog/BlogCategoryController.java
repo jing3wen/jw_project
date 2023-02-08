@@ -1,7 +1,7 @@
 package com.jw_server.controller.blog;
 
 import com.jw_server.core.aop.logAspect.SysLog;
-import com.jw_server.dao.blog.dto.QueryBlogAdminCategoryPageDTO;
+import com.jw_server.dao.blog.dto.BlogAdminQueryCategoryPageDTO;
 import com.jw_server.dao.blog.entity.BlogCategory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,7 +84,7 @@ public class BlogCategoryController {
      * Date 2023/1/12 22:09
      **/
     @PostMapping("/admin/getBlogCategoryPageList")
-    public ResponseResult getBlogCategoryPageList(@RequestBody QueryBlogAdminCategoryPageDTO queryCategoryDTO) {
+    public ResponseResult getBlogCategoryPageList(@RequestBody BlogAdminQueryCategoryPageDTO queryCategoryDTO) {
         return ResponseResult.success(blogCategoryService.getBlogCategoryPageList(queryCategoryDTO));
     }
 

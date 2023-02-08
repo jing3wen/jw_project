@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
-import com.jw_server.dao.blog.dto.FrontAddCommentDTO;
-import com.jw_server.dao.blog.dto.QueryBlogAdminCommentPageDTO;
+import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
+import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
 import com.jw_server.dao.blog.entity.BlogComment;
 import com.jw_server.dao.blog.mapper.BlogArticleMapper;
 import com.jw_server.dao.blog.mapper.BlogCommentMapper;
@@ -99,7 +99,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
      * 新增评论
      **/
     @Override
-    public void addComment(FrontAddCommentDTO frontAddCommentDTO) {
+    public void addComment(BlogFrontAddCommentDTO frontAddCommentDTO) {
         //新增一条评论
         BlogComment addComment = new BlogComment();
         BeanUtil.copyProperties(frontAddCommentDTO, addComment);
@@ -146,7 +146,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
      * 后台查询评论分页
      **/
     @Override
-    public MyPageVO<BlogAdminCommentPageVO> getAdminCommentPageList(QueryBlogAdminCommentPageDTO queryCommentPageDTO) {
+    public MyPageVO<BlogAdminCommentPageVO> getAdminCommentPageList(BlogAdminQueryCommentPageDTO queryCommentPageDTO) {
 
         IPage<BlogAdminCommentPageVO> page = blogCommentMapper.getAdminCommentPageList(
                 new Page<>(queryCommentPageDTO.getPageNum(),queryCommentPageDTO.getPageSize()),

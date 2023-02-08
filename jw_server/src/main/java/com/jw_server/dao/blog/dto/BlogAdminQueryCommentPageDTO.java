@@ -9,7 +9,7 @@ import lombok.Data;
  * DATE: 2023/1/13 11:04
  */
 @Data
-public class QueryBlogAdminCommentPageDTO extends MyPageDTO {
+public class BlogAdminQueryCommentPageDTO extends MyPageDTO {
 
     //评论人昵称
     private String nickname;

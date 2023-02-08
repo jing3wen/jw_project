@@ -2,14 +2,13 @@ package com.jw_server.dao.blog.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jw_server.dao.blog.dto.FrontQueryArticlePageDTO;
-import com.jw_server.dao.blog.dto.QueryBlogAdminArticlePageDTO;
+import com.jw_server.dao.blog.dto.BlogFrontQueryArticlePageDTO;
+import com.jw_server.dao.blog.dto.BlogAdminQueryArticlePageDTO;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jw_server.dao.blog.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticle> {
      * Date: 2022/12/4 13:39
      **/
     IPage<BlogFrontArticlePageVO> getFrontArticlePage(Page<BlogFrontArticlePageVO> page,
-                                                      @Param("queryArticleDTO") FrontQueryArticlePageDTO queryArticlePageDTO);
+                                                      @Param("queryArticleDTO") BlogFrontQueryArticlePageDTO queryArticlePageDTO);
 
     /**
      * Description: 更新文章浏览量
@@ -57,7 +56,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticle> {
      * Date: 2023/1/10 21:52
      **/
     IPage<BlogAdminArticlePageVO> getAdminBlogArticlePage(Page<BlogAdminArticlePageVO> page,
-                                                         @Param("queryArticleDTO") QueryBlogAdminArticlePageDTO queryArticleDTO);
+                                                         @Param("queryArticleDTO") BlogAdminQueryArticlePageDTO queryArticleDTO);
 
     /**
      * Description:
@@ -73,10 +72,4 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticle> {
      **/
     List<BlogFrontHotArticleVO> getHotArticle(Integer pageNum, Integer pageSize);
 
-    /**
-     * Description: 前台根据文章标签查询文章分页
-     * Author: jingwen
-     * Date: 2023/2/7 21:30
-     **/
-    IPage<BlogFrontArticlePageVO> getFrontArticleByTag(FrontQueryArticlePageDTO frontQueryArticlePageDTO);
 }

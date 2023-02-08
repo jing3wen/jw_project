@@ -2,7 +2,7 @@ package com.jw_server.dao.blog.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jw_server.dao.blog.dto.QueryBlogAdminCategoryPageDTO;
+import com.jw_server.dao.blog.dto.BlogAdminQueryCategoryPageDTO;
 import com.jw_server.dao.blog.entity.BlogCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jw_server.dao.blog.vo.BlogAdminCategoryPageVO;
@@ -34,7 +34,7 @@ public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
      * Date: 2023/1/12 22:23
      **/
     IPage<BlogAdminCategoryPageVO> getBlogCategoryPageList(Page<BlogAdminCategoryPageVO> page,
-                                                           @Param("queryCategoryDTO") QueryBlogAdminCategoryPageDTO queryCategoryDTO);
+                                                           @Param("queryCategoryDTO") BlogAdminQueryCategoryPageDTO queryCategoryDTO);
 
     /**
      * Description: 后台根据文章类别名搜索类别列表

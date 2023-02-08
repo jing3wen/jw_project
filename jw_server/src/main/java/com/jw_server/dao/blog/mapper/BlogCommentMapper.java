@@ -2,7 +2,7 @@ package com.jw_server.dao.blog.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jw_server.dao.blog.dto.QueryBlogAdminCommentPageDTO;
+import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
 import com.jw_server.dao.blog.entity.BlogComment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jw_server.dao.blog.vo.BlogAdminCommentPageVO;
@@ -44,7 +44,7 @@ public interface BlogCommentMapper extends BaseMapper<BlogComment> {
      * Date: 2023/1/13 11:25
      **/
     IPage<BlogAdminCommentPageVO> getAdminCommentPageList(Page<BlogAdminCommentPageVO> objectPage,
-                                                          @Param("queryCommentPageDTO") QueryBlogAdminCommentPageDTO queryCommentPageDTO);
+                                                          @Param("queryCommentPageDTO") BlogAdminQueryCommentPageDTO queryCommentPageDTO);
 
     /**
      * Description: 批量审核评论

@@ -1,8 +1,8 @@
 package com.jw_server.service.blog;
 
 import com.jw_server.core.common.MyPageVO;
-import com.jw_server.dao.blog.dto.FrontAddCommentDTO;
-import com.jw_server.dao.blog.dto.QueryBlogAdminCommentPageDTO;
+import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
+import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
 import com.jw_server.dao.blog.entity.BlogComment;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jw_server.dao.blog.vo.BlogAdminCommentPageVO;
@@ -38,7 +38,7 @@ public interface IBlogCommentService extends IService<BlogComment> {
      * Author: jingwen
      * Date: 2023/1/4 21:51
      **/
-    void addComment(FrontAddCommentDTO frontAddCommentDTO);
+    void addComment(BlogFrontAddCommentDTO frontAddCommentDTO);
 
     /**
      * Description: 删除评论 并且还删除该评论下的子评论
@@ -66,6 +66,6 @@ public interface IBlogCommentService extends IService<BlogComment> {
      * Author: jingwen
      * Date: 2023/1/13 11:22
      **/
-    MyPageVO<BlogAdminCommentPageVO> getAdminCommentPageList(QueryBlogAdminCommentPageDTO queryCommentPageDTO);
+    MyPageVO<BlogAdminCommentPageVO> getAdminCommentPageList(BlogAdminQueryCommentPageDTO queryCommentPageDTO);
 
 }

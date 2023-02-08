@@ -1,7 +1,7 @@
 package com.jw_server.service.blog;
 
 import com.jw_server.core.common.MyPageVO;
-import com.jw_server.dao.blog.dto.QueryBlogAdminCategoryPageDTO;
+import com.jw_server.dao.blog.dto.BlogAdminQueryCategoryPageDTO;
 import com.jw_server.dao.blog.entity.BlogCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jw_server.dao.blog.vo.BlogAdminCategoryPageVO;
@@ -30,7 +30,7 @@ public interface IBlogCategoryService extends IService<BlogCategory> {
      * Author jingwen
      * Date 2023/1/12 22:09
      **/
-    MyPageVO<BlogAdminCategoryPageVO> getBlogCategoryPageList(QueryBlogAdminCategoryPageDTO queryCategoryDTO);
+    MyPageVO<BlogAdminCategoryPageVO> getBlogCategoryPageList(BlogAdminQueryCategoryPageDTO queryCategoryDTO);
 
     /**
      * Description: 新增或更新文章类别

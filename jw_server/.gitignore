@@ -1,7 +1,7 @@
 .idea
 target
 src/test
-application.yml
+src/main/resources/application.yml
 jw_server.iml
 rebel.xml
 rebel-remote.xml

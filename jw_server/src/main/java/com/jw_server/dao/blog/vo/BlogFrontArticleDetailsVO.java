@@ -33,7 +33,7 @@ public class BlogFrontArticleDetailsVO {
     private String categoryName;
 
     @ApiModelProperty("标签列表")
-    private List<FrontTagVO> tagList;
+    private List<BlogFrontTagVO> tagList;
 
     @ApiModelProperty("顶置（0表示不顶置，1表示顶置）")
     private String isTop;

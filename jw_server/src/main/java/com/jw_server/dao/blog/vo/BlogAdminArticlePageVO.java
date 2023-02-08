@@ -24,7 +24,7 @@ public class BlogAdminArticlePageVO {
     private String categoryName;
 
     //标签名
-    private List<FrontTagVO> tagList;
+    private List<BlogFrontTagVO> tagList;
 
     //是否顶置
     private String isTop;

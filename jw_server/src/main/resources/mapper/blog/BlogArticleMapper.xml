@@ -20,7 +20,8 @@
             LEFT JOIN sys_user AS su ON ba.user_id = su.id
             LEFT JOIN blog_category AS bc ON ba.category_id = bc.category_id
         WHERE
-            ba.article_check='1' AND ba.is_deleted='0'
+            ba.article_check='1'
+            AND ba.is_deleted='0'
             <if test="queryArticleDTO.categoryId != null and queryArticleDTO.categoryId !=''">
                 AND bc.category_id = #{queryArticleDTO.categoryId}
             </if>
@@ -56,7 +57,9 @@
                 LEFT JOIN sys_user AS su ON ba.user_id = su.id
                 LEFT JOIN blog_category AS bc ON ba.category_id = bc.category_id
         WHERE
-            ba.article_check='1' AND ba.is_deleted='0' AND ba.article_id = #{articleId};
+            ba.article_check='1'
+            AND ba.is_deleted='0'
+            AND ba.article_id = #{articleId};
     </select>
 
     <update id="updateArticleCommentCounts" parameterType="java.lang.Integer">
@@ -105,11 +108,6 @@
             AND ba.is_deleted='0'
         ORDER BY view_counts DESC
         LIMIT #{pageNum}, #{pageSize}
-
     </select>
-    <select id="getFrontArticleByTag" resultType="com.jw_server.dao.blog.vo.BlogFrontArticlePageVO">
-
-    </select>
-
 
 </mapper>

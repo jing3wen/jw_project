@@ -2,6 +2,9 @@ package com.jw_server.service.blog;
 
 import com.jw_server.dao.blog.entity.BlogTag;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jw_server.dao.blog.vo.BlogFrontTagVO;
+
+import java.util.List;
 
 
 /**
@@ -11,4 +14,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  **/
 public interface IBlogTagService extends IService<BlogTag> {
 
+    /**
+     * Description: 前台查询所有标签
+     * Author: jingwen
+     * Date: 2023/2/8 10:04
+     **/
+    List<BlogFrontTagVO> getAllFrontTag();
 }

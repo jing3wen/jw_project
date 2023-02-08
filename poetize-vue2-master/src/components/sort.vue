@@ -10,10 +10,18 @@
       <div class="sort-warp shadow-box" v-if="!$common.isEmpty(categoryList) && !$common.isEmpty(categoryId)">
         <div v-for="(category, index) in categoryList" :key="index"
              :class="{isActive: !$common.isEmpty(categoryId) && parseInt(categoryId) === category.categoryId}"
-             @click="listArticle(category)">
-          <!--    TODO 此处还统计了该类别下的文章数量      -->
-<!--          <proTag :info="category.categoryName+' '+label.countOfLabel"-->
-          <proTag :info="category.categoryName+' '"
+             @click="listArticle(category, null)">
+          <proTag :info="category.categoryName+' （'+category.articleCounts+'篇文章）'"
+                  :color="$constant.before_color_list[Math.floor(Math.random() * 6)]"
+                  style="margin: 12px">
+          </proTag>
+        </div>
+      </div>
+      <div class="sort-warp shadow-box" v-if="!$common.isEmpty(tagList) && !$common.isEmpty(tagId)" style="margin-top:20px">
+        <div v-for="(tag, index) in tagList" :key="index"
+             :class="{isActive: !$common.isEmpty(tagId) && parseInt(tagId) === tag.tagId}"
+             @click="listArticle(null, tag)">
+          <proTag :info="tag.tagName+' （'+tag.articleCounts+'篇文章）'"
                   :color="$constant.before_color_list[Math.floor(Math.random() * 6)]"
                   style="margin: 12px">
           </proTag>
@@ -57,6 +65,7 @@
         categoryId: this.$route.query.sortId,
         tagId: this.$route.query.labelId,
         categoryList: null,
+        tagList:null,
         pagination: {
           pageNum: 1,
           pageSize: 10,
@@ -83,13 +92,18 @@
         this.articles.splice(0, this.articles.length);
         this.categoryId = this.$route.query.sortId;
         this.tagId = this.$route.query.labelId;
-        this.getSort();
+        this.getCategory();
         this.getArticles();
       }
     },
 
     created() {
-      this.getSort();
+      if(!this.$common.isEmpty(this.categoryId)) {
+        this.getCategory();
+      }
+      if(!this.$common.isEmpty(this.tagId)) {
+        this.getTag()
+      }
       this.getArticles();
     },
 
@@ -102,7 +116,7 @@
         this.getArticles();
       },
 
-      getSort() {
+      getCategory() {
         // TODO 此处可以参考博客2.0用缓存
         // let sortInfo = this.$store.state.sortInfo;
         // if (!this.$common.isEmpty(sortInfo)) {
@@ -127,13 +141,43 @@
           });
 
       },
-      listArticle(label) {
-        this.categoryId = label.categoryId;
+      getTag() {
+        // TODO 此处可以参考博客2.0用缓存
+        // let sortInfo = this.$store.state.sortInfo;
+        // if (!this.$common.isEmpty(sortInfo)) {
+        //   let sortArray = sortInfo.filter(f => {
+        //     return f.id === parseInt(this.sortId);
+        //   });
+        //   if (!this.$common.isEmpty(sortArray)) {
+        //     this.sort = sortArray[0];
+        //   }
+        // }
+        this.$http.get("http://localhost:9090/blogTag/front/getAllFrontTag")
+          .then((res) => {
+            if (!this.$common.isEmpty(res.data)) {
+              this.tagList = res.data;
+            }
+          })
+          .catch((error) => {
+            this.$message({
+              message: error.message,
+              type: "error"
+            });
+          });
+
+      },
+      listArticle(category, tag) {
+        if(!this.$common.isEmpty(category)) {
+          this.categoryId = category.categoryId;
+        }
+        if (!this.$common.isEmpty(tag)){
+          this.tagId = tag.tagId;
+        }
         this.pagination = {
           pageNum: 1,
           pageSize: 10,
-          categoryId: this.$route.query.sortId,
-          tagId: this.$route.query.labelId,
+          categoryId: this.categoryId,
+          tagId: this.tagId,
           keywords: "",
         };
         this.articles.splice(0, this.articles.length);
@@ -142,11 +186,12 @@
         });
       },
       getArticles() {
+        this.total = 0
         this.$http.post("http://localhost:9090/blogArticle/front/getFrontArticlePage", this.pagination)
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.articles = this.articles.concat(res.data.records);
-              this.pagination.total = res.data.total;
+              this.total = res.data.total;
             }
           })
           .catch((error) => {

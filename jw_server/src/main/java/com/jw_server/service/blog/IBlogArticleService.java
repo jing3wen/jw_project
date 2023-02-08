@@ -23,14 +23,7 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2022/12/3 17:00
      **/
-    MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(FrontQueryArticlePageDTO frontQueryArticlePageDTO);
-
-    /**
-     * Description: 前台根据文章标签查询文章分页
-     * Author: jingwen
-     * Date: 2023/2/7 21:27
-     **/
-    MyPageVO<BlogFrontArticlePageVO> getFrontArticleByTag(FrontQueryArticlePageDTO frontQueryArticlePageDTO);
+    MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(BlogFrontQueryArticlePageDTO blogFrontQueryArticlePageDTO);
 
     /**
      * Description: 浏览文章详细信息
@@ -44,14 +37,14 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2023/1/9 21:19
      **/
-    void addBlogArticle(AdminAddArticleDTO adminAddArticleDTO);
+    void addBlogArticle(BlogAdminAddArticleDTO blogAdminAddArticleDTO);
 
     /**
      * Description: 博客后台查询文章列表
      * Author: jingwen
      * Date: 2023/1/10 11:22
      **/
-    MyPageVO<BlogAdminArticlePageVO> getAdminBlogArticlePage(QueryBlogAdminArticlePageDTO queryBlogAdminArticlePageDTO);
+    MyPageVO<BlogAdminArticlePageVO> getAdminBlogArticlePage(BlogAdminQueryArticlePageDTO blogAdminQueryArticlePageDTO);
 
     /**
      * Description: 后台查询需要编辑的文章信息
@@ -72,7 +65,7 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2023/1/26 12:48
      **/
-    void updateArticleTop(AdminUpdateArticleTopDTO updateTopDTO);
+    void updateArticleTop(BlogAdminUpdateArticleTopDTO updateTopDTO);
 
     /**
      * Description: 要注意同时删除文章评论和标签
@@ -86,7 +79,7 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2023/1/26 12:48
      **/
-    void updateArticleCheck(AdminUpdateArticleCheckDTO updateCheckDTO);
+    void updateArticleCheck(BlogAdminUpdateArticleCheckDTO updateCheckDTO);
 
     /**
      * Description: 前台获取热门文章————浏览量最多的3篇文章
