@@ -2,7 +2,7 @@
   <div class="myCenter verify-container">
     <div class="verify-content">
       <div>
-        <el-avatar :size="50" :src="$store.state.webInfo.avatar"></el-avatar>
+        <el-avatar :size="50" :src="$store.state.webInfo.webAvatar"></el-avatar>
       </div>
       <div>
         <el-input v-model="account">

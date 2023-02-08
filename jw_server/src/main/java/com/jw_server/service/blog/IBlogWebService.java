@@ -11,4 +11,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  **/
 public interface IBlogWebService extends IService<BlogWeb> {
 
+    /**
+     * Description: 获取网站配置
+     * Author: jingwen
+     * Date: 2023/2/8 23:15
+     **/
+    BlogWeb getWebInfo();
 }

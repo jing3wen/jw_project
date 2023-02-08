@@ -1,5 +1,6 @@
 package com.jw_server.service.blog.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jw_server.dao.blog.entity.BlogWeb;
 import com.jw_server.dao.blog.mapper.BlogWebMapper;
 import com.jw_server.service.blog.IBlogWebService;
@@ -14,4 +15,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class BlogWebServiceImpl extends ServiceImpl<BlogWebMapper, BlogWeb> implements IBlogWebService {
 
+    /**
+     * 获取网站配置
+     **/
+    @Override
+    public BlogWeb getWebInfo() {
+
+        return getOne(new LambdaQueryWrapper<BlogWeb>().orderByDesc(BlogWeb::getUpdateTime));
+    }
 }

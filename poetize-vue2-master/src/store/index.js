@@ -16,11 +16,10 @@ export default new Vuex.Store({
     webInfo: {
       webName: "",
       webTitle: [],
-      notices: [],
-      footer: "",
+      webNotices: [],
+      webFooter: "",
       backgroundImage: "",
-      avatar: "",
-
+      webAvatar: "",
     },
     commentCheck:'1',
   },
@@ -69,7 +68,7 @@ export default new Vuex.Store({
     },
     loadWebInfo(state, webInfo) {
       webInfo.webTitle = webInfo.webTitle.split('');
-      webInfo.notices = JSON.parse(webInfo.notices);
+      webInfo.webNotices = JSON.parse(webInfo.webNotices);
       state.webInfo = webInfo;
     }
   },

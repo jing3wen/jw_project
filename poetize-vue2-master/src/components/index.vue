@@ -46,7 +46,7 @@
               <div class="announcement background-opacity">
                 <i class="fa fa-volume-up" aria-hidden="true"></i>
                 <div>
-                  <div v-for="(notice, index) in $store.state.webInfo.notices" :key="index">
+                  <div v-for="(notice, index) in $store.state.webInfo.webNotices" :key="index">
                     {{ notice }}
                   </div>
                 </div>

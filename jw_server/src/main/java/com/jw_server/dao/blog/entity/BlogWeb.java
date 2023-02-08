@@ -1,9 +1,10 @@
 package com.jw_server.dao.blog.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -57,6 +58,15 @@ public class BlogWeb implements Serializable {
 
       @ApiModelProperty("是否启用[0:否，1:是]")
       private String status;
+
+      @ApiModelProperty("更新者")
+      @TableField(fill = FieldFill.INSERT_UPDATE)
+      private String updateBy;
+
+      @ApiModelProperty("更新时间")
+      @TableField(fill = FieldFill.INSERT_UPDATE)
+      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+      private LocalDateTime updateTime;
 
 
 }

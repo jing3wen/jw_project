@@ -80,7 +80,7 @@
               <el-dropdown placement="bottom">
                 <el-avatar class="user-avatar" :size="36"
                            style="margin-top: 12px"
-                           :src="!$common.isEmpty($store.state.currentUser)?$store.state.currentUser.avatar:$store.state.webInfo.avatar">
+                           :src="!$common.isEmpty($store.state.currentUser)?$store.state.currentUser.avatar:$store.state.webInfo.webAvatar">
                 </el-avatar>
 
                 <el-dropdown-menu slot="dropdown">
@@ -361,7 +361,7 @@
 
       },
       getWebInfo() {
-        this.$http.get(this.$constant.baseURL + "/webInfo/getWebInfo")
+        this.$http.get("http://localhost:9090/blogWeb/getWebInfo")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.$store.commit("loadWebInfo", res.data);

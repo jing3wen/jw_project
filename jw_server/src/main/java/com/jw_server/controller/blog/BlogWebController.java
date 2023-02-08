@@ -52,47 +52,16 @@ public class BlogWebController {
     }
 
     /**
-     * Description 批量删除
+     * Description 获取网站配置
      * Author jingwen
      * Date 2023-02-04 15:21:28
      **/
-    @SysLog(logModule="", logType = DELETE, logDesc = "删除")
-    @PostMapping("/deleteBatch")
-    public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
-        blogWebService.removeByIds(ids);
-        return ResponseResult.success();
-    }
-
-    /**
-     * Description 查询所有数据
-     * Author jingwen
-     * Date 2023-02-04 15:21:28
-     **/
-    @GetMapping("/findAll")
+    //TODO 此处可设置缓存切片
+    @GetMapping("/getWebInfo")
     public ResponseResult findAll() {
-        return ResponseResult.success(blogWebService.list());
+        return ResponseResult.success(blogWebService.getWebInfo());
     }
 
-    /**
-     * Description 根据id查询数据
-     * Author jingwen
-     * Date 2023-02-04 15:21:28
-     **/
-    @GetMapping("/findOne")
-    public ResponseResult findOne(@RequestParam Integer id) {
-        return ResponseResult.success(blogWebService.getById(id));
-    }
-
-    /**
-     * Description 分页查询
-     * Author jingwen
-     * Date 2023-02-04 15:21:28
-     **/
-    @GetMapping("/getPageList")
-    public ResponseResult getPageList(@RequestParam Integer pageNum,@RequestParam Integer pageSize) {
-        QueryWrapper<BlogWeb> queryWrapper = new QueryWrapper<>();
-        return ResponseResult.success(blogWebService.page(new Page<>(pageNum, pageSize), queryWrapper));
-    }
 
 }
 

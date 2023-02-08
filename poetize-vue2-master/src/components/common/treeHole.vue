@@ -7,7 +7,7 @@
         <div class="tree-hole-content"
              :class="{ leftTreeHole: index % 2 === 0 && !$common.mobile(), rightTreeHole: index % 2 !== 0 || $common.mobile() }">
           <el-avatar shape="square" class="avatar-img" :size="36"
-                     :src="!$common.isEmpty($store.state.currentUser)?$store.state.currentUser.avatar:$store.state.webInfo.avatar"></el-avatar>
+                     :src="!$common.isEmpty($store.state.currentUser)?$store.state.currentUser.avatar:$store.state.webInfo.webAvatar"></el-avatar>
           <div class="tree-hole-box"
                :style="{background: $constant.tree_hole_color[index % $constant.tree_hole_color.length]}">
             <div class="box-tag" v-if="index % 2 === 0 && !$common.mobile()"
