@@ -30,10 +30,10 @@
               </div>
             </li>
             <li v-for="(menu, index) in $store.getters.navigationBar"
-                @click="$router.push({path: '/sort', query: {sortId: menu.id}})"
+                @click="$router.push({path: '/sort', query: {sortId: menu.categoryId}})"
                 :key="index">
               <div class="my-menu">
-                📒 <span>{{ menu.sortName }}</span>
+                📒 <span>{{ menu.categoryName }}</span>
               </div>
             </li>
 
@@ -80,7 +80,7 @@
               <el-dropdown placement="bottom">
                 <el-avatar class="user-avatar" :size="36"
                            style="margin-top: 12px"
-                           :src="!$common.isEmpty($store.state.currentUser)?$store.state.currentUser.avatar:$store.state.webInfo.webAvatar">
+                           :src="!$common.isEmpty($store.state.currentUser)?$store.state.currentUser.avatar: ''">
                 </el-avatar>
 
                 <el-dropdown-menu slot="dropdown">
@@ -162,10 +162,10 @@
             </div>
           </li>
           <li v-for="(menu, index) in $store.getters.navigationBar"
-              @click="smallMenu({path: '/sort', query: {sortId: menu.id, labelId: menu.labels[0].id}})"
+              @click="smallMenu({path: '/sort', query: {sortId: menu.categoryId}})"
               :key="index">
             <div>
-              📒 <span>{{ menu.sortName }}</span>
+              📒 <span>{{ menu.categoryName }}</span>
             </div>
           </li>
 
@@ -303,7 +303,7 @@
       };
       this.$store.commit("changeToolbarStatus", toolbarStatus);
       this.getWebInfo();
-      this.getSortInfo();
+      this.getCategoryList();
 
       this.mobile = document.body.clientWidth < 1100;
 
@@ -374,11 +374,11 @@
             });
           });
       },
-      getSortInfo() {
-        this.$http.get(this.$constant.baseURL + "/webInfo/getSortInfo")
+      getCategoryList() {
+        this.$http.get("http://localhost:9090/blogCategory/front/getAllCategory")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
-              this.$store.commit("loadSortInfo", res.data);
+              this.$store.commit("loadCategoryList", res.data);
             }
           })
           .catch((error) => {

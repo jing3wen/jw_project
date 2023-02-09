@@ -36,16 +36,16 @@
                     </div>
                     <div class="user-content">
                       <div>
-                        <el-input maxlength="30" v-model="friend.title"></el-input>
+                        <el-input maxlength="30" v-model="friend.friendTitle"></el-input>
                       </div>
                       <div>
-                        <el-input maxlength="120" v-model="friend.introduction"></el-input>
+                        <el-input maxlength="120" v-model="friend.friendIntroduction"></el-input>
                       </div>
                       <div>
-                        <el-input maxlength="200" v-model="friend.cover"></el-input>
+                        <el-input maxlength="200" v-model="friend.friendCover"></el-input>
                       </div>
                       <div>
-                        <el-input maxlength="200" v-model="friend.url"></el-input>
+                        <el-input maxlength="200" v-model="friend.friendUrl"></el-input>
                       </div>
                     </div>
                   </div>
@@ -197,10 +197,10 @@
         window.open(path);
       },
       getFriends() {
-        this.$http.post(this.$constant.baseURL + "/webInfo/listResourcePath", this.pagination)
+        this.$http.get("http://localhost:9090/blogFriend/front/getAllFriend")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
-              this.friendList = res.data.records;
+              this.friendList = res.data;
             }
           })
           .catch((error) => {

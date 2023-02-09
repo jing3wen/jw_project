@@ -17,7 +17,7 @@
           </proTag>
         </div>
       </div>
-      <div class="sort-warp shadow-box" v-if="!$common.isEmpty(tagList) && !$common.isEmpty(tagId)" style="margin-top:20px">
+      <div class="sort-warp shadow-box" v-if="!$common.isEmpty(tagList)" style="margin-top:20px">
         <div v-for="(tag, index) in tagList" :key="index"
              :class="{isActive: !$common.isEmpty(tagId) && parseInt(tagId) === tag.tagId}"
              @click="listArticle(null, tag)">
@@ -101,15 +101,16 @@
       if(!this.$common.isEmpty(this.categoryId)) {
         this.getCategory();
       }
-      if(!this.$common.isEmpty(this.tagId)) {
-        this.getTag()
-      }
+      this.getTag()
       this.getArticles();
     },
 
     mounted() {
     },
-
+    destroyed() {
+      this.categoryId = ''
+      this.tagId = ''
+    },
     methods: {
       pageArticles() {
         this.pagination.pageNum = this.pagination.pageNum + 1;
@@ -117,29 +118,16 @@
       },
 
       getCategory() {
-        // TODO 此处可以参考博客2.0用缓存
-        // let sortInfo = this.$store.state.sortInfo;
-        // if (!this.$common.isEmpty(sortInfo)) {
-        //   let sortArray = sortInfo.filter(f => {
-        //     return f.id === parseInt(this.sortId);
-        //   });
-        //   if (!this.$common.isEmpty(sortArray)) {
-        //     this.sort = sortArray[0];
-        //   }
-        // }
-        this.$http.get("http://localhost:9090/blogCategory/front/getAllCategory")
-          .then((res) => {
-            if (!this.$common.isEmpty(res.data)) {
-              this.categoryList = res.data;
-            }
-          })
-          .catch((error) => {
-            this.$message({
-              message: error.message,
-              type: "error"
-            });
+        // 原博客是只显示该文章的类别
+        let categoryList = this.$store.state.categoryList;
+        if (!this.$common.isEmpty(categoryList)) {
+          let categoryArray = categoryList.filter(f => {
+            return f.categoryId === parseInt(this.categoryId);
           });
-
+          if (!this.$common.isEmpty(categoryArray)) {
+            this.categoryList = categoryArray;
+          }
+        }
       },
       getTag() {
         // TODO 此处可以参考博客2.0用缓存

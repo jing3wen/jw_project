@@ -16,6 +16,9 @@ public class BlogFrontHotArticleVO {
     //文章id
     private Integer articleId;
 
+    //文章作者
+    private String nickname;
+
     //文章封面
     private String articleCover;
 

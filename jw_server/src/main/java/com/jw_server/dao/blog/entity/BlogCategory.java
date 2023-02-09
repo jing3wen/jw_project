@@ -34,6 +34,12 @@ public class BlogCategory implements Serializable {
     @ApiModelProperty("备注")
     private String remark;
 
+    @ApiModelProperty("分类类型[0:导航栏分类，1:普通分类]")
+    private String categoryType;
+
+    @ApiModelProperty("导航栏分类优先级：数字小的在前面")
+    private Integer categorySort;
+
     @ApiModelProperty("状态(1正常 0停用)")
     private String status;
 

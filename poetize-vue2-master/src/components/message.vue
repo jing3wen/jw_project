@@ -45,6 +45,7 @@
   const comment = () => import( "./comment/comment");
   const myFooter = () => import( "./common/myFooter");
 
+
   export default {
     components: {
       comment,
@@ -55,7 +56,8 @@
         show: false,
         messageContent: "",
         // background: {"background": "url(" + this.$store.state.webInfo.backgroundImage + ") center center / cover no-repeat"},
-        barrageList: []
+        barrageList: [],
+        messageDefaultAvatar:"../assets/file/messageDefault.png",
       };
     },
     created() {
@@ -63,14 +65,14 @@
     },
     methods: {
       getTreeHole() {
-        this.$http.get(this.$constant.baseURL + "/webInfo/listTreeHole")
+        this.$http.get("http://localhost:9090/blogMessage/front/getMessageList")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               res.data.forEach(m => {
                 this.barrageList.push({
-                  id: m.id,
-                  avatar: m.avatar,
-                  msg: m.message,
+                  id: m.messageId,
+                  avatar: !this.$common.isEmpty(m.messageAvatar)? m.messageAvatar: this.messageDefaultAvatar,
+                  msg: m.messageContent,
                   time: Math.floor(Math.random() * 10 + 5)
                 });
               });
@@ -92,25 +94,25 @@
           return;
         }
 
-        let treeHole = {
-          message: this.messageContent.trim()
+        let message = {
+          messageContent: this.messageContent.trim(),
+          messageCheck: this.$store.state.webInfo.messageCheck
         };
 
-        if (!this.$common.isEmpty(this.$store.state.currentUser) && !this.$common.isEmpty(this.$store.state.currentUser.avatar)) {
-          treeHole.avatar = this.$store.state.currentUser.avatar;
+        if (!this.$common.isEmpty(this.$store.state.currentUser)) {
+          if(!this.$common.isEmpty(this.$store.state.currentUser.avatar)){
+            message.messageAvatar = this.$store.state.currentUser.avatar;
+          }
+          if(!this.$common.isEmpty(this.$store.state.currentUser.nickname)){
+            message.messageNickname = this.$store.state.currentUser.nickname;
+          }
+          if(!this.$common.isEmpty(this.$store.state.currentUser.email)){
+            message.messageEmail = this.$store.state.currentUser.email;
+          }
         }
-
-
-        this.$http.post(this.$constant.baseURL + "/webInfo/saveTreeHole", treeHole)
+        this.$http.post("http://localhost:9090/blogMessage/front/addMessage", message)
           .then((res) => {
-            if (!this.$common.isEmpty(res.data)) {
-              this.barrageList.push({
-                id: res.data.id,
-                avatar: res.data.avatar,
-                msg: res.data.message,
-                time: Math.floor(Math.random() * 10 + 5)
-              });
-            }
+            this.getTreeHole()
           })
           .catch((error) => {
             this.$message({

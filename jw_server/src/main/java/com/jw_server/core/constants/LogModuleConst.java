@@ -58,4 +58,9 @@ public class LogModuleConst {
     public static final String BlogCommentModule = "博客文章评论模块";
 
 
+    /**
+     * 博客留言模块
+     **/
+    public static final String BlogMessageModule = "博客留言模块";
+
 }

@@ -11,7 +11,7 @@
         </div>
         <div class="blog-info-box">
           <span>分类</span>
-          <span class="blog-info-num">{{ sortInfo.length }}</span>
+          <span class="blog-info-num">{{ categoryList.length }}</span>
         </div>
       </div>
       <a class="collection-btn" @click="showTip()">
@@ -25,12 +25,12 @@
         <i class="el-icon-folder-opened card-content2-icon"></i>
         <span>分类</span>
       </div>
-      <div v-for="(sort, index) in sortInfo"
+      <div v-for="(sort, index) in categoryList"
            :key="index"
            class="post-sort"
-           @click="$router.push({path: '/sort', query: {sortId: sort.id}})">
+           @click="$router.push({path: '/sort', query: {sortId: sort.categoryId}})">
         <div>
-          <span v-for="(s, i) in sort.sortName.split('')" :key="i">{{ s }}</span>
+          <span v-for="(s, i) in sort.categoryName.split('')" :key="i">{{ s }}</span>
         </div>
       </div>
     </div>
@@ -44,13 +44,13 @@
       </div>
       <div v-for="(article, index) in recommendArticles"
            :key="index"
-           @click="$router.push({path: '/article', query: {id: article.id}})">
+           @click="$router.push({path: '/article', query: {id: article.articleId}})">
         <div class="aside-post-detail">
           <div class="aside-post-image">
             <el-image lazy class="my-el-image" :src="article.articleCover" fit="cover">
               <div slot="error" class="image-slot">
                 <div class="error-aside-image">
-                  {{article.username}}
+                  {{article.nickname}}
                 </div>
               </div>
             </el-image>
@@ -83,8 +83,8 @@
       webInfo() {
         return this.$store.state.webInfo;
       },
-      sortInfo() {
-        return this.$store.state.sortInfo;
+      categoryList() {
+        return this.$store.state.categoryList;
       }
     },
     created() {
@@ -92,10 +92,10 @@
     },
     methods: {
       getRecommendArticles() {
-        this.$http.post(this.$constant.baseURL + "/article/listArticle", this.pagination)
+        this.$http.get("http://localhost:9090/blogArticle/front/getHotArticle")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
-              this.recommendArticles = res.data.records;
+              this.recommendArticles = res.data;
             }
           })
           .catch((error) => {

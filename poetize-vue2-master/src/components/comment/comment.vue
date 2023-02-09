@@ -264,7 +264,7 @@
           articleId: this.source,
           userId: this.$store.state.currentUser.id,
           commentContent: commentContent,
-          commentCheck: this.$store.state.commentCheck,
+          commentCheck: this.$store.state.webInfo.commentCheck,
         };
         this.$http.post("http://localhost:9090/blogComment/front/addComment", comment)
           .then((res) => {
@@ -277,7 +277,7 @@
             }
             this.getComments(this.pagination);
             this.getTotal();
-            if(this.$store.state.commentCheck === '0'){
+            if(this.$store.state.webInfo.commentCheck === '0'){
               this.$message({
                 type: 'warning',
                 message: '管理员已开启评论审核, 审核通过后才能展示'
@@ -305,7 +305,7 @@
           replyCommentId: this.replyComment.commentId,
           replyUserId: this.replyComment.userId,
           commentContent: commentContent,
-          commentCheck: this.$store.state.commentCheck,
+          commentCheck: this.$store.state.webInfo.commentCheck,
         };
         let floorComment = this.floorComment;
 
@@ -320,7 +320,7 @@
             }
             this.getComments(pagination, floorComment);
             this.getTotal();
-            if(this.$store.state.commentCheck === '0'){
+            if(this.$store.state.webInfo.commentCheck === '0'){
               this.$message({
                 type: 'warning',
                 message: '管理员已开启评论审核, 审核通过后才能展示'

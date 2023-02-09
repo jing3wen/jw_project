@@ -10,7 +10,7 @@ export default new Vuex.Store({
       visible: false,
       enter: true
     },
-    sortInfo: [],
+    categoryList: [],
     currentUser: {},
     currentAdmin: {},
     webInfo: {
@@ -20,20 +20,23 @@ export default new Vuex.Store({
       webFooter: "",
       backgroundImage: "",
       webAvatar: "",
+      articleCheck:"",
+      commentCheck:"",
+      messageCheck:"",
     },
-    commentCheck:'1',
   },
   getters: {
+    //根据类别数量计算文章总数
     articleTotal: state => {
-      if (state.sortInfo !== null && state.sortInfo.length !== 0) {
-        if (state.sortInfo.length === 1) {
-          return state.sortInfo[0].countOfSort;
+      if (state.categoryList !== null && state.categoryList.length !== 0) {
+        if (state.categoryList.length === 1) {
+          return state.categoryList[0].articleCounts;
         } else {
-          return state.sortInfo.reduce((prev, curr) => {
+          return state.categoryList.reduce((prev, curr) => {
             if (typeof prev === "number") {
-              return prev + curr.countOfSort;
+              return prev + curr.articleCounts;
             } else {
-              return prev.countOfSort + curr.countOfSort;
+              return prev.articleCounts + curr.articleCounts;
             }
           });
         }
@@ -41,12 +44,13 @@ export default new Vuex.Store({
         return 0;
       }
     },
+    //对导航栏类型的文章类别排序, 后端可完成
     navigationBar: state => {
-      if (state.sortInfo !== null && state.sortInfo.length !== 0) {
-        return state.sortInfo.filter(f => {
-          return f.sortType === 0;
+      if (state.categoryList !== null && state.categoryList.length !== 0) {
+        return state.categoryList.filter(f => {
+          return f.categoryType === '0';
         }).sort((s1, s2) => {
-          return s1.priority - s2.priority;
+          return s1.categorySort - s2.categorySort;
         })
       } else {
         return [];
@@ -57,8 +61,8 @@ export default new Vuex.Store({
     changeToolbarStatus(state, toolbarState) {
       state.toolbar = toolbarState;
     },
-    loadSortInfo(state, sortInfo) {
-      state.sortInfo = sortInfo;
+    loadCategoryList(state, categoryList) {
+      state.categoryList = categoryList;
     },
     loadCurrentUser(state, user) {
       state.currentUser = user;
