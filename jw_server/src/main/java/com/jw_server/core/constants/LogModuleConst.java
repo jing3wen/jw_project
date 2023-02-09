@@ -63,4 +63,9 @@ public class LogModuleConst {
      **/
     public static final String BlogMessageModule = "博客留言模块";
 
+    /**
+     * 博客留言模块
+     **/
+    public static final String BlogFriendModule = "博客友链模块";
+
 }

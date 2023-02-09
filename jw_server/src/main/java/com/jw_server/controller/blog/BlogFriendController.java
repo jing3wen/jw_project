@@ -13,6 +13,7 @@ import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.core.common.ResponseResult;
 import java.util.List;
 
+import static com.jw_server.core.constants.LogModuleConst.BlogFriendModule;
 import static com.jw_server.core.constants.LogTypeConst.*;
 
 
@@ -27,17 +28,18 @@ public class BlogFriendController {
 
     @Resource
     private IBlogFriendService blogFriendService;
-//    /**
-//     * Description 新增
-//     * Author jingwen
-//     * Date 2023-02-09 21:59:28
-//     **/
-//    @SysLog(logModule="", logType = ADD, logDesc = "新增")
-//    @PostMapping("/add")
-//    public ResponseResult add(@RequestBody BlogFriend blogFriend) {
-//        blogFriendService.save(blogFriend);
-//        return ResponseResult.success();
-//    }
+    /**
+     * Description 前台申请友链
+     * Author jingwen
+     * Date 2023-02-09 21:59:28
+     **/
+    @SysLog(logModule=BlogFriendModule, logType = ADD, logDesc = "前台申请友链")
+    @PostMapping("/front/addFriend")
+    public ResponseResult add(@RequestBody BlogFriend blogFriend) {
+        blogFriend.setStatus("0");
+        blogFriendService.save(blogFriend);
+        return ResponseResult.success();
+    }
 //
 //    /**
 //     * Description 更新
@@ -62,27 +64,7 @@ public class BlogFriendController {
 //        blogFriendService.removeByIds(ids);
 //        return ResponseResult.success();
 //    }
-//
-//    /**
-//     * Description 查询所有数据
-//     * Author jingwen
-//     * Date 2023-02-09 21:59:28
-//     **/
-//    @GetMapping("/findAll")
-//    public ResponseResult findAll() {
-//        return ResponseResult.success(blogFriendService.list());
-//    }
-//
-//    /**
-//     * Description 根据id查询数据
-//     * Author jingwen
-//     * Date 2023-02-09 21:59:28
-//     **/
-//    @GetMapping("/findOne")
-//    public ResponseResult findOne(@RequestParam Integer id) {
-//        return ResponseResult.success(blogFriendService.getById(id));
-//    }
-//
+
 //    /**
 //     * Description 分页查询
 //     * Author jingwen

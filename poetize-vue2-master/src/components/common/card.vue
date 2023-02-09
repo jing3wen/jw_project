@@ -1,14 +1,14 @@
 <template>
-  <div class="card-container" v-if="!$common.isEmpty(resourcePathList)">
-    <div v-for="(resourcePath, index) in resourcePathList"
+  <div class="card-container" v-if="!$common.isEmpty(friendList)">
+    <div v-for="(friendLink, index) in friendList"
          :key="index"
          class="card-item shadow-box wow"
-         @click="clickResourcePath(resourcePath)">
+         @click="clickFriendLink(friendLink)">
       <div class="card-image">
         <el-image class="my-el-image"
                   v-once
                   lazy
-                  :src="resourcePath.cover"
+                  :src="friendLink.friendCover"
                   fit="cover">
           <div slot="error" class="image-slot myCenter" style="background-color: var(--lightGreen)">
             <div class="error-text">
@@ -19,13 +19,13 @@
       </div>
       <div class="card-body">
         <div class="card-title">
-          <span v-if="resourcePath.recommendStatus">
+          <span v-if="friendLink.recommendStatus">
             🔥
           </span>
-          {{resourcePath.title}}
+          {{friendLink.friendTitle}}
         </div>
         <div class="card-desc">
-          {{resourcePath.introduction}}
+          {{friendLink.friendIntroduction}}
         </div>
 
         <div class="card-time">
@@ -38,7 +38,7 @@
               d="M725.333333 312.888889H711.111111v28.444444c0 31.288889-25.6 56.888889-56.888889 56.888889s-56.888889-25.6-56.888889-56.888889v-28.444444h-170.666666v28.444444c0 31.288889-25.6 56.888889-56.888889 56.888889s-56.888889-25.6-56.888889-56.888889v-28.444444h-14.222222c-22.755556 0-42.666667 19.911111-42.666667 42.666667v341.333333c0 22.755556 19.911111 42.666667 42.666667 42.666667h426.666666c22.755556 0 42.666667-19.911111 42.666667-42.666667v-341.333333c0-22.755556-19.911111-42.666667-42.666667-42.666667zM426.666667 654.222222h-56.888889c-17.066667 0-28.444444-11.377778-28.444445-28.444444s11.377778-28.444444 28.444445-28.444445h56.888889c17.066667 0 28.444444 11.377778 28.444444 28.444445s-11.377778 28.444444-28.444444 28.444444z m227.555555 0h-56.888889c-17.066667 0-28.444444-11.377778-28.444444-28.444444s11.377778-28.444444 28.444444-28.444445h56.888889c17.066667 0 28.444444 11.377778 28.444445 28.444445s-11.377778 28.444444-28.444445 28.444444z m0-113.777778h-56.888889c-17.066667 0-28.444444-11.377778-28.444444-28.444444s11.377778-28.444444 28.444444-28.444444h56.888889c17.066667 0 28.444444 11.377778 28.444445 28.444444s-11.377778 28.444444-28.444445 28.444444z"
               fill="#FFFFFF"></path>
           </svg>
-          发布于 {{ $common.getDateDiff(resourcePath.createTime) }}
+          发布于 {{ $common.getDateDiff(friendLink.createTime) }}
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
 <script>
   export default {
     props: {
-      resourcePathList: {
+      friendList: {
         type: Array
       }
     },
@@ -70,8 +70,8 @@
     },
 
     methods: {
-      clickResourcePath(resourcePath) {
-        this.$emit("clickResourcePath", resourcePath.url);
+      clickFriendLink(friendLink) {
+        this.$emit("clickFriendLink", friendLink.friendUrl);
       }
     }
   }

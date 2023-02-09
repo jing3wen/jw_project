@@ -70,7 +70,7 @@
         <hr>
 
         <h2>🥇友情链接</h2>
-        <card :resourcePathList="friendList" @clickResourcePath="clickFriend"></card>
+        <card :friendList="friendList" @clickFriendLink="clickFriend"></card>
       </div>
     </div>
 
@@ -101,10 +101,10 @@
         },
         friendList: [],
         friend: {
-          title: "",
-          introduction: "",
-          cover: "",
-          url: ""
+          friendTitle: "",
+          friendIntroduction: "",
+          friendCover: "",
+          friendUrl: ""
         }
       }
     },
@@ -146,7 +146,7 @@
           return;
         }
 
-        if (this.friend.title.trim() === "") {
+        if (this.friend.friendTitle.trim() === "") {
           this.$message({
             message: "你还没写名称呢~",
             type: "warning",
@@ -154,7 +154,7 @@
           return;
         }
 
-        if (this.friend.introduction.trim() === "") {
+        if (this.friend.friendIntroduction.trim() === "") {
           this.$message({
             message: "你还没写简介呢~",
             type: "warning",
@@ -162,7 +162,7 @@
           return;
         }
 
-        if (this.friend.cover.trim() === "") {
+        if (this.friend.friendCover.trim() === "") {
           this.$message({
             message: "你还没设置封面呢~",
             type: "warning",
@@ -170,7 +170,7 @@
           return;
         }
 
-        if (this.friend.url.trim() === "") {
+        if (this.friend.friendUrl.trim() === "") {
           this.$message({
             message: "你还没写网址呢~",
             type: "warning",
@@ -178,7 +178,7 @@
           return;
         }
 
-        this.$http.post(this.$constant.baseURL + "/webInfo/saveFriend", this.friend)
+        this.$http.post("http://localhost:9090/blogFriend/front/addFriend", this.friend)
           .then((res) => {
             $(".form-wrap").css({"height": "447px", "top": "0"});
             this.$message({
@@ -194,6 +194,9 @@
           });
       },
       clickFriend(path) {
+        if(path.indexOf("http://")===-1 && path.indexOf("https://")===-1){
+          path = "https://" + path
+        }
         window.open(path);
       },
       getFriends() {
