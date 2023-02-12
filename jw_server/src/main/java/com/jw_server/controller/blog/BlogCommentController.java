@@ -3,6 +3,7 @@ package com.jw_server.controller.blog;
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
 import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
+import com.jw_server.dao.blog.dto.BlogFrontCommentPageDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogCommentService;
@@ -37,13 +38,10 @@ public class BlogCommentController {
      * floorCommentId = 0 表示查询一级评论分页
      * floorCommentId != 0 表示查询二级评论分页
      **/
-    @GetMapping("/front/getFrontComment")
-    public ResponseResult getFrontComment(@RequestParam Integer articleId,
-                                                @RequestParam Integer floorCommentId,
-                                                @RequestParam Integer pageNum,
-                                                @RequestParam Integer pageSize){
+    @PostMapping ("/front/getFrontComment")
+    public ResponseResult getFrontComment(@RequestBody BlogFrontCommentPageDTO frontCommentPageDTO){
 
-        return ResponseResult.success(blogCommentService.getFrontCommentByArticleId(articleId, floorCommentId, pageNum, pageSize));
+        return ResponseResult.success(blogCommentService.getFrontCommentByArticleId(frontCommentPageDTO));
     }
 
 

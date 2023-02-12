@@ -10,6 +10,9 @@ import lombok.Data;
 @Data
 public class BlogFrontAddCommentDTO {
 
+    //评论类型 文章评论/留言
+    private String commentType;
+
     //文章ID
     private Integer articleId;
 

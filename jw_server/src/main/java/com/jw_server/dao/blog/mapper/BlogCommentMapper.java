@@ -27,7 +27,7 @@ public interface BlogCommentMapper extends BaseMapper<BlogComment> {
      * Author: jingwen 
      * Date: 2023/1/4 16:44
      **/
-    IPage<BlogFrontCommentVO> getFrontCommentPageVO(Integer articleId, Integer floorCommentId, Page<BlogFrontCommentVO> page);
+    IPage<BlogFrontCommentVO> getFrontCommentPageVO(String commentType, Integer articleId, Integer floorCommentId, Page<BlogFrontCommentVO> page);
 
 
     /**

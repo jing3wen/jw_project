@@ -109,6 +109,20 @@ export default {
     });
   },
 
+  delete(url, data = {}) {
+    let headers;
+    return new Promise((resolve, reject) => {
+      axios.delete(url, {
+        data: data,
+        headers: headers
+      }).then(res => {
+        resolve(res.data);
+      }).catch(err => {
+        reject(err)
+      })
+    });
+  },
+
   upload(url, param, isAdmin = false) {
     let config;
     if (isAdmin) {

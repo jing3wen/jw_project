@@ -372,6 +372,7 @@
         let headings = $(".entry-content").find("h1, h2, h3, h4, h5, h6");
         headings.attr('id', (i, id) => id || 'toc-' + i);
       },
+      //获取文章详情
       getArticle() {
         this.$http.get("http://localhost:9090/blogArticle/front/getFrontArticleDetails", {articleId: this.id})
           .then((res) => {
@@ -397,6 +398,7 @@
             });
           });
       },
+      //代码高亮
       highlight() {
         let attributes = {
           autocomplete: "off",

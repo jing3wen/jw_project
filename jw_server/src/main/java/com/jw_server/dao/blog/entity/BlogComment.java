@@ -28,6 +28,9 @@ public class BlogComment implements Serializable {
     @TableId(value = "comment_id", type = IdType.AUTO)
     private Integer commentId;
 
+    @ApiModelProperty("评论类型")
+    private String commentType;
+
     @ApiModelProperty("评论用户ID")
     private Integer userId;
 

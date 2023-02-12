@@ -63,6 +63,7 @@ public class SecurityConfig{
                 .antMatchers("/blogWeb/**").permitAll()
                 .antMatchers("/blogMessage/**").permitAll()
                 .antMatchers("/blogFriend/**").permitAll()
+                .antMatchers("/blogMoments/**").permitAll()
                 .anyRequest().authenticated()  //任意请求认证后都能访问
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)

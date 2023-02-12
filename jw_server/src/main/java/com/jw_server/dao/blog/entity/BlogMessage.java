@@ -19,7 +19,7 @@ import lombok.Data;
  **/
 @Data
 @TableName("blog_message")
-@ApiModel(value = "BlogMessage对象", description = "")
+@ApiModel(value = "BlogMessage对象", description = "弹幕留言类")
 public class BlogMessage implements Serializable {
 
     private static final long serialVersionUID = 1L;

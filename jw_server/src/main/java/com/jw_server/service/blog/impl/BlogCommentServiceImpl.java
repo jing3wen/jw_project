@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
 import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
+import com.jw_server.dao.blog.dto.BlogFrontCommentPageDTO;
 import com.jw_server.dao.blog.entity.BlogComment;
 import com.jw_server.dao.blog.mapper.BlogArticleMapper;
 import com.jw_server.dao.blog.mapper.BlogCommentMapper;
@@ -45,14 +46,16 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
      * floorCommentId != 0 表示查询二级评论分页
      **/
     @Override
-    public MyPageVO<BlogFrontCommentVO> getFrontCommentByArticleId(Integer articleId, Integer floorCommentId, Integer pageNum, Integer pageSize) {
+    public MyPageVO<BlogFrontCommentVO> getFrontCommentByArticleId(BlogFrontCommentPageDTO frontCommentPageDTO) {
 
-        IPage<BlogFrontCommentVO> commentIPage = blogCommentMapper.getFrontCommentPageVO(articleId,
-                floorCommentId,
-                new Page<>(pageNum,pageSize));
+        IPage<BlogFrontCommentVO> commentIPage = blogCommentMapper.getFrontCommentPageVO(
+                frontCommentPageDTO.getCommentType(),
+                frontCommentPageDTO.getArticleId(),
+                frontCommentPageDTO.getFloorCommentId(),
+                new Page<>(frontCommentPageDTO.getPageNum(),frontCommentPageDTO.getPageSize()));
 
         //前台查询二级评论, 直接返回
-        if (floorCommentId!=0){
+        if (frontCommentPageDTO.getFloorCommentId()!=0){
             return new MyPageVO<>(commentIPage);
         }else{
             //前台查询一级评论,需要封装一级评论下的二级评论, 其实这个else可以省去,但是为了方便后续查看我还是写上了
@@ -61,7 +64,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
              * 开始查询二级评论
              **/
             parentList.forEach(parent -> {
-                IPage<BlogFrontCommentVO> childPage = blogCommentMapper.getFrontCommentPageVO(articleId,
+                IPage<BlogFrontCommentVO> childPage = blogCommentMapper.getFrontCommentPageVO(
+                        frontCommentPageDTO.getCommentType(),
+                        frontCommentPageDTO.getArticleId(),
                         parent.getCommentId(),
                         new Page<>(0, 5));
                 parent.setReplyCommentCounts(childPage.getTotal());
@@ -83,16 +88,6 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     public Integer getFrontCommentCounts(Integer articleId) {
 
         return blogCommentMapper.getFrontCommentCounts(articleId);
-    }
-
-    /**
-     * 查询二级评论分页
-     **/
-    public List<BlogFrontCommentVO> getChildCommentByArticleId(Integer articleId, Integer floorCommentId,Integer pageNum, Integer pageSize) {
-
-        return blogCommentMapper.getFrontCommentPageVO(articleId,
-                floorCommentId,
-                new Page<>(pageNum, pageSize)).getRecords();
     }
 
     /**

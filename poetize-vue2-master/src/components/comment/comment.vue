@@ -151,6 +151,7 @@
         replyComment: {},
         comments: [],
         pagination: {
+          commentType: this.type,
           articleId: this.source,
           floorCommentId: 0,
           pageNum : 1,
@@ -168,7 +169,7 @@
     methods: {
       //获取一级(二级)评论
       getComments(pagination, floorComment = {}, isToPage = false) {
-        this.$http.get("http://localhost:9090/blogComment/front/getFrontComment", pagination)
+        this.$http.post("http://localhost:9090/blogComment/front/getFrontComment", pagination)
           .then((res) => {
             if (!this.$common.isEmpty(res.data) && !this.$common.isEmpty(res.data.records)) {
               if (this.$common.isEmpty(floorComment)) {
@@ -261,6 +262,7 @@
       //提交评论
       submitComment(commentContent) {
         let comment = {
+          commentType: this.type,
           articleId: this.source,
           userId: this.$store.state.currentUser.id,
           commentContent: commentContent,
@@ -270,6 +272,7 @@
           .then((res) => {
             //重置分页数据
             this.pagination = {
+              commentType: this.type,
               articleId: this.source,
               floorCommentId: 0,
               pageNum : 1,
@@ -299,6 +302,7 @@
       //提交回复
       submitReply(commentContent) {
         let comment = {
+          commentType: this.type,
           articleId: this.source,
           userId: this.$store.state.currentUser.id,
           floorCommentId: this.floorComment.commentId,
@@ -313,6 +317,7 @@
           .then((res) => {
             //提交回复后，查询(回复评论)二级评论
             let pagination = {
+              commentType: this.type,
               articleId: this.source,
               floorCommentId: floorComment.commentId,
               pageNum: 1,

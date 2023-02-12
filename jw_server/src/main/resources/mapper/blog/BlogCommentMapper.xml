@@ -12,7 +12,10 @@
             LEFT JOIN sys_user AS su1 ON bc.user_id = su1.id
             LEFT JOIN sys_user AS su2 ON bc.reply_user_id = su2.id
         WHERE
-            bc.article_id = #{articleId}
+            bc.comment_type = #{commentType}
+            <if test="commentType == 'article'">
+                AND bc.article_id = #{articleId}
+            </if>
             AND bc.floor_comment_id = #{floorCommentId}
             AND bc.comment_check = '1'
             AND bc.is_deleted='0'

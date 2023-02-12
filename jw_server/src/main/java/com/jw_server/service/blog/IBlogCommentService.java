@@ -3,6 +3,7 @@ package com.jw_server.service.blog;
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
 import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
+import com.jw_server.dao.blog.dto.BlogFrontCommentPageDTO;
 import com.jw_server.dao.blog.entity.BlogComment;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jw_server.dao.blog.vo.BlogAdminCommentPageVO;
@@ -24,7 +25,7 @@ public interface IBlogCommentService extends IService<BlogComment> {
      * Author: jingwen
      * Date: 2023/1/4 16:33
      **/
-    MyPageVO<BlogFrontCommentVO> getFrontCommentByArticleId(Integer articleId, Integer floorCommentId, Integer pageNum, Integer pageSize);
+    MyPageVO<BlogFrontCommentVO> getFrontCommentByArticleId(BlogFrontCommentPageDTO frontCommentPageDTO);
 
     /**
      * Description: 获取文章评论总数量

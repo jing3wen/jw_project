@@ -7,10 +7,10 @@
 
     <div style="background: var(--background);animation: hideToShow 2.5s">
       <div>
-        <treeHole :treeHoleList="treeHoleList" @launch="launch" @deleteTreeHole="deleteTreeHole"></treeHole>
-        <proPage :current="pagination.current"
-                 :size="pagination.size"
-                 :total="pagination.total"
+        <treeHole :treeHoleList="treeHoleList" @launch="launch" @deleteTreeHole="deleteMoments"></treeHole>
+        <proPage :current="pagination.pageNum"
+                 :size="pagination.pageSize"
+                 :total="total"
                  :buttonSize="3"
                  :color="$constant.pageColor"
                  @toPage="toPage">
@@ -31,12 +31,12 @@
       <div>
         <div class="myCenter" style="padding-bottom: 20px">
           <el-radio-group v-model="isPublic">
-            <el-radio-button :label="true">公开</el-radio-button>
-            <el-radio-button :label="false">私密</el-radio-button>
+            <el-radio-button :label="'1'">公开</el-radio-button>
+            <el-radio-button :label="'0'">私密</el-radio-button>
           </el-radio-group>
         </div>
         <commentBox :disableGraffiti="true"
-                    @submitComment="submitWeiYan">
+                    @submitComment="submitMoments">
         </commentBox>
       </div>
     </el-dialog>
@@ -63,12 +63,14 @@
       return {
         treeHoleList: [],
         pagination: {
-          current: 1,
-          size: 10,
-          total: 0
+          loginUserId: this.$store.state.currentUser.id,
+          viewMe:false,
+          pageNum: 1,
+          pageSize: 10
         },
+        total:0,
         weiYanDialogVisible: false,
-        isPublic: true,
+        isPublic: '1',
         showFooter: false
       }
     },
@@ -78,7 +80,7 @@
     watch: {},
 
     created() {
-      this.getWeiYan();
+      this.getMoments();
     },
 
     mounted() {
@@ -87,12 +89,12 @@
 
     methods: {
       toPage(page) {
-        this.pagination.current = page;
+        this.pagination.pageNum = page;
         window.scrollTo({
           top: 240,
           behavior: "smooth"
         });
-        this.getWeiYan();
+        this.getMoments();
       },
       launch() {
         if (this.$common.isEmpty(this.$store.state.currentUser)) {
@@ -116,15 +118,19 @@
       handleClose() {
         this.weiYanDialogVisible = false;
       },
-      submitWeiYan(content) {
-        let weiYan = {
-          content: content,
+      submitMoments(content) {
+        let moments = {
+          userId: this.$store.state.currentUser.id,
+          momentsContent: content,
           isPublic: this.isPublic
         };
-
-        this.$http.post(this.$constant.baseURL + "/weiYan/saveWeiYan", weiYan)
+        this.$http.post("http://localhost:9090/blogMoments/front/addMoments", moments)
           .then((res) => {
-            this.getWeiYan();
+            this.$message({
+              type: 'success',
+              message: '发布成功!'
+            });
+            this.getMoments();
           })
           .catch((error) => {
             this.$message({
@@ -134,7 +140,7 @@
           });
         this.handleClose();
       },
-      deleteTreeHole(id) {
+      deleteMoments(id) {
         if (this.$common.isEmpty(this.$store.state.currentUser)) {
           this.$message({
             message: "请先登录！",
@@ -157,14 +163,14 @@
           type: 'success',
           center: true
         }).then(() => {
-          this.$http.get(this.$constant.baseURL + "/weiYan/deleteWeiYan", {id: id})
+          this.$http.delete("http://localhost:9090/blogMoments/front/deleteBatch", [id])
             .then((res) => {
               this.$message({
                 type: 'success',
                 message: '删除成功!'
               });
-              this.pagination.current = 1;
-              this.getWeiYan();
+              this.pagination.pageNum = 1;
+              this.getMoments();
             })
             .catch((error) => {
               this.$message({
@@ -179,19 +185,19 @@
           });
         });
       },
-      getWeiYan() {
-        this.$http.post(this.$constant.baseURL + "/weiYan/listWeiYan", this.pagination)
+      getMoments() {
+        this.$http.post("http://localhost:9090/blogMoments/front/getFrontMomentsPage", this.pagination)
           .then((res) => {
             this.showFooter = false;
             if (!this.$common.isEmpty(res.data)) {
               res.data.records.forEach(c => {
-                c.content = c.content.replace(/\n{2,}/g, '<div style="height: 12px"></div>');
-                c.content = c.content.replace(/\n/g, '<br/>');
-                c.content = this.$common.faceReg(c.content);
-                c.content = this.$common.pictureReg(c.content);
+                c.momentsContent = c.momentsContent.replace(/\n{2,}/g, '<div style="height: 12px"></div>');
+                c.momentsContent = c.momentsContent.replace(/\n/g, '<br/>');
+                c.momentsContent = this.$common.faceReg(c.momentsContent);
+                c.momentsContent = this.$common.pictureReg(c.momentsContent);
               });
               this.treeHoleList = res.data.records;
-              this.pagination.total = res.data.total;
+              this.total = res.data.total;
             }
             this.$nextTick(() => {
               this.showFooter = true;

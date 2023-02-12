@@ -7,19 +7,23 @@
         <div class="tree-hole-content"
              :class="{ leftTreeHole: index % 2 === 0 && !$common.mobile(), rightTreeHole: index % 2 !== 0 || $common.mobile() }">
           <el-avatar shape="square" class="avatar-img" :size="36"
-                     :src="!$common.isEmpty($store.state.currentUser)?$store.state.currentUser.avatar:$store.state.webInfo.webAvatar"></el-avatar>
+                     :src="!$common.isEmpty(treeHole.avatar)?treeHole.avatar:$store.state.webInfo.webAvatar"></el-avatar>
           <div class="tree-hole-box"
                :style="{background: $constant.tree_hole_color[index % $constant.tree_hole_color.length]}">
             <div class="box-tag" v-if="index % 2 === 0 && !$common.mobile()"
                  :style="{'border-color': 'transparent transparent transparent '+$constant.tree_hole_color[index % $constant.tree_hole_color.length]}"></div>
             <div class="box-tag" v-if="index % 2 !== 0 || $common.mobile()"
                  :style="{'border-color': 'transparent '+$constant.tree_hole_color[index % $constant.tree_hole_color.length]+' transparent transparent'}"></div>
-            <div class="my-content" v-html="treeHole.content"></div>
+            <div class="my-content" v-html="treeHole.nickname+': '+treeHole.momentsContent"></div>
             <div style="display: flex;justify-content: space-between">
-              <div>😃 {{treeHole.createTime}}</div>
-              <div @click="deleteTreeHole(treeHole.id)"
+              <div>
+                <el-tag type="success" v-if="treeHole.isPublic === '1'">(公开)😙</el-tag>
+                <el-tag type="warning" v-if="treeHole.isPublic === '0'">(私密)🤫</el-tag>
+                 {{treeHole.createTime}}
+              </div>
+              <div @click="deleteTreeHole(treeHole.momentsId)"
                    class="tree-hole-delete"
-                   v-if="!$common.isEmpty($store.state.currentUser)">
+                   v-if="treeHole.userId === $store.state.currentUser.id">
                 <svg viewBox="0 0 1024 1024" width="18" height="18" style="vertical-align: -2px;">
                   <path
                     d="M921.1392 155.392h-270.592v-48.2816c0-22.7328-18.432-41.1648-41.1648-41.1648H426.3424a41.1648 41.1648 0 0 0-41.1648 41.1648v48.2816H110.6432c-14.1312 0-25.6 11.4688-25.6 25.6s11.4688 25.6 25.6 25.6h810.496c14.1312 0 25.6-11.4688 25.6-25.6s-11.4688-25.6-25.6-25.6zM170.8032 260.0448v592.8448c0 50.8928 41.2672 92.16 92.16 92.16h500.6848c50.8928 0 92.16-41.2672 92.16-92.16V260.0448H170.8032z m249.1392 462.7968c0 14.1312-11.4688 25.6-25.6 25.6s-25.6-11.4688-25.6-25.6V443.0848c0-14.1312 11.4688-25.6 25.6-25.6s25.6 11.4688 25.6 25.6v279.7568z m243.1488 0c0 14.1312-11.4688 25.6-25.6 25.6s-25.6-11.4688-25.6-25.6V443.0848c0-14.1312 11.4688-25.6 25.6-25.6s25.6 11.4688 25.6 25.6v279.7568z"
@@ -37,8 +41,11 @@
   </div>
 </template>
 
+
 <script>
   export default {
+    components: {},
+    //TODO $store.state.webInfo.webAvatar 替换成 默认头像
     props: {
       treeHoleList: {
         type: Array
@@ -46,7 +53,9 @@
     },
 
     data() {
-      return {}
+      return {
+        info: '公开'
+      }
     },
 
     computed: {},
