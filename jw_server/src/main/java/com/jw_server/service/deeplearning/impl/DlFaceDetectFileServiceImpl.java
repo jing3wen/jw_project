@@ -202,8 +202,6 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
         detectFile.setDetectStatus(2);
         detectFile.setResultFileAddress(file_detected_url);
         detectFile.setResultMsg("检测到的人脸: "+recognitionFaceList.toString());
-        detectFile.setUpdateBy(sysUserService.getCurrentLoginUser().getUsername());
-        detectFile.setUpdateTime(LocalDateTime.now());
         updateById(detectFile);
         //TODO 检测视频过程很长，检测完成前，前端的axios报异常会超时，后续可通过webSocket主动向前端发送消息
     }

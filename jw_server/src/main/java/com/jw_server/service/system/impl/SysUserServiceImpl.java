@@ -42,6 +42,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import static com.jw_server.core.constants.SysConst.ANONYMOUS_USER;
+
 
 /**
  * Description 系统用户表 服务实现类
@@ -197,17 +199,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public LoginUserVO getCurrentLoginUser() {
-        LoginUserVO loginUserVO=null;
-        try{
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println(authentication.getPrincipal());
-            UserDetailsVO userDetailsVO = (UserDetailsVO) authentication.getPrincipal();
-            loginUserVO = copyBeanFromUserDetailsVO(userDetailsVO);
-
-        }catch (Exception e){
-            logger.error(e.getMessage());
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getPrincipal());
+        //当前用户未登录，匿名访问
+        if(authentication.getPrincipal().equals(ANONYMOUS_USER)){
+            return null;
         }
+        UserDetailsVO userDetailsVO = (UserDetailsVO) authentication.getPrincipal();
+        LoginUserVO loginUserVO = copyBeanFromUserDetailsVO(userDetailsVO);
+
         return loginUserVO;
     }
 

@@ -77,5 +77,6 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticle> {
      * Author: jingwen
      * Date: 2023/2/18 21:33
      **/
-    List<BlogFrontArticleArchiveVO> getArticleArchiveList(Integer pageNum, Integer pageSize);
+    List<BlogFrontArticleArchiveVO> getArticleArchiveList(Page<BlogFrontArticlePageVO> page,
+                                                          @Param("userId") Integer userId);
 }

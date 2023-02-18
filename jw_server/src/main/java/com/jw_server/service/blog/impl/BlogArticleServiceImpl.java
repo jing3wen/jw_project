@@ -14,6 +14,7 @@ import com.jw_server.dao.blog.dto.*;
 import com.jw_server.dao.blog.entity.BlogArticle;
 import com.jw_server.dao.blog.mapper.*;
 import com.jw_server.dao.blog.vo.*;
+import com.jw_server.dao.system.vo.LoginUserVO;
 import com.jw_server.service.blog.IBlogArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jw_server.service.system.ISysUserService;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -233,9 +235,18 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      **/
     @Override
     public List<BlogFrontArticleArchiveVO> getArticleArchive(Integer pageNum, Integer pageSize) {
-
-        System.out.println(sysUserService.getCurrentLoginUser());
-        List<BlogFrontArticleArchiveVO> archiveList = blogArticleMapper.getArticleArchiveList(pageNum, pageSize);
-        return null;
+        List<BlogFrontArticleArchiveVO> archiveList = new ArrayList<>();
+        LoginUserVO loginUserVO = sysUserService.getCurrentLoginUser();
+        //匿名用户，只能查看公开文章
+        if(ObjectUtil.isNotEmpty(loginUserVO)){
+            archiveList = blogArticleMapper.getArticleArchiveList(new Page<>(pageNum,pageSize),
+                    null);
+        }
+        //登录用户，能查看自己的所有文章和其他人的公开文章
+        if(ObjectUtil.isNotEmpty(loginUserVO)){
+            archiveList = blogArticleMapper.getArticleArchiveList(new Page<>(pageNum,pageSize),
+                    loginUserVO.getId());
+        }
+        return archiveList;
     }
 }
