@@ -89,5 +89,10 @@ public interface IBlogArticleService extends IService<BlogArticle> {
     List<BlogFrontHotArticleVO> getHotArticle(Integer pageNum, Integer pageSize);
 
 
-
+    /**
+     * Description: 前台获取文章归档
+     * Author: jingwen
+     * Date: 2023/2/18 21:29
+     **/
+    List<BlogFrontArticleArchiveVO> getArticleArchive(Integer pageNum, Integer pageSize);
 }

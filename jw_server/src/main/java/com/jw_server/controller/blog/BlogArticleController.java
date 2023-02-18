@@ -65,6 +65,17 @@ public class BlogArticleController {
         return ResponseResult.success(blogArticleService.getHotArticle(0, 3));
     }
 
+    /**
+     * Description: 前台获取文章归档
+     * Author: jingwen
+     * Date: 2023/2/18 21:28
+     **/
+    @GetMapping("/front/getArticleArchive")
+    public ResponseResult getArticleArchive(@RequestParam Integer pageNum,@RequestParam Integer pageSize){
+
+        return ResponseResult.success(blogArticleService.getArticleArchive(pageNum, pageSize));
+    }
+
 
     /**
      * Description: 博客后台新增文章

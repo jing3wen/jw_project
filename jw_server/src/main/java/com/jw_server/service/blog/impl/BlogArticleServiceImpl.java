@@ -3,6 +3,7 @@ package com.jw_server.service.blog.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,6 +16,7 @@ import com.jw_server.dao.blog.mapper.*;
 import com.jw_server.dao.blog.vo.*;
 import com.jw_server.service.blog.IBlogArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jw_server.service.system.ISysUserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     @Resource
     private BlogArticleTagMapper blogArticleTagMapper;
+
+    @Resource
+    private ISysUserService sysUserService;
 
 
     @Resource
@@ -221,5 +226,16 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     public List<BlogFrontHotArticleVO> getHotArticle(Integer pageNum, Integer pageSize) {
 
         return blogArticleMapper.getHotArticle(pageNum, pageSize);
+    }
+
+    /**
+     * 前台获取文章归档
+     **/
+    @Override
+    public List<BlogFrontArticleArchiveVO> getArticleArchive(Integer pageNum, Integer pageSize) {
+
+        System.out.println(sysUserService.getCurrentLoginUser());
+        List<BlogFrontArticleArchiveVO> archiveList = blogArticleMapper.getArticleArchiveList(pageNum, pageSize);
+        return null;
     }
 }

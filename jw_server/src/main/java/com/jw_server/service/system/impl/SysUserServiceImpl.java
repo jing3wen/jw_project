@@ -197,9 +197,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public LoginUserVO getCurrentLoginUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsVO userDetailsVO = (UserDetailsVO) authentication.getPrincipal();
-        LoginUserVO loginUserVO = copyBeanFromUserDetailsVO(userDetailsVO);
+        LoginUserVO loginUserVO=null;
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println(authentication.getPrincipal());
+            UserDetailsVO userDetailsVO = (UserDetailsVO) authentication.getPrincipal();
+            loginUserVO = copyBeanFromUserDetailsVO(userDetailsVO);
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+
+        }
         return loginUserVO;
     }
 

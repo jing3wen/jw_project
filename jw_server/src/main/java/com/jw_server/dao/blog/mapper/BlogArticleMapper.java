@@ -72,4 +72,10 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticle> {
      **/
     List<BlogFrontHotArticleVO> getHotArticle(Integer pageNum, Integer pageSize);
 
+    /**
+     * Description: 前台获取文章归档
+     * Author: jingwen
+     * Date: 2023/2/18 21:33
+     **/
+    List<BlogFrontArticleArchiveVO> getArticleArchiveList(Integer pageNum, Integer pageSize);
 }

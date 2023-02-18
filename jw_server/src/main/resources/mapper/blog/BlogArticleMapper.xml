@@ -107,7 +107,18 @@
         WHERE
             ba.article_check='1'
             AND ba.is_deleted='0'
-        ORDER BY view_counts DESC
+        ORDER BY ba.view_counts DESC
+        LIMIT #{pageNum}, #{pageSize}
+    </select>
+    <select id="getArticleArchiveList" resultType="com.jw_server.dao.blog.vo.BlogFrontArticleArchiveVO">
+        SELECT
+            ba.article_id,  ba.article_title, ba.view_visiable, ba.create_time
+        FROM
+            `blog_article` AS ba
+        WHERE
+            ba.article_check='1'
+            AND ba.is_deleted='0'
+        ORDER BY ba.create_time DESC
         LIMIT #{pageNum}, #{pageSize}
     </select>
 
