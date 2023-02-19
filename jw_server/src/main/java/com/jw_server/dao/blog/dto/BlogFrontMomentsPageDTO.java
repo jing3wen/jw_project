@@ -11,7 +11,5 @@ import lombok.Data;
 @Data
 public class BlogFrontMomentsPageDTO extends MyPageDTO {
 
-    private Integer loginUserId;
-
     private Boolean viewMe;
 }

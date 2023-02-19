@@ -37,10 +37,17 @@
               </div>
             </li>
 
-            <!-- 爱情买卖 -->
-            <li @click="$router.push({path: '/love'})">
+<!--            &lt;!&ndash; 爱情买卖 &ndash;&gt;-->
+<!--            <li @click="$router.push({path: '/love'})">-->
+<!--              <div class="my-menu">-->
+<!--                💋 <span>爱情买卖</span>-->
+<!--              </div>-->
+<!--            </li>-->
+
+            <!-- 文章归档 -->
+            <li @click="$router.push({path: '/archive'})">
               <div class="my-menu">
-                💋 <span>爱情买卖</span>
+                💋 <span>归档</span>
               </div>
             </li>
 
@@ -169,12 +176,20 @@
             </div>
           </li>
 
-          <!-- 爱情买卖 -->
-          <li @click="smallMenu({path: '/love'})">
+<!--          &lt;!&ndash; 爱情买卖 &ndash;&gt;-->
+<!--          <li @click="smallMenu({path: '/love'})">-->
+<!--            <div>-->
+<!--              💋 <span>爱情买卖</span>-->
+<!--            </div>-->
+<!--          </li>-->
+
+          <li @click="smallMenu({path: '/archive'})">
             <div>
-              💋 <span>爱情买卖</span>
+              💋 <span>归档</span>
             </div>
           </li>
+
+
 
           <!-- 聊天室 -->
           <li @click="goIm()">

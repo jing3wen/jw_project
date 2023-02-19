@@ -16,7 +16,7 @@ import java.util.Collections;
 public class CodeGenerator {
 
     private static void generateCode(){
-        FastAutoGenerator.create("jdbc:mysql://localhost:3306/jw_project?serverTimezone=GMT%2b8", "root", "155416")
+        FastAutoGenerator.create("jdbc:mysql://101.201.196.173:3307/jw_project?serverTimezone=GMT%2b8", "root", "root")
                 .globalConfig(builder -> {
                     builder.author("jingwen") // 设置作者
                             .enableSwagger() // 开启 swagger 模式
@@ -46,7 +46,7 @@ public class CodeGenerator {
                             ;
                     builder.mapperBuilder()
                             .enableMapperAnnotation();  //mapper添加@Mapper
-//                    builder.addInclude("blog_comment");// 设置需要生成的表名
+                    builder.addInclude("blog_friend");// 设置需要生成的表名
 
 //                            .addTablePrefix("t_", "sys_"); // 设置过滤表前缀
                 })
