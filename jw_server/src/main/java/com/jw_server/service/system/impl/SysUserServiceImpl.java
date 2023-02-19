@@ -200,14 +200,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public LoginUserVO getCurrentLoginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getPrincipal());
         //当前用户未登录，匿名访问
         if(authentication.getPrincipal().equals(ANONYMOUS_USER)){
-            logger.info("当前访问用户："+ANONYMOUS_USER);
             return null;
         }
         UserDetailsVO userDetailsVO = (UserDetailsVO) authentication.getPrincipal();
         LoginUserVO loginUserVO = copyBeanFromUserDetailsVO(userDetailsVO);
-        logger.info("当前登录用户："+loginUserVO.toString());
 
         return loginUserVO;
     }

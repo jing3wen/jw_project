@@ -17,7 +17,8 @@
             <div class="my-content" v-html="treeHole.nickname+': '+treeHole.momentsContent"></div>
             <div style="display: flex;justify-content: space-between">
               <div>
-                <el-tag type="warning" v-if="treeHole.isPublic === '0' && $store.state.currentUser!=null">(私密)🤫</el-tag>
+                <el-tag type="success" v-if="treeHole.isPublic === '1'">(公开)😙</el-tag>
+                <el-tag type="warning" v-if="treeHole.isPublic === '0'">(私密)🤫</el-tag>
                  {{treeHole.createTime}}
               </div>
               <div @click="deleteTreeHole(treeHole.momentsId)"

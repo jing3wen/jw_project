@@ -67,9 +67,6 @@ public class BlogArticleController {
 
     /**
      * Description: 前台获取文章归档
-     * 匿名访问：只查询公开文章
-     * 登录用户访问：查询当前用户的所有文章和其他用户的公开文章
-     *
      * Author: jingwen
      * Date: 2023/2/18 21:28
      **/

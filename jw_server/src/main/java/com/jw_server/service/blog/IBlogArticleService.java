@@ -94,5 +94,5 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2023/2/18 21:29
      **/
-    MyPageVO<BlogFrontArticleArchiveVO> getArticleArchive(Integer pageNum, Integer pageSize);
+    List<BlogFrontArticleArchiveVO> getArticleArchive(Integer pageNum, Integer pageSize);
 }

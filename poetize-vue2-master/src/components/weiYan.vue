@@ -63,6 +63,7 @@
       return {
         treeHoleList: [],
         pagination: {
+          loginUserId: this.$store.state.currentUser.id,
           viewMe:false,
           pageNum: 1,
           pageSize: 10

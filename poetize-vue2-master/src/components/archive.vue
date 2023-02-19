@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!$common.isEmpty(article)">
     <!-- 封面 -->
     <div class="article-head my-animation-slide-top">
       <!-- 背景图片 -->
@@ -13,32 +13,17 @@
         </div>
       </el-image>
     </div>
-    <!-- 文章归档 -->
+    <!-- 文章 -->
     <div style="background: var(--background);">
       <div class="article-container my-animation-slide-bottom">
-        <!--  -->
-        <div v-if="!$common.isEmpty(archiveList)" class="process-wrap">
+        <!-- 最新进展 -->
+        <div v-if="!$common.isEmpty(treeHoleList)" class="process-wrap">
           <el-collapse accordion value="1">
-            <el-collapse-item title="文章归档" name="1">
-              <div class="process-line">
-                <div class="process-item"
-                     v-for="(archive, index) in archiveList"
-                     :key="index">
-                  <div class="timeline-item-time">
-                    <span>
-                      <el-tag type="warning" v-if="archive.articleVisible === '0' && $store.state.currentUser!=null">(私密)🤫</el-tag>
-                      {{$common.getDateDiff(archive.createTime)}}
-                    </span>
-                  </div>
-                  <div class="item-content"
-                       @click="$router.push({path: '/article', query: {id: archive.articleId}})">
-                    <div class="timeline-item-content" v-html="archive.articleTitle"></div>
-                  </div>
-
-                </div>
-              </div>
+            <el-collapse-item title="最新进展" name="1">
+              <process :treeHoleList="treeHoleList" @deleteTreeHole="deleteTreeHole"></process>
             </el-collapse-item>
           </el-collapse>
+
           <hr>
         </div>
       </div>
@@ -47,6 +32,28 @@
     <div style="background: var(--background)">
       <myFooter></myFooter>
     </div>
+
+    <el-dialog title="最新进展"
+               :visible.sync="weiYanDialogVisible"
+               width="40%"
+               :append-to-body="true"
+               destroy-on-close
+               center>
+      <div>
+        <div class="myCenter" style="margin-bottom: 20px">
+          <el-date-picker
+            v-model="newsTime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            type="datetime"
+            align="center"
+            placeholder="选择日期时间">
+          </el-date-picker>
+        </div>
+        <commentBox :disableGraffiti="true"
+                    @submitComment="submitWeiYan">
+        </commentBox>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -58,33 +65,98 @@ const commentBox = () => import( "./comment/commentBox");
 export default {
   components: {
     myFooter,
-
+    commentBox,
+    process
   },
 
   data() {
     return {
-      archiveList: [],
+      article: {},
+      articleContentHtml: "",
+      treeHoleList: [],
       weiYanDialogVisible: false,
-      newsTime: "",
-      pagination: {
-        pageNum: 1,
-        pageSize: 10
-      },
-      total:0,
+      newsTime: ""
     };
   },
   created() {
-    this.getArchive();
+    this.getArticle();
   },
   mounted() {
     // window.addEventListener("scroll", this.onScrollPage);
   },
   methods: {
-    getArchive() {
-      this.$http.get("http://localhost:9090/blogArticle/front/getArticleArchive", this.pagination)
+    deleteTreeHole(id) {
+      if (this.$common.isEmpty(this.$store.state.currentUser)) {
+        this.$message({
+          message: "请先登录！",
+          type: "error"
+        });
+        return;
+      }
+
+      this.$confirm('确认删除？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'success',
+        center: true
+      }).then(() => {
+        this.$http.get(this.$constant.baseURL + "/weiYan/deleteWeiYan", {id: id})
+          .then((res) => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.getNews();
+          })
+          .catch((error) => {
+            this.$message({
+              message: error.message,
+              type: "error"
+            });
+          });
+      }).catch(() => {
+        this.$message({
+          type: 'success',
+          message: '已取消删除!'
+        });
+      });
+    },
+    submitWeiYan(content) {
+      let weiYan = {
+        content: content,
+        createTime: this.newsTime,
+        source: this.article.articleId
+      };
+
+      this.$http.post(this.$constant.baseURL + "/weiYan/saveNews", weiYan)
         .then((res) => {
-          this.archiveList = res.data.records;
-          this.total = res.data.total;
+          this.weiYanDialogVisible = false;
+          this.newsTime = "";
+          this.getNews();
+        })
+        .catch((error) => {
+          this.$message({
+            message: error.message,
+            type: "error"
+          });
+        });
+    },
+    getNews() {
+      this.$http.post(this.$constant.baseURL + "/weiYan/listNews", {
+        current: 1,
+        size: 9999,
+        source: this.article.id
+      })
+        .then((res) => {
+          if (!this.$common.isEmpty(res.data)) {
+            res.data.records.forEach(c => {
+              c.content = c.content.replace(/\n{2,}/g, '<div style="height: 12px"></div>');
+              c.content = c.content.replace(/\n/g, '<br/>');
+              c.content = this.$common.faceReg(c.content);
+              c.content = this.$common.pictureReg(c.content);
+            });
+            this.treeHoleList = res.data.records;
+          }
         })
         .catch((error) => {
           this.$message({
@@ -187,58 +259,5 @@ blockquote {
   .article-info-news {
     right: 20px;
   }
-}
-
-
-.process-line {
-  border-left: 2px solid var(--lightGreen);
-  padding: 50px 20px 10px;
-  margin-left: 20px;
-  position: relative;
-}
-
-.process-line:before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border: 4px solid var(--maxLightRed);
-  border-radius: 50%;
-  position: absolute;
-  top: 15px;
-  left: -1px;
-  transform: translateX(-50%);
-  background-color: var(--white);
-  animation: weiYanShadowFlashing 1.5s linear infinite;
-}
-
-.process-item {
-  position: relative;
-  margin: 10px;
-  color: var(--fontColor);
-}
-
-
-.timeline-item-time::before {
-  position: absolute;
-  top: 5px;
-  left: -37px;
-  width: 6px;
-  height: 6px;
-  border: 3px solid var(--blue);
-  border-radius: 50%;
-  background: var(--white);
-  content: '';
-}
-
-.item-content :hover{
-  cursor: pointer;/*鼠标变成手指样式*/
-  transition: all 1s;/*所有属性变化在0.6秒内执行动画*/
-  transform: scale(1.05);
-}
-.timeline-item-content {
-  padding: 12px 15px;
-  margin: 10px 0 15px;
-  border-radius: 10px;
-  background: rgba(66, 139, 202, 0.2);
 }
 </style>

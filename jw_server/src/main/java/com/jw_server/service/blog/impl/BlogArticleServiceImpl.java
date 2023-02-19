@@ -65,26 +65,15 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Override
     public MyPageVO<BlogFrontArticlePageVO> getFrontArticlePage(BlogFrontQueryArticlePageDTO blogFrontQueryArticlePageDTO) {
 
-
         /*
          * 先联表blog_article, sys_user, blog_category 查询（筛选）出文章列表
          *
+         *
          * 再对每个文章进行遍历, 查询(筛选)文章标签和点赞量
          **/
-        IPage<BlogFrontArticlePageVO> articlePage;
-        LoginUserVO loginUserVO = sysUserService.getCurrentLoginUser();
-        //登录用户，能查看自己的所有文章和其他人的公开文章
-        if(ObjectUtil.isNotEmpty(loginUserVO)){
-             articlePage = blogArticleMapper.getFrontLoginUserArticlePage(
-                    new Page<>(blogFrontQueryArticlePageDTO.getPageNum(), blogFrontQueryArticlePageDTO.getPageSize()),
-                    loginUserVO.getId(),
-                    blogFrontQueryArticlePageDTO);
-        }else { //匿名访问，只能查看公开文章
-            articlePage = blogArticleMapper.getFrontPublicArticlePage(
-                    new Page<>(blogFrontQueryArticlePageDTO.getPageNum(), blogFrontQueryArticlePageDTO.getPageSize()),
-                    blogFrontQueryArticlePageDTO);
-        }
-
+        IPage<BlogFrontArticlePageVO> articlePage = blogArticleMapper.getFrontArticlePage(
+                new Page<>(blogFrontQueryArticlePageDTO.getPageNum(), blogFrontQueryArticlePageDTO.getPageSize()),
+                blogFrontQueryArticlePageDTO);
 
         List<BlogFrontArticlePageVO> articleVOList = articlePage.getRecords();
         if(CollectionUtil.isNotEmpty(articleVOList)){
@@ -245,18 +234,19 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 前台获取文章归档
      **/
     @Override
-    public MyPageVO<BlogFrontArticleArchiveVO> getArticleArchive(Integer pageNum, Integer pageSize) {
-        IPage<BlogFrontArticleArchiveVO> archiveVOIPage;
+    public List<BlogFrontArticleArchiveVO> getArticleArchive(Integer pageNum, Integer pageSize) {
+        List<BlogFrontArticleArchiveVO> archiveList = new ArrayList<>();
         LoginUserVO loginUserVO = sysUserService.getCurrentLoginUser();
-
-        //登录用户，能查看自己的所有文章和其他人的公开文章
+        //匿名用户，只能查看公开文章
         if(ObjectUtil.isNotEmpty(loginUserVO)){
-            archiveVOIPage = blogArticleMapper.getArticleArchivePage(new Page<>(pageNum,pageSize),
-                    loginUserVO.getId());
-        }else { //匿名用户，只能查看公开文章
-            archiveVOIPage = blogArticleMapper.getArticleArchivePage(new Page<>(pageNum,pageSize),
+            archiveList = blogArticleMapper.getArticleArchiveList(new Page<>(pageNum,pageSize),
                     null);
         }
-        return new MyPageVO<>(archiveVOIPage);
+        //登录用户，能查看自己的所有文章和其他人的公开文章
+        if(ObjectUtil.isNotEmpty(loginUserVO)){
+            archiveList = blogArticleMapper.getArticleArchiveList(new Page<>(pageNum,pageSize),
+                    loginUserVO.getId());
+        }
+        return archiveList;
     }
 }

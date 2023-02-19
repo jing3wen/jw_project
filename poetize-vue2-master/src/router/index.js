@@ -59,7 +59,7 @@ const routes = [
     },{
       path: "/archive",
       name: "archive",
-      component: () => import('../components/archive')
+      component: () => import('../components/article')
     }]
   },
   {

@@ -2,7 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jw_server.dao.blog.mapper.BlogArticleMapper">
 
-    <select id="getFrontPublicArticlePage" resultType="com.jw_server.dao.blog.vo.BlogFrontArticlePageVO">
+<!--    <resultMap id="blogFrontArticleMap" type="com.jw_server.dao.blog.vo.BlogFrontArticlePageVO">-->
+<!--        <id property="articleId" column="article_id"></id>-->
+<!--        <result property="userId" column="user_id"></result>-->
+<!--        <result property="nickname" column="nickname"></result>-->
+<!--        <result property="categoryId" column="category_id"></result>-->
+
+<!--    </resultMap>-->
+
+    <select id="getFrontArticlePage" resultType="com.jw_server.dao.blog.vo.BlogFrontArticlePageVO">
         SELECT
             ba.article_id, ba.user_id, su.nickname, ba.category_id,
             bc.category_name, ba.is_top, ba.article_cover, ba.article_title,
@@ -14,7 +22,6 @@
         WHERE
             ba.article_check='1'
             AND ba.is_deleted='0'
-            AND ba.article_visible='1'
             <if test="queryArticleDTO.categoryId != null and queryArticleDTO.categoryId !=''">
                 AND bc.category_id = #{queryArticleDTO.categoryId}
             </if>
@@ -27,36 +34,6 @@
                         LEFT JOIN blog_article_tag AS bat ON ba2.article_id = bat.article_id
                     WHERE
                         bat.tag_id = #{queryArticleDTO.tagId}
-                )
-            </if>
-        ORDER BY is_top DESC, ba.create_time DESC
-    </select>
-
-    <select id="getFrontLoginUserArticlePage" resultType="com.jw_server.dao.blog.vo.BlogFrontArticlePageVO">
-        SELECT
-            ba.article_id, ba.user_id, su.nickname, ba.category_id,
-            bc.category_name, ba.is_top, ba.article_cover, ba.article_title,
-            ba.article_summary, ba.view_counts, ba.create_time
-        FROM
-        `blog_article` AS ba
-            LEFT JOIN sys_user AS su ON ba.user_id = su.id
-            LEFT JOIN blog_category AS bc ON ba.category_id = bc.category_id
-        WHERE
-            ba.article_check='1'
-            AND ba.is_deleted='0'
-            AND (ba.user_id=#{loginUserId} OR ba.article_visible='1')
-            <if test="queryArticleDTO.categoryId != null and queryArticleDTO.categoryId !=''">
-                AND bc.category_id = #{queryArticleDTO.categoryId}
-            </if>
-            <if test="queryArticleDTO.tagId != null and queryArticleDTO.tagId !=''">
-                AND ba.article_id in (
-                SELECT
-                ba2.article_id
-                FROM
-                blog_article AS ba2
-                LEFT JOIN blog_article_tag AS bat ON ba2.article_id = bat.article_id
-                WHERE
-                bat.tag_id = #{queryArticleDTO.tagId}
                 )
             </if>
         ORDER BY is_top DESC, ba.create_time DESC
@@ -133,21 +110,9 @@
         ORDER BY ba.view_counts DESC
         LIMIT #{pageNum}, #{pageSize}
     </select>
-    <select id="getArticleArchivePage" resultType="com.jw_server.dao.blog.vo.BlogFrontArticleArchiveVO">
-        SELECT
-            ba.article_id, ba.article_title, ba.article_visible, ba.create_time
-        FROM
-            `blog_article` AS ba
-        WHERE
-            ba.article_check='1'
-            AND ba.is_deleted='0'
-            <if test="loginUserId!=null and loginUserId!=''">
-                AND (ba.user_id=#{loginUserId} OR ba.article_visible='1')
-            </if>
-            <if test="loginUserId==null">
-                AND ba.article_visible='1'
-            </if>
-        ORDER BY ba.create_time DESC
+    <select id="getArticleArchiveList" resultType="com.jw_server.dao.blog.vo.BlogFrontArticleArchiveVO">
+
+
     </select>
 
 
