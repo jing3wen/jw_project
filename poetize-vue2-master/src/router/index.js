@@ -17,9 +17,9 @@ const routes = [
       name: "index",
       component: () => import('../components/index')
     }, {
-      path: "/sort",
-      name: "sort",
-      component: () => import('../components/sort')
+      path: "/category",
+      name: "category",
+      component: () => import('../components/category')
     }, {
       path: "/article",
       name: "article",
@@ -59,64 +59,8 @@ const routes = [
     },{
       path: "/archive",
       name: "archive",
-      component: () => import('../components/article')
+      component: () => import('../components/archive')
     }]
-  },
-  {
-    path: '/admin',
-    redirect: '/main',
-    meta: {requiresAuth: true},
-    component: () => import('../components/admin/admin'),
-    children: [{
-      path: '/main',
-      name: 'main',
-      component: () => import('../components/admin/main')
-    }, {
-      path: '/webEdit',
-      name: 'webEdit',
-      component: () => import('../components/admin/webEdit')
-    }, {
-      path: '/userList',
-      name: 'userList',
-      component: () => import('../components/admin/userList')
-    }, {
-      path: '/postList',
-      name: 'postList',
-      component: () => import('../components/admin/postList')
-    }, {
-      path: '/postEdit',
-      name: 'postEdit',
-      component: () => import('../components/admin/postEdit')
-    }, {
-      path: '/sortList',
-      name: 'sortList',
-      component: () => import('../components/admin/sortList')
-    }, {
-      path: '/commentList',
-      name: 'commentList',
-      component: () => import('../components/admin/commentList')
-    }, {
-      path: '/treeHoleList',
-      name: 'treeHoleList',
-      component: () => import('../components/admin/treeHoleList')
-    }, {
-      path: '/resourceList',
-      name: 'resourceList',
-      component: () => import('../components/admin/resourceList')
-    }, {
-      path: '/loveList',
-      name: 'loveList',
-      component: () => import('../components/admin/loveList')
-    }, {
-      path: '/resourcePathList',
-      name: 'resourcePathList',
-      component: () => import('../components/admin/resourcePathList')
-    }]
-  },
-  {
-    path: '/verify',
-    name: 'verify',
-    component: () => import('../components/admin/verify')
   }
 ]
 

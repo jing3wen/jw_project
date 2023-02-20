@@ -62,15 +62,15 @@
 
     data() {
       return {
-        categoryId: this.$route.query.sortId,
-        tagId: this.$route.query.labelId,
+        categoryId: this.$route.query.categoryId,
+        tagId: this.$route.query.tagId,
         categoryList: null,
         tagList:null,
         pagination: {
           pageNum: 1,
           pageSize: 10,
-          categoryId: this.$route.query.sortId,
-          tagId: this.$route.query.labelId,
+          categoryId: this.$route.query.categoryId,
+          tagId: this.$route.query.tagId,
           keywords: "",
         },
         total: 0,
@@ -85,13 +85,13 @@
         this.pagination = {
           pageNum: 1,
           pageSize: 10,
-          categoryId: this.$route.query.sortId,
-          tagId: this.$route.query.labelId,
+          categoryId: this.$route.query.categoryId,
+          tagId: this.$route.query.tagId,
           keywords: "",
         };
         this.articles.splice(0, this.articles.length);
-        this.categoryId = this.$route.query.sortId;
-        this.tagId = this.$route.query.labelId;
+        this.categoryId = this.$route.query.categoryId;
+        this.tagId = this.$route.query.tagId;
         this.getCategory();
         this.getArticles();
       }
@@ -130,16 +130,6 @@
         }
       },
       getTag() {
-        // TODO 此处可以参考博客2.0用缓存
-        // let sortInfo = this.$store.state.sortInfo;
-        // if (!this.$common.isEmpty(sortInfo)) {
-        //   let sortArray = sortInfo.filter(f => {
-        //     return f.id === parseInt(this.sortId);
-        //   });
-        //   if (!this.$common.isEmpty(sortArray)) {
-        //     this.sort = sortArray[0];
-        //   }
-        // }
         this.$http.get("http://localhost:9090/blogTag/front/getAllFrontTag")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {

@@ -23,11 +23,22 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticle> {
 
     /**
      * Description: 查询博客前台文章分页
+     * 匿名访问， 查询所用公开文章
      * Author: jingwen
      * Date: 2022/12/4 13:39
      **/
-    IPage<BlogFrontArticlePageVO> getFrontArticlePage(Page<BlogFrontArticlePageVO> page,
+    IPage<BlogFrontArticlePageVO> getFrontPublicArticlePage(Page<BlogFrontArticlePageVO> page,
                                                       @Param("queryArticleDTO") BlogFrontQueryArticlePageDTO queryArticlePageDTO);
+
+    /**
+     * Description: 查询博客前台文章分页
+     * 登录用户访问：查询当前用户所有文章和其他用户公开文章
+     * Author: jingwen
+     * Date: 2022/12/4 13:39
+     **/
+    IPage<BlogFrontArticlePageVO> getFrontLoginUserArticlePage(Page<BlogFrontArticlePageVO> page,
+                                                               @Param("loginUserId") Integer loginUserId,
+                                                               @Param("queryArticleDTO") BlogFrontQueryArticlePageDTO queryArticlePageDTO);
 
     /**
      * Description: 更新文章浏览量
@@ -74,9 +85,11 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticle> {
 
     /**
      * Description: 前台获取文章归档
+     * loginUserId==null 匿名访问，只查询所有公开文章
+     * loginUserId!=null 登录用户访问，查询登录用户所有文章和其他用户公开文章
      * Author: jingwen
      * Date: 2023/2/18 21:33
      **/
-    List<BlogFrontArticleArchiveVO> getArticleArchiveList(Page<BlogFrontArticlePageVO> page,
-                                                          @Param("userId") Integer userId);
+    IPage<BlogFrontArticleArchiveVO> getArticleArchivePage(Page<BlogFrontArticlePageVO> page,
+                                                           @Param("loginUserId") Integer loginUserId);
 }

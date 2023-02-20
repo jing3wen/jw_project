@@ -112,10 +112,10 @@
         </div>
         <!-- 分类 标签 -->
         <div class="sort-label" style="display: flex; flex-wrap: wrap;">
-        
+
           <!-- 分类 -->
           <span style="margin-right: 12px"
-                @click.stop="$router.push({path: '/sort', query: {sortId: article.categoryId}})">
+                @click.stop="$router.push({path: '/category', query: {categoryId: article.categoryId}})">
             <svg viewBox="0 0 1024 1024" width="15" height="15" style="vertical-align: -3px;">
               <path
                 d="M179.2 153.6m89.6 0l588.8 0q89.6 0 89.6 89.6l0 486.4q0 89.6-89.6 89.6l-588.8 0q-89.6 0-89.6-89.6l0-486.4q0-89.6 89.6-89.6Z"
@@ -135,9 +135,9 @@
             </svg> {{ article.categoryName }}
           </span>
           <!-- 标签 -->
-          <span v-for="(tag, index) in article.tagList" :key="index" 
-              style="margin-right: 12px" 
-              @click.stop="$router.push({path: '/sort', query: {labelId: tag.tagId}})">
+          <span v-for="(tag, index) in article.tagList" :key="index"
+              style="margin-right: 12px"
+              @click.stop="$router.push({path: '/category', query: {tagId: tag.tagId}})">
             <svg viewBox="0 0 1024 1024" width="15" height="15" style="vertical-align: -3px;">
               <path
                 d="M905.0112 560.4352l-342.784 342.784c-56.7808 56.7808-148.7872 56.7808-205.568 0l-231.5776-231.5776c-56.7808-56.7808-56.7808-148.7872 0-205.568l342.9376-342.9376a114.8928 114.8928 0 0 1 84.224-33.5872l266.3936 7.2192c60.7744 1.6384 109.7216 50.3808 111.5648 111.1552l8.2944 267.8272c1.024 31.6928-11.1104 62.3104-33.4848 84.6848z"
@@ -147,7 +147,7 @@
                 fill="#FFE37B"></path>
             </svg> {{ tag.tagName }}
           </span>
-          
+
         </div>
       </div>
     </div>
@@ -277,7 +277,7 @@
     cursor: pointer;
     user-select: none;
 
-    
+
     margin-top: 5px;  /* 父标签设置成子标签排列不下换行,此处加上margin-top距离,*/
     max-width: 120px;  /* 内容过长自动隐藏 */
     overflow:hidden;

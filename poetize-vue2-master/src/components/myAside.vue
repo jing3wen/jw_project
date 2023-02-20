@@ -25,12 +25,12 @@
         <i class="el-icon-folder-opened card-content2-icon"></i>
         <span>分类</span>
       </div>
-      <div v-for="(sort, index) in categoryList"
+      <div v-for="(category, index) in categoryList"
            :key="index"
            class="post-sort"
-           @click="$router.push({path: '/sort', query: {sortId: sort.categoryId}})">
+           @click="$router.push({path: '/category', query: {categoryId: category.categoryId}})">
         <div>
-          <span v-for="(s, i) in sort.categoryName.split('')" :key="i">{{ s }}</span>
+          <span v-for="(s, i) in category.categoryName.split('')" :key="i">{{ s }}</span>
         </div>
       </div>
     </div>

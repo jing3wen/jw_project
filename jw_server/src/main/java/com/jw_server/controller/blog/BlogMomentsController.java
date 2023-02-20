@@ -73,7 +73,7 @@ public class BlogMomentsController {
      **/
     @PostMapping("/front/getFrontMomentsPage")
     public ResponseResult getFrontMomentsPage(@RequestBody BlogFrontMomentsPageDTO frontMomentsPageDTO) {
-        System.out.println(frontMomentsPageDTO.toString());
+
         return ResponseResult.success(blogMomentsService.getFrontMomentsPage(frontMomentsPageDTO));
     }
 

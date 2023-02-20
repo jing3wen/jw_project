@@ -33,25 +33,9 @@ axios.interceptors.response.use(function (response) {
     //用户token过期情况
     if (response.data.code === 401) {
       store.commit("loadCurrentUser", {});
-      localStorage.removeItem("userToken");
-      store.commit("loadCurrentAdmin", {});
-      localStorage.removeItem("adminToken");
-      window.location.href = constant.webURL + "/user";
-    }
-    // TODO 此在代码整合完成后删掉
-    if (response.data.code === 300) {
-      store.commit("loadCurrentUser", {});
-      localStorage.removeItem("userToken");
-      store.commit("loadCurrentAdmin", {});
-      localStorage.removeItem("adminToken");
-      window.location.href = constant.webURL + "/user";
     }
 
-    //TODO 此处在代码整合完成后修改
-    if (response.data.msg !== null)
-      return Promise.reject(new Error(response.data.msg));
-
-    return Promise.reject(new Error(response.data.message));
+    return Promise.reject(new Error(response.data.msg));
   } else {
     return response;
   }
@@ -66,20 +50,9 @@ axios.interceptors.response.use(function (response) {
 
 export default {
   post(url, params = {}, isAdmin = false, json = true) {
-    let config;
-    if (isAdmin) {
-      config = {
-        headers: {"Authorization": localStorage.getItem("adminToken")}
-      };
-    } else {
-      config = {
-        headers: {"Authorization": localStorage.getItem("userToken")}
-      };
-    }
-
     return new Promise((resolve, reject) => {
       axios
-        .post(url, json ? params : qs.stringify(params), config)
+        .post(url, json ? params : qs.stringify(params))
         .then(res => {
           resolve(res.data);
         })
@@ -90,18 +63,8 @@ export default {
   },
 
   get(url, params = {}, isAdmin = false) {
-    let headers;
-    if (isAdmin) {
-      headers = {"Authorization": localStorage.getItem("adminToken")};
-    } else {
-      headers = {"Authorization": localStorage.getItem("userToken")};
-    }
-
     return new Promise((resolve, reject) => {
-      axios.get(url, {
-        params: params,
-        headers: headers
-      }).then(res => {
+      axios.get(url, {params: params}).then(res => {
         resolve(res.data);
       }).catch(err => {
         reject(err)
@@ -110,12 +73,8 @@ export default {
   },
 
   delete(url, data = {}) {
-    let headers;
     return new Promise((resolve, reject) => {
-      axios.delete(url, {
-        data: data,
-        headers: headers
-      }).then(res => {
+      axios.delete(url, {data: data,}).then(res => {
         resolve(res.data);
       }).catch(err => {
         reject(err)

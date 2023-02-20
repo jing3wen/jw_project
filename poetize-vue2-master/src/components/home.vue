@@ -30,17 +30,24 @@
               </div>
             </li>
             <li v-for="(menu, index) in $store.getters.navigationBar"
-                @click="$router.push({path: '/sort', query: {sortId: menu.categoryId}})"
+                @click="$router.push({path: '/category', query: {categoryId: menu.categoryId}})"
                 :key="index">
               <div class="my-menu">
                 📒 <span>{{ menu.categoryName }}</span>
               </div>
             </li>
 
-            <!-- 爱情买卖 -->
-            <li @click="$router.push({path: '/love'})">
+<!--            &lt;!&ndash; 爱情买卖 &ndash;&gt;-->
+<!--            <li @click="$router.push({path: '/love'})">-->
+<!--              <div class="my-menu">-->
+<!--                💋 <span>爱情买卖</span>-->
+<!--              </div>-->
+<!--            </li>-->
+
+            <!-- 文章归档 -->
+            <li @click="$router.push({path: '/archive'})">
               <div class="my-menu">
-                💋 <span>爱情买卖</span>
+                💋 <span>归档</span>
               </div>
             </li>
 
@@ -162,17 +169,23 @@
             </div>
           </li>
           <li v-for="(menu, index) in $store.getters.navigationBar"
-              @click="smallMenu({path: '/sort', query: {sortId: menu.categoryId}})"
+              @click="smallMenu({path: '/category', query: {categoryId: menu.categoryId}})"
               :key="index">
             <div>
               📒 <span>{{ menu.categoryName }}</span>
             </div>
           </li>
 
-          <!-- 爱情买卖 -->
-          <li @click="smallMenu({path: '/love'})">
+<!--          &lt;!&ndash; 爱情买卖 &ndash;&gt;-->
+<!--          <li @click="smallMenu({path: '/love'})">-->
+<!--            <div>-->
+<!--              💋 <span>爱情买卖</span>-->
+<!--            </div>-->
+<!--          </li>-->
+
+          <li @click="smallMenu({path: '/archive'})">
             <div>
-              💋 <span>爱情买卖</span>
+              💋 <span>归档</span>
             </div>
           </li>
 
@@ -348,8 +361,6 @@
           .then((res) => {
             this.$message.success('注销成功')
             this.$store.commit("loadCurrentUser", {});
-            //TODO 修改axios时此处要删除
-            localStorage.removeItem("userToken");
             this.$router.push({path: '/'});
           })
           .catch((error) => {
