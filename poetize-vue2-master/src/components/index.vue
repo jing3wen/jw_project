@@ -14,7 +14,7 @@
                   class="background-image"
                   v-once
                   lazy
-                  :src="!$common.isEmpty($store.state.webInfo.backgroundImage)?$store.state.webInfo.backgroundImage:$constant.random_image+new Date()+Math.floor(Math.random()*10)"
+                  :src="!$common.isEmpty($store.state.webInfo.backgroundImage)?$store.state.webInfo.backgroundImage:require('@/assets/file/backimage/indexBG.jpg')"
                   fit="cover">
           <div slot="error" class="image-slot background-image-error"></div>
         </el-image>

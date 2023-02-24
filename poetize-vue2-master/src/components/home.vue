@@ -37,30 +37,16 @@
               </div>
             </li>
 
-<!--            &lt;!&ndash; 爱情买卖 &ndash;&gt;-->
-<!--            <li @click="$router.push({path: '/love'})">-->
-<!--              <div class="my-menu">-->
-<!--                💋 <span>爱情买卖</span>-->
-<!--              </div>-->
-<!--            </li>-->
-
             <!-- 文章归档 -->
             <li @click="$router.push({path: '/archive'})">
               <div class="my-menu">
                 💋 <span>归档</span>
               </div>
             </li>
-
-            <!-- 聊天室 -->
-            <li @click="goIm()">
-              <div class="my-menu">
-                💬 <span>非礼勿言</span>
-              </div>
-            </li>
             <!-- 鬼畜全明星 -->
             <li @click="$router.push({path: '/funny'})">
               <div class="my-menu">
-                🐔 <span>只因</span>
+                🐔 <span>音乐室</span>
               </div>
             </li>
             <!-- 留言 -->
@@ -175,30 +161,15 @@
               📒 <span>{{ menu.categoryName }}</span>
             </div>
           </li>
-
-<!--          &lt;!&ndash; 爱情买卖 &ndash;&gt;-->
-<!--          <li @click="smallMenu({path: '/love'})">-->
-<!--            <div>-->
-<!--              💋 <span>爱情买卖</span>-->
-<!--            </div>-->
-<!--          </li>-->
-
           <li @click="smallMenu({path: '/archive'})">
             <div>
               💋 <span>归档</span>
             </div>
           </li>
-
-          <!-- 聊天室 -->
-          <li @click="goIm()">
-            <div>
-              💬 <span>非礼勿言</span>
-            </div>
-          </li>
           <!-- 鬼畜全明星 -->
           <li @click="smallMenu({path: '/funny'})">
             <div>
-              🐔 <span>只因</span>
+              🐔 <span>音乐室</span>
             </div>
           </li>
           <!-- 留言 -->
@@ -344,18 +315,7 @@
         this.logout();
         this.toolbarDrawer = false;
       },
-
-      goIm() {
-        if (this.$common.isEmpty(this.$store.state.currentUser)) {
-          this.$message({
-            message: "请先登录！",
-            type: "error"
-          });
-        } else {
-          let userToken = this.$common.encrypt(localStorage.getItem("userToken"));
-          window.open(this.$constant.imBaseURL + "?userToken=" + userToken);
-        }
-      },
+      //登出
       logout() {
         this.$http.post("http://localhost:9090/login/userLogout")
           .then((res) => {
@@ -371,6 +331,7 @@
           });
 
       },
+      //获取网站配置
       getWebInfo() {
         this.$http.get("http://localhost:9090/blogWeb/getWebInfo")
           .then((res) => {
@@ -385,6 +346,7 @@
             });
           });
       },
+      //获取类别列表
       getCategoryList() {
         this.$http.get("http://localhost:9090/blogCategory/front/getAllCategory")
           .then((res) => {

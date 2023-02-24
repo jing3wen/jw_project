@@ -6,7 +6,7 @@
       <el-image class="article-image my-el-image"
                 v-once
                 lazy
-                :src="!$common.isEmpty(article.articleCover)?article.articleCover:$constant.random_image+new Date()+Math.floor(Math.random()*10)"
+                :src="!$common.isEmpty(article.articleCover)?article.articleCover:require('@/assets/file/backimage/articleBG.jpg')"
                 fit="cover">
         <div slot="error" class="image-slot">
           <div class="article-image"></div>

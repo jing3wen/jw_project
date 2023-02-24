@@ -6,7 +6,7 @@
               style="position: absolute;margin-top: -50px"
               v-once
               lazy
-              :src="$constant.two_poem_image[Math.floor(Math.random() * $constant.two_poem_image.length)]"
+              :src="require('@/assets/file/backimage/twoPoemBG.jpg')"
               fit="cover">
       <div slot="error" class="image-slot"></div>
     </el-image>

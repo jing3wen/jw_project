@@ -4,7 +4,7 @@
               class="background-image"
               v-once
               lazy
-              :src="$constant.friendBG"
+              :src="require('@/assets/file/backimage/friendBG.jpg')"
               fit="cover">
       <div slot="error" class="image-slot background-image-error"></div>
     </el-image>
@@ -84,6 +84,7 @@
   const card = () => import( "./common/card");
   const proButton = () => import( "./common/proButton");
 
+
   export default {
     components: {
       myFooter,
@@ -105,7 +106,7 @@
           friendIntroduction: "",
           friendCover: "",
           friendUrl: ""
-        }
+        },
       }
     },
 

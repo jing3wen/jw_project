@@ -5,7 +5,7 @@
                 class="background-image"
                 v-once
                 lazy
-                :src="$constant.random_image+new Date()+Math.floor(Math.random()*10)"
+                :src="require('@/assets/file/backimage/messageBG.jpg')"
                 fit="cover">
         <div slot="error" class="image-slot background-image-error"></div>
       </el-image>
