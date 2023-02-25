@@ -252,6 +252,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         if(ObjectUtil.isNotEmpty(loginUserVO)){
             archiveVOIPage = blogArticleMapper.getArticleArchivePage(new Page<>(pageNum,pageSize),
                     loginUserVO.getId());
+
         }else { //匿名用户，只能查看公开文章
             archiveVOIPage = blogArticleMapper.getArticleArchivePage(new Page<>(pageNum,pageSize),
                     null);

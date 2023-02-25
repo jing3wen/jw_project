@@ -44,18 +44,6 @@ export default new Vuex.Store({
         return 0;
       }
     },
-    //对导航栏类型的文章类别排序, 后端可完成
-    navigationBar: state => {
-      if (state.categoryList !== null && state.categoryList.length !== 0) {
-        return state.categoryList.filter(f => {
-          return f.categoryType === '0';
-        }).sort((s1, s2) => {
-          return s1.categorySort - s2.categorySort;
-        })
-      } else {
-        return [];
-      }
-    }
   },
   mutations: {
     changeToolbarStatus(state, toolbarState) {

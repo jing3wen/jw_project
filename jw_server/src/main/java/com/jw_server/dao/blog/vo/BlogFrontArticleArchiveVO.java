@@ -25,6 +25,9 @@ public class BlogFrontArticleArchiveVO {
     @ApiModelProperty("是否可见（0代表仅自己可见，1表示所有人可见）")
     private String articleVisible;
 
+    @ApiModelProperty("归档时间")
+    private String archiveTime;
+
     @ApiModelProperty("创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;

@@ -5,6 +5,7 @@ import com.jw_server.core.common.ResponseResult;
 import com.jw_server.core.fileUpload.FileUploadUtils;
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.dao.system.dto.QuerySysUserDTO;
+import com.jw_server.dao.system.dto.RegisterUserDTO;
 import com.jw_server.dao.system.dto.ResetPasswordDTO;
 import com.jw_server.dao.system.dto.UserRoleDTO;
 import com.jw_server.dao.system.entity.SysUser;
@@ -57,12 +58,12 @@ public class SysUserController {
     @SysLog(logModule= SysUserModule, logType = ADD, logDesc = "新增用户")
     @PreAuthorize("hasAuthority('system:sysUser:add')")
     @PostMapping("/add")
-    public ResponseResult add(@RequestBody SysUser sysUser) {
+    public ResponseResult add(@RequestBody RegisterUserDTO registerUserDTO) {
         //添加用户时，对密码进行加密
-        if (sysUser.getPassword()==null || sysUser.getPassword().equals("")){
-            sysUser.setPassword(initPassword);
+        if (registerUserDTO.getPassword()==null || registerUserDTO.getPassword().equals("")){
+            registerUserDTO.setPassword(initPassword);
         }
-        sysUserService.register(sysUser);
+        sysUserService.register(registerUserDTO);
         return ResponseResult.success();
     }
 
@@ -126,7 +127,7 @@ public class SysUserController {
      **/
     @SysLog(logModule=SysUserModule, logType = ADD, logDesc = "用户注册")
     @PostMapping("/register")
-    public ResponseResult register(@RequestBody SysUser sysUser){
+    public ResponseResult register(@RequestBody RegisterUserDTO sysUser){
 
         return sysUserService.register(sysUser);
     }
@@ -180,6 +181,20 @@ public class SysUserController {
     @PostMapping("/resetPassword")
     public ResponseResult resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO){
         sysUserService.resetPassword(resetPasswordDTO);
+        return ResponseResult.success();
+    }
+
+
+    /**
+     * Description: 获取验证码
+     * Author: jingwen
+     * Date: 2023/2/25 19:42
+     **/
+    @GetMapping("/getCodeForType")
+    public ResponseResult getCodeForType(@RequestParam("place") String place,
+                                         @RequestParam("flag") Integer flag,
+                                         @RequestParam("type") String type){
+        sysUserService.getCodeForType(place, flag, type);
         return ResponseResult.success();
     }
 }

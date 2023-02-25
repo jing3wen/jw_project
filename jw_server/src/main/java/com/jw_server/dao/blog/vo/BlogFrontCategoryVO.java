@@ -16,9 +16,6 @@ public class BlogFrontCategoryVO {
     //类别名称
     private String categoryName;
 
-    //类别类型
-    private String categoryType;
-
     //类别优先级
     private Integer categorySort;
 

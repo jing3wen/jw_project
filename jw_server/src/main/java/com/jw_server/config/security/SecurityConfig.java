@@ -54,6 +54,7 @@ public class SecurityConfig{
                  **/
                 .antMatchers("/login/userLogin").anonymous()
                 .antMatchers("/sysUser/register").permitAll()
+                .antMatchers("/sysUser/getCodeForType").permitAll()
                 .antMatchers("/fileUpload/**").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/blogArticle/**").permitAll()

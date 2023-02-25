@@ -137,7 +137,7 @@
           <!-- 标签 -->
           <span v-for="(tag, index) in article.tagList" :key="index"
               style="margin-right: 12px"
-              @click.stop="$router.push({path: '/category', query: {tagId: tag.tagId}})">
+              @click.stop="$router.push({path: '/tag', query: {tagId: tag.tagId}})">
             <svg viewBox="0 0 1024 1024" width="15" height="15" style="vertical-align: -3px;">
               <path
                 d="M905.0112 560.4352l-342.784 342.784c-56.7808 56.7808-148.7872 56.7808-205.568 0l-231.5776-231.5776c-56.7808-56.7808-56.7808-148.7872 0-205.568l342.9376-342.9376a114.8928 114.8928 0 0 1 84.224-33.5872l266.3936 7.2192c60.7744 1.6384 109.7216 50.3808 111.5648 111.1552l8.2944 267.8272c1.024 31.6928-11.1104 62.3104-33.4848 84.6848z"

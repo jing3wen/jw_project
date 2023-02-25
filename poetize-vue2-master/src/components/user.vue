@@ -207,6 +207,8 @@
 </template>
 
 <script>
+  import router from "@/router";
+
   const proButton = () => import( "./common/proButton");
   const uploadPicture = () => import( "./common/uploadPicture");
 
@@ -270,8 +272,6 @@
               this.$store.commit("loadCurrentUser", res.data);
               this.userInfo = this.$store.state.currentUser
 
-              // TODO request.js更改完成后此处删除
-              localStorage.setItem("userToken", res.data.accessToken);
               this.account = "";
               this.password = "";
               this.$router.push({path: '/'});
@@ -321,24 +321,22 @@
         let user = {
           username: this.username.trim(),
           code: this.code.trim(),
-          password: this.$common.encrypt(this.password.trim())
+          //password: this.$common.encrypt(this.password.trim())  TODO 注册用户时密码加密
+          password: this.password.trim()
         };
 
         if (this.dialogTitle === "邮箱验证码") {
           user.email = this.email;
         }
 
-        this.$http.post(this.$constant.baseURL + "/user/regist", user)
+        this.$http.post("http://localhost:9090/sysUser/register", user)
           .then((res) => {
-            if (!this.$common.isEmpty(res.data)) {
-              this.$store.commit("loadCurrentUser", res.data);
-              localStorage.setItem("userToken", res.data.accessToken);
-              this.username = "";
-              this.password = "";
-              this.$router.push({path: '/'});
-              let userToken = this.$common.encrypt(localStorage.getItem("userToken"));
-              window.open(this.$constant.imBaseURL + "?userToken=" + userToken);
-            }
+            this.$message.success("注册成功");
+            this.account=''
+            //清空表单
+            this.clearDialog()
+            //打开登录表单
+            this.signIn()
           })
           .catch((error) => {
             this.$message({
@@ -590,19 +588,25 @@
       getCode() {
         if (this.codeString === "验证码") {
           // 获取验证码
-          let params = {};
+          let params = {
+            type:"",
+          };
           if (!this.checkParams(params)) {
             return;
           }
 
-          let url;
-          if (this.dialogTitle === "找回密码" || this.dialogTitle === "邮箱验证码") {
-            url = "/user/getCodeForForgetPassword";
-          } else {
-            url = "/user/getCodeForBind";
+          // let url;
+          // if (this.dialogTitle === "找回密码" || this.dialogTitle === "邮箱验证码") {
+          //   url = "/user/getCodeForForgetPassword";
+          // } else {
+          //   url = "/user/getCodeForBind";
+          // }
+
+          if (this.dialogTitle === "邮箱验证码") {
+            params.type = this.$constant.registerUserCodeType
           }
 
-          this.$http.get(this.$constant.baseURL + url, params)
+          this.$http.get("http://localhost:9090/sysUser/getCodeForType", params)
             .then((res) => {
               this.$message({
                 message: "验证码已发送，请注意查收！",

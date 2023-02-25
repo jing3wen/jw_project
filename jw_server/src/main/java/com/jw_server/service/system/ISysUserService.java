@@ -4,6 +4,7 @@ import com.jw_server.core.common.MyPageVO;
 import com.jw_server.core.common.ResponseResult;
 import com.jw_server.dao.system.dto.LoginSysUserDTO;
 import com.jw_server.dao.system.dto.QuerySysUserDTO;
+import com.jw_server.dao.system.dto.RegisterUserDTO;
 import com.jw_server.dao.system.dto.ResetPasswordDTO;
 import com.jw_server.dao.system.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -37,7 +38,7 @@ public interface ISysUserService extends IService<SysUser> {
      * @Author jingwen
      * @Date 2022/8/20 10:42
      **/
-    ResponseResult register(SysUser sysUser);
+    ResponseResult register(RegisterUserDTO registerUserDTO);
 
     /**
      * @Description 根据用户名查询用户信息服务
@@ -68,4 +69,12 @@ public interface ISysUserService extends IService<SysUser> {
      * Date: 2022/9/10 20:20
      **/
     void resetPassword(ResetPasswordDTO resetPasswordDTO);
+
+
+    /**
+     * Description: 获取验证码
+     * Author: jingwen
+     * Date: 2023/2/25 19:28
+     **/
+    void getCodeForType(String place, Integer flag, String type);
 }

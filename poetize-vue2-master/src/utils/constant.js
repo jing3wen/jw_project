@@ -3,6 +3,9 @@ export default {
   imBaseURL: "http://localhost:81",
   webURL: "http://localhost",
 
+
+  registerUserCodeType : "register_user",
+
   // baseURL: "https://poetize.cn/api",
   // imBaseURL: "https://poetize.cn/im",
   // webURL: "https://poetize.cn",

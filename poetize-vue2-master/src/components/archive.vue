@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-
+    
     <div style="background: var(--background)">
       <myFooter></myFooter>
     </div>
@@ -116,7 +116,7 @@ export default {
 .article-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 10px 20px;
 }
 
 

@@ -29,14 +29,16 @@
                 🏡 <span>首页</span>
               </div>
             </li>
-            <li v-for="(menu, index) in $store.getters.navigationBar"
-                @click="$router.push({path: '/category', query: {categoryId: menu.categoryId}})"
-                :key="index">
+            <li @click="$router.push({path: '/category'})">
               <div class="my-menu">
-                📒 <span>{{ menu.categoryName }}</span>
+                📒 <span>类别</span>
               </div>
             </li>
-
+            <li @click="$router.push({path: '/tag'})">
+              <div class="my-menu">
+                📘 <span>标签</span>
+              </div>
+            </li>
             <!-- 文章归档 -->
             <li @click="$router.push({path: '/archive'})">
               <div class="my-menu">
@@ -154,11 +156,14 @@
               🏡 <span>首页</span>
             </div>
           </li>
-          <li v-for="(menu, index) in $store.getters.navigationBar"
-              @click="smallMenu({path: '/category', query: {categoryId: menu.categoryId}})"
-              :key="index">
+          <li @click="$router.push({path: '/tag'})">
             <div>
-              📒 <span>{{ menu.categoryName }}</span>
+              📒 <span>类别</span>
+            </div>
+          </li>
+          <li @click="$router.push({path: '/tag'})">
+            <div class="my-menu">
+              📘 <span>标签</span>
             </div>
           </li>
           <li @click="smallMenu({path: '/archive'})">

@@ -17,6 +17,21 @@ spring:
       max-file-size: 100MB
       #  总上传的数据大小限制
       max-request-size: 1024MB
+  #邮箱配置
+  mail:
+    host: smtp.qq.com
+    username: 2902364393@qq.com
+    password: vrnnaxitcmdddfdd
+    default-encoding: utf-8
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+          ssl:
+            enable: true
 
 
 mybatis-plus:

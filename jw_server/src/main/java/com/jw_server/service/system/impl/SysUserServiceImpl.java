@@ -3,18 +3,24 @@ package com.jw_server.service.system.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jw_server.core.constants.BlogConst;
 import com.jw_server.core.constants.HttpCode;
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.core.common.ResponseResult;
+import com.jw_server.core.constants.SysConst;
 import com.jw_server.core.exception.ServiceException;
+import com.jw_server.core.utils.EMailUtils;
 import com.jw_server.core.utils.JwtUtils;
 import com.jw_server.core.utils.RedisUtils;
+import com.jw_server.dao.blog.entity.BlogWeb;
 import com.jw_server.dao.system.dto.LoginSysUserDTO;
 import com.jw_server.dao.system.dto.QuerySysUserDTO;
+import com.jw_server.dao.system.dto.RegisterUserDTO;
 import com.jw_server.dao.system.dto.ResetPasswordDTO;
 import com.jw_server.dao.system.entity.SysRole;
 import com.jw_server.dao.system.entity.SysUser;
@@ -64,6 +70,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private SysUserMapper sysUserMapper;
+
+    @Resource
+    private EMailUtils eMailUtils;
 
     //jwt过期时间
     @Value("${jwt.data.jwtTtl}")
@@ -126,23 +135,38 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public ResponseResult register(SysUser sysUser) {
-        String username = sysUser.getUsername();
-        String password = sysUser.getPassword();
+    public ResponseResult register(RegisterUserDTO registerUserDTO) {
+        String username = registerUserDTO.getUsername();
+        String password = registerUserDTO.getPassword();
         if(StrUtil.isEmpty(username) || StrUtil.isEmpty(password)){
             throw new ServiceException(HttpCode.CODE_400,"用户名或密码为空");
         }
-
+        //检查验证码
+        String cacheCode = redisUtils.getCacheObject(SysConst.REGISTER_USER_CODE_CACHE + "_" + registerUserDTO.getEmail() + "_" + 2);
+        if(StrUtil.isEmpty(cacheCode) || !registerUserDTO.getCode().equals(cacheCode)){
+            throw new ServiceException(HttpCode.CODE_500, "验证码错误或已过期");
+        }
         // 检查是否有同名用户, 只需要随便查找一个属性（主键）即可
         SysUser findSameUserNameUser = getUserByUserName(username);
-
+        //检查同名用户名
         if (ObjectUtil.isNotEmpty(findSameUserNameUser)){
             throw new ServiceException(HttpCode.CODE_600,"用户名已存在, 请修改用户名");
         }
+        //检查邮箱是否已经注册
+        SysUser findSameEmailUser = getOne(new LambdaQueryWrapper<SysUser>()
+                .select(SysUser::getId)
+                .eq(SysUser::getEmail, registerUserDTO.getEmail()));
+        if (ObjectUtil.isNotEmpty(findSameEmailUser)){
+            throw new ServiceException(HttpCode.CODE_600,"该邮箱已经注册");
+        }
         //对密码进行加密
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        sysUser.setPassword(bCryptPasswordEncoder.encode(sysUser.getPassword()));
-        save(sysUser);
+        registerUserDTO.setPassword(bCryptPasswordEncoder.encode(registerUserDTO.getPassword()));
+        SysUser addUser  = new SysUser();
+        BeanUtil.copyProperties(registerUserDTO, addUser);
+        //初始昵称
+        addUser.setNickname("初始昵称");
+        save(addUser);
         return ResponseResult.success();
     }
 
@@ -223,6 +247,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserMapper.updatePasswordByUserId(resetPasswordDTO.getUserId(), encodePassword);
     }
 
+
+    /**
+     * 根据type信息发送验证码
+     **/
+    @Override
+    public void getCodeForType(String place, Integer flag, String type) {
+        int code = new Random().nextInt(900000) + 100000;
+        if (flag == 1) {
+            logger.info(place + "---" + "手机验证码---" + code);
+        } else if (flag == 2) {
+            logger.info(place + "---" + "邮箱验证码---" + code);
+            List<String> toUser = new ArrayList<>();
+            toUser.add(place);
+            if(type.equals(SysConst.REGISTER_USER) ){
+                String text = "您的验证码为："+code+", 有效时间为5分钟，请及时注册";
+                eMailUtils.sendMailMessage(toUser, "感谢您使用JW网站, 验证码", text);
+                redisUtils.setCacheObject(SysConst.REGISTER_USER_CODE_CACHE + "_" + place + "_" + flag, String.valueOf(code), 5, TimeUnit.MINUTES);
+            }else if(type.equals(SysConst.USER_RESET_PASSWORD)){
+                String text = "您的验证码为："+code+", 有效时间为5分钟";
+                eMailUtils.sendMailMessage(toUser, "感谢您使用JW网站, 验证码", text);
+                redisUtils.setCacheObject(SysConst.USER_RESET_PASSWORD_CODE_CACHE + "_" + place + "_" + flag, String.valueOf(code), 5, TimeUnit.MINUTES);
+            }
+        }
+    }
+
     /**
      * Description: 将userDetailsVO信息复制到LoginUserVO
      * Author: jingwen
@@ -256,5 +305,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         updateWrapper.set(SysUser::getLastLoginTime, LocalDateTime.now());
         update(updateWrapper);
     }
+
+
 
 }

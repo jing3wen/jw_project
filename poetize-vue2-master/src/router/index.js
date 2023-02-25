@@ -21,6 +21,10 @@ const routes = [
       name: "category",
       component: () => import('../components/category')
     }, {
+      path: "/tag",
+      name: "tag",
+      component: () => import('../components/tag')
+    }, {
       path: "/article",
       name: "article",
       component: () => import('../components/article')

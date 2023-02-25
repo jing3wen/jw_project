@@ -8,6 +8,11 @@ package com.jw_server.core.constants;
 public class BlogConst {
 
     /**
+     * 缓存到redis中的网站信息 key
+     **/
+    public static final String BLOG_WEB="blog:blog_web";
+
+    /**
      * 查询留言数量上线
      **/
     public static final Integer MAX_MESSAGE_COUNT = 200;

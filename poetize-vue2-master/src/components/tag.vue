@@ -4,19 +4,19 @@
     <div class="my-animation-slide-top">
       <twoPoem></twoPoem>
     </div>
+
     <div style="background: var(--background);padding-top: 40px;" class="my-animation-slide-bottom">
-      <!-- 类别 -->
-      <div class="sort-warp shadow-box" v-if="!$common.isEmpty(categoryList)">
-        <div v-for="(category, index) in categoryList" :key="index"
-             :class="{isActive: !$common.isEmpty(categoryId) && parseInt(categoryId) === category.categoryId}"
-             @click="listArticle(category, null)">
-          <proTag :info="category.categoryName+' （'+category.articleCounts+'篇文章）'"
+      <!-- 标签 -->
+      <div class="sort-warp shadow-box" v-if="!$common.isEmpty(tagList)" style="margin-top:20px">
+        <div v-for="(tag, index) in tagList" :key="index"
+             :class="{isActive: !$common.isEmpty(tagId) && parseInt(tagId) === tag.tagId}"
+             @click="listArticle(null, tag)">
+          <proTag :info="tag.tagName+' （'+tag.articleCounts+'篇文章）'"
                   :color="$constant.before_color_list[Math.floor(Math.random() * 6)]"
                   style="margin: 12px">
           </proTag>
         </div>
       </div>
-
       <!-- 文章 -->
       <div class="article-wrap">
         <articleList :articleList="articles"></articleList>
@@ -51,13 +51,12 @@
 
     data() {
       return {
-        categoryId: this.$route.query.categoryId,
-        categoryList: null,
+        tagId: this.$route.query.tagId,
         tagList:null,
         pagination: {
           pageNum: 1,
           pageSize: 10,
-          categoryId: this.$route.query.categoryId,
+          tagId: this.$route.query.tagId,
           keywords: "",
         },
         total: 0,
@@ -72,44 +71,54 @@
         this.pagination = {
           pageNum: 1,
           pageSize: 10,
-          categoryId: this.$route.query.categoryId,
+          tagId: this.$route.query.tagId,
           keywords: "",
         };
         this.articles.splice(0, this.articles.length);
-        this.categoryId = this.$route.query.categoryId;
-        this.getCategory();
+        this.tagId = this.$route.query.tagId;
+        this.getTag();
         this.getArticles();
       }
     },
 
     created() {
-      this.getCategory();
+      this.getTag()
       this.getArticles();
     },
 
     mounted() {
     },
     destroyed() {
-      this.categoryId = ''
+      this.tagId = ''
     },
     methods: {
       pageArticles() {
         this.pagination.pageNum = this.pagination.pageNum + 1;
         this.getArticles();
       },
+      getTag() {
+        this.$http.get("http://localhost:9090/blogTag/front/getAllFrontTag")
+          .then((res) => {
+            if (!this.$common.isEmpty(res.data)) {
+              this.tagList = res.data;
+            }
+          })
+          .catch((error) => {
+            this.$message({
+              message: error.message,
+              type: "error"
+            });
+          });
 
-      getCategory() {
-        // 原博客是只显示该文章的类别
-        this.categoryList = this.$store.state.categoryList;
       },
       listArticle(category, tag) {
-        if(!this.$common.isEmpty(category)) {
-          this.categoryId = category.categoryId;
+        if (!this.$common.isEmpty(tag)){
+          this.tagId = tag.tagId;
         }
         this.pagination = {
           pageNum: 1,
           pageSize: 10,
-          categoryId: this.categoryId,
+          tagId: this.tagId,
           keywords: "",
         };
         this.articles.splice(0, this.articles.length);

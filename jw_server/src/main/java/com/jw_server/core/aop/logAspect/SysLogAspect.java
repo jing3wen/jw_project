@@ -1,13 +1,17 @@
 package com.jw_server.core.aop.logAspect;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jw_server.core.constants.SysConst;
 import com.jw_server.core.utils.IpUtils;
 import com.jw_server.dao.system.dto.LoginSysUserDTO;
 import com.jw_server.dao.system.entity.SysLoginLog;
 import com.jw_server.dao.system.entity.SysOperationLog;
+import com.jw_server.dao.system.vo.LoginUserVO;
 import com.jw_server.service.system.ISysLoginLogService;
 import com.jw_server.service.system.ISysOperationLogService;
 import com.jw_server.service.system.ISysUserService;
@@ -147,7 +151,13 @@ public class SysLogAspect {
             /*
              * Description:操作人用户名, ip, ip地址
              */
-            sysOperationLog.setOptUser(sysUserService.getCurrentLoginUser().getUsername());
+            LoginUserVO loginUserVO = sysUserService.getCurrentLoginUser();
+            if (ObjectUtil.isEmpty(loginUserVO)){
+                sysOperationLog.setOptUser(SysConst.ANONYMOUS_USER);
+            }else {
+                sysOperationLog.setOptUser(loginUserVO.getUsername());
+            }
+
             // 请求IP
             String ipAddress = IpUtils.getIpAddress(request);
             sysOperationLog.setOptIp(ipAddress);
