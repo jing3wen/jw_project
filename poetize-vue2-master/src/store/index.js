@@ -12,7 +12,6 @@ export default new Vuex.Store({
     },
     categoryList: [],
     currentUser: {},
-    currentAdmin: {},
     webInfo: {
       webName: "",
       webTitle: [],
@@ -54,9 +53,6 @@ export default new Vuex.Store({
     },
     loadCurrentUser(state, user) {
       state.currentUser = user;
-    },
-    loadCurrentAdmin(state, user) {
-      state.currentAdmin = user;
     },
     loadWebInfo(state, webInfo) {
       webInfo.webTitle = webInfo.webTitle.split('');

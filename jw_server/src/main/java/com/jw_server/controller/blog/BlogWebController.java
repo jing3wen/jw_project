@@ -1,7 +1,12 @@
 package com.jw_server.controller.blog;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jw_server.core.constants.BlogConst;
+import com.jw_server.core.utils.RedisUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogWebService;
@@ -9,6 +14,8 @@ import com.jw_server.dao.blog.entity.BlogWeb;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.core.common.ResponseResult;
 import java.util.List;
@@ -27,6 +34,9 @@ public class BlogWebController {
 
     @Resource
     private IBlogWebService blogWebService;
+
+    @Resource
+    private RedisUtils redisUtils;
     /**
      * Description 新增
      * Author jingwen
@@ -48,6 +58,10 @@ public class BlogWebController {
     @PostMapping("/update")
     public ResponseResult update(@RequestBody BlogWeb blogWeb) {
         blogWebService.updateById(blogWeb);
+        //删除缓存
+        if(ObjectUtil.isNotEmpty(redisUtils.getCacheObject(BlogConst.BLOG_WEB))){
+            redisUtils.deleteObject(BlogConst.BLOG_WEB);
+        }
         return ResponseResult.success();
     }
 
@@ -56,10 +70,19 @@ public class BlogWebController {
      * Author jingwen
      * Date 2023-02-04 15:21:28
      **/
-    //TODO 此处可设置缓存切片
-    @GetMapping("/getWebInfo")
+    @GetMapping("/front/getWebInfo")
     public ResponseResult findAll() {
         return ResponseResult.success(blogWebService.getWebInfo());
+    }
+
+    /**
+     * Description: 获取看板娘消息
+     * Author: jingwen 
+     * Date: 2023/2/26 21:06
+     **/
+    @GetMapping("/front/getWaifuJson")
+    public String getWaifuJson() {
+        return blogWebService.getWaifuJson();
     }
 
 

@@ -3,12 +3,10 @@ package com.jw_server.service.system.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jw_server.core.constants.BlogConst;
 import com.jw_server.core.constants.HttpCode;
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.core.common.ResponseResult;
@@ -17,7 +15,7 @@ import com.jw_server.core.exception.ServiceException;
 import com.jw_server.core.utils.EMailUtils;
 import com.jw_server.core.utils.JwtUtils;
 import com.jw_server.core.utils.RedisUtils;
-import com.jw_server.dao.blog.entity.BlogWeb;
+import com.jw_server.dao.blog.dto.BlogFrontForgetPasswordOrUpdateBindDTO;
 import com.jw_server.dao.system.dto.LoginSysUserDTO;
 import com.jw_server.dao.system.dto.QuerySysUserDTO;
 import com.jw_server.dao.system.dto.RegisterUserDTO;
@@ -46,7 +44,6 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import static com.jw_server.core.constants.SysConst.ANONYMOUS_USER;
 
@@ -142,9 +139,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new ServiceException(HttpCode.CODE_400,"用户名或密码为空");
         }
         //检查验证码
-        String cacheCode = redisUtils.getCacheObject(SysConst.REGISTER_USER_CODE_CACHE + "_" + registerUserDTO.getEmail() + "_" + 2);
+        String cacheCode = redisUtils.getCacheObject(SysConst.REGISTER_USER_CODE_CACHE + "_email_" + registerUserDTO.getEmail());
         if(StrUtil.isEmpty(cacheCode) || !registerUserDTO.getCode().equals(cacheCode)){
-            throw new ServiceException(HttpCode.CODE_500, "验证码错误或已过期");
+            throw new ServiceException(HttpCode.CODE_600, "验证码错误或已过期");
         }
         // 检查是否有同名用户, 只需要随便查找一个属性（主键）即可
         SysUser findSameUserNameUser = getUserByUserName(username);
@@ -166,7 +163,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         BeanUtil.copyProperties(registerUserDTO, addUser);
         //初始昵称
         addUser.setNickname("初始昵称");
+
         save(addUser);
+        //清楚缓存
+        redisUtils.deleteObject(SysConst.REGISTER_USER_CODE_CACHE + "_email_" + registerUserDTO.getEmail());
         return ResponseResult.success();
     }
 
@@ -252,24 +252,110 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 根据type信息发送验证码
      **/
     @Override
-    public void getCodeForType(String place, Integer flag, String type) {
+    public void getCodeForType(String email, String phone, String type) {
         int code = new Random().nextInt(900000) + 100000;
-        if (flag == 1) {
-            logger.info(place + "---" + "手机验证码---" + code);
-        } else if (flag == 2) {
-            logger.info(place + "---" + "邮箱验证码---" + code);
+        if (StrUtil.isNotEmpty(phone)) {
+            logger.info(phone + "---" + "手机验证码---" + code);
+
+        } else if (StrUtil.isNotEmpty(email)) {
+            logger.info(email + "---" + "邮箱验证码---" + code);
             List<String> toUser = new ArrayList<>();
-            toUser.add(place);
+            toUser.add(email);
             if(type.equals(SysConst.REGISTER_USER) ){
                 String text = "您的验证码为："+code+", 有效时间为5分钟，请及时注册";
+                eMailUtils.sendMailMessage(toUser, "感谢您注册JW网站, 验证码", text);
+                redisUtils.setCacheObject(SysConst.REGISTER_USER_CODE_CACHE + "_email_" + email, String.valueOf(code), 5, TimeUnit.MINUTES);
+            }else if(type.equals(SysConst.USER_FORGET_PASSWORD)){
+                String text = "注意：您正在找回密码，验证码为："+code+", 有效时间为5分钟";
                 eMailUtils.sendMailMessage(toUser, "感谢您使用JW网站, 验证码", text);
-                redisUtils.setCacheObject(SysConst.REGISTER_USER_CODE_CACHE + "_" + place + "_" + flag, String.valueOf(code), 5, TimeUnit.MINUTES);
-            }else if(type.equals(SysConst.USER_RESET_PASSWORD)){
-                String text = "您的验证码为："+code+", 有效时间为5分钟";
+                redisUtils.setCacheObject(SysConst.USER_FORGET_PASSWORD_CODE_CACHE + "_email_" + email, String.valueOf(code), 5, TimeUnit.MINUTES);
+            }else if(type.equals(SysConst.UPDATE_USER_BIND)){
+                String text = "注意：您正在绑定该邮箱，验证码为："+code+", 有效时间为5分钟";
                 eMailUtils.sendMailMessage(toUser, "感谢您使用JW网站, 验证码", text);
-                redisUtils.setCacheObject(SysConst.USER_RESET_PASSWORD_CODE_CACHE + "_" + place + "_" + flag, String.valueOf(code), 5, TimeUnit.MINUTES);
+                redisUtils.setCacheObject(SysConst.UPDATE_USER_BIND_CODE_CACHE + "_email_" + email, String.valueOf(code), 5, TimeUnit.MINUTES);
+            }else {
+                throw new ServiceException(HttpCode.CODE_400, "参数异常");
             }
         }
+    }
+
+    /**
+     * 找回密码
+     **/
+    @Override
+    public void updateForgetPassword(BlogFrontForgetPasswordOrUpdateBindDTO forgetPasswordDTO) {
+        //检查输入数据
+        if(StrUtil.isEmpty(forgetPasswordDTO.getPassword())){
+            throw new ServiceException(HttpCode.CODE_600,"输入密码为空");
+        }
+
+        if (StrUtil.isNotEmpty(forgetPasswordDTO.getPhone())) {
+            logger.info(forgetPasswordDTO.getPhone() + "---" + "手机忘记密码---");
+        } else if (StrUtil.isNotEmpty(forgetPasswordDTO.getEmail())) {
+            logger.info(forgetPasswordDTO.getEmail() + "---" + "邮箱忘记密码---");
+            //检查验证码
+            String cacheCode = redisUtils.getCacheObject(SysConst.USER_FORGET_PASSWORD_CODE_CACHE + "_email_" + forgetPasswordDTO.getEmail());
+            if(StrUtil.isEmpty(cacheCode) || !forgetPasswordDTO.getCode().equals(cacheCode)){
+                throw new ServiceException(HttpCode.CODE_600, "验证码错误或已过期");
+            }
+            //检查待更新密码的用户是否存在/是否被停用
+            SysUser findOneByEmail = getOne(new LambdaQueryWrapper<SysUser>()
+                    .select(SysUser::getId, SysUser::getStatus)
+                    .eq(SysUser::getEmail, forgetPasswordDTO.getEmail()));
+            if (ObjectUtil.isEmpty(findOneByEmail)){
+                throw new ServiceException(HttpCode.CODE_600, "该邮箱未注册用户");
+            }
+            if(findOneByEmail.getStatus().equals(SysConst.USER_FORBID_STATUS)){
+                throw new ServiceException(HttpCode.CODE_403, "该用户被停用");
+            }
+            //密码加密
+            String encodePassword = new BCryptPasswordEncoder().encode(forgetPasswordDTO.getPassword());
+            update(new LambdaUpdateWrapper<SysUser>()
+                    .set(SysUser::getPassword, encodePassword)
+                    .eq(SysUser::getId, findOneByEmail.getId()));
+            //清除缓存验证码
+            redisUtils.deleteObject(SysConst.USER_FORGET_PASSWORD_CODE_CACHE + "_email_" + forgetPasswordDTO.getEmail());
+        }
+    }
+
+    /**
+     * 根据密码 绑定邮箱/手机号 或 更改绑定邮箱/手机号
+     **/
+    @Override
+    public void updateBindByPassword(BlogFrontForgetPasswordOrUpdateBindDTO updateBindDTO) {
+        LoginUserVO loginUserVO = getCurrentLoginUser();
+        String password = getOne(new LambdaQueryWrapper<SysUser>()
+                .select(SysUser::getPassword)
+                .eq(SysUser::getId, loginUserVO.getId())).getPassword();
+
+        if(StrUtil.isEmpty(updateBindDTO.getPassword()) || !new BCryptPasswordEncoder().matches(updateBindDTO.getPassword(), password)){
+            throw new ServiceException(HttpCode.CODE_600, "账户密码错误");
+        }
+        if (StrUtil.isNotEmpty(updateBindDTO.getPhone())) {
+            logger.info(loginUserVO.getUsername()+"---更改绑定手机号---"+updateBindDTO.getPhone());
+        } else if (StrUtil.isNotEmpty(updateBindDTO.getEmail())) {
+            logger.info(loginUserVO.getUsername()+"---更改绑定邮箱号---"+updateBindDTO.getEmail());
+            //检查验证码
+            String cacheCode = redisUtils.getCacheObject(SysConst.UPDATE_USER_BIND_CODE_CACHE + "_email_" + updateBindDTO.getEmail());
+            if(StrUtil.isEmpty(cacheCode) || !updateBindDTO.getCode().equals(cacheCode)){
+                throw new ServiceException(HttpCode.CODE_600, "验证码错误或已过期");
+            }
+            //检查邮箱是否已经被注册
+            SysUser findSameEmail = getOne(new LambdaQueryWrapper<SysUser>()
+                    .select(SysUser::getId)
+                    .eq(SysUser::getEmail, updateBindDTO.getEmail()));
+            if (ObjectUtil.isNotEmpty(findSameEmail)){
+                throw new ServiceException(HttpCode.CODE_600, "该邮箱已被注册");
+            }
+            //更改绑定
+            update(new LambdaUpdateWrapper<SysUser>()
+                    .set(SysUser::getEmail, updateBindDTO.getEmail())
+                    .eq(SysUser::getId, loginUserVO.getId()));
+            //清除缓存验证码
+            redisUtils.deleteObject(SysConst.UPDATE_USER_BIND_CODE_CACHE + "_email_" + updateBindDTO.getEmail());
+
+        }
+
     }
 
     /**
@@ -304,6 +390,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         updateWrapper.eq(SysUser::getId, userId);
         updateWrapper.set(SysUser::getLastLoginTime, LocalDateTime.now());
         update(updateWrapper);
+    }
+
+    /**
+     * Description: 根据注册用户类型分配初始角色
+     * Author: jingwen
+     * Date: 2023/2/27 0:03
+     **/
+    public void setRoleByRegisterUserType(RegisterUserDTO registerUserDTO){
+        //根据注册用户类型分配初始角色
+        if(registerUserDTO.getUserType().equals(SysConst.BLOG_USER)){
+
+        }
     }
 
 

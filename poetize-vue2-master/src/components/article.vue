@@ -115,16 +115,6 @@
     <!-- 文章 -->
     <div style="background: var(--background);">
       <div class="article-container my-animation-slide-bottom">
-        <!-- 最新进展 -->
-        <div v-if="!$common.isEmpty(treeHoleList)" class="process-wrap">
-          <el-collapse accordion value="1">
-            <el-collapse-item title="最新进展" name="1">
-              <process :treeHoleList="treeHoleList" @deleteTreeHole="deleteTreeHole"></process>
-            </el-collapse-item>
-          </el-collapse>
-
-          <hr>
-        </div>
 
         <!-- 文章内容 -->
         <div v-html="articleContentHtml" class="entry-content"></div>
@@ -199,43 +189,18 @@
       <myFooter></myFooter>
     </div>
 
-    <el-dialog title="最新进展"
-               :visible.sync="weiYanDialogVisible"
-               width="40%"
-               :append-to-body="true"
-               destroy-on-close
-               center>
-      <div>
-        <div class="myCenter" style="margin-bottom: 20px">
-          <el-date-picker
-            v-model="newsTime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            type="datetime"
-            align="center"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </div>
-        <commentBox :disableGraffiti="true"
-                    @submitComment="submitWeiYan">
-        </commentBox>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
   const myFooter = () => import( "./common/myFooter");
   const comment = () => import( "./comment/comment");
-  const process = () => import( "./common/process");
-  const commentBox = () => import( "./comment/commentBox");
   import MarkdownIt from 'markdown-it';
 
   export default {
     components: {
       myFooter,
       comment,
-      commentBox,
-      process
     },
 
     data() {
@@ -255,86 +220,6 @@
       // window.addEventListener("scroll", this.onScrollPage);
     },
     methods: {
-      deleteTreeHole(id) {
-        if (this.$common.isEmpty(this.$store.state.currentUser)) {
-          this.$message({
-            message: "请先登录！",
-            type: "error"
-          });
-          return;
-        }
-
-        this.$confirm('确认删除？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'success',
-          center: true
-        }).then(() => {
-          this.$http.get(this.$constant.baseURL + "/weiYan/deleteWeiYan", {id: id})
-            .then((res) => {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-              this.getNews();
-            })
-            .catch((error) => {
-              this.$message({
-                message: error.message,
-                type: "error"
-              });
-            });
-        }).catch(() => {
-          this.$message({
-            type: 'success',
-            message: '已取消删除!'
-          });
-        });
-      },
-      submitWeiYan(content) {
-        let weiYan = {
-          content: content,
-          createTime: this.newsTime,
-          source: this.article.articleId
-        };
-
-        this.$http.post(this.$constant.baseURL + "/weiYan/saveNews", weiYan)
-          .then((res) => {
-            this.weiYanDialogVisible = false;
-            this.newsTime = "";
-            this.getNews();
-          })
-          .catch((error) => {
-            this.$message({
-              message: error.message,
-              type: "error"
-            });
-          });
-      },
-      getNews() {
-        this.$http.post(this.$constant.baseURL + "/weiYan/listNews", {
-          current: 1,
-          size: 9999,
-          source: this.article.id
-        })
-          .then((res) => {
-            if (!this.$common.isEmpty(res.data)) {
-              res.data.records.forEach(c => {
-                c.content = c.content.replace(/\n{2,}/g, '<div style="height: 12px"></div>');
-                c.content = c.content.replace(/\n/g, '<br/>');
-                c.content = this.$common.faceReg(c.content);
-                c.content = this.$common.pictureReg(c.content);
-              });
-              this.treeHoleList = res.data.records;
-            }
-          })
-          .catch((error) => {
-            this.$message({
-              message: error.message,
-              type: "error"
-            });
-          });
-      },
       onScrollPage() {
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         if (scrollTop < (window.innerHeight / 4)) {

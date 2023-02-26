@@ -5,10 +5,9 @@
       ref="upload"
       multiple
       drag
-      :action="$constant.qiniuUrl"
-      :data="qiniuParam"
+      :action="f_action"
+      :headers="config"
       :on-change="handleChange"
-      :before-upload="beforeUpload"
       :on-success="handleSuccess"
       :on-error="handleError"
       :list-type="listType"
@@ -50,13 +49,9 @@
 <script>
   export default {
     props: {
-      isAdmin: {
-        type: Boolean,
-        default: false
-      },
-      prefix: {
-        type: String,
-        default: ""
+      f_action: { //上传文件的请求url,
+        type:String,
+        default:"",
       },
       listType: {
         type: String,
@@ -78,75 +73,37 @@
 
     data() {
       return {
-        qiniuParam: {
-          token: "",
-          key: ""
-        }
+
       }
     },
+    computed: {
+      config(){  //上传图片的请求header添加token
+        return {'token' : this.$store.state.currentUser.token};
+      }
+    },
+    watch: {
 
-    computed: {},
-
-    watch: {},
-
+    },
     created() {
-      if ((!this.isAdmin && !this.$common.isEmpty(this.$store.state.currentUser)) || (this.isAdmin && !this.$common.isEmpty(this.$store.state.currentAdmin))) {
-        this.getUpToken();
-      }
-    },
 
+    },
     mounted() {
 
     },
-
     methods: {
-      getUpToken() {
-        this.$http.get(this.$constant.baseURL + "/qiniu/getUpToken", {}, this.isAdmin)
-          .then((res) => {
-            if (!this.$common.isEmpty(res.data)) {
-              this.qiniuParam.token = res.data;
-            }
-          })
-          .catch((error) => {
-            this.$message({
-              message: error.message,
-              type: "error"
-            });
-          });
-      },
       submitUpload() {
         this.$refs.upload.submit();
       },
       // 文件上传成功时的钩子
-      handleSuccess(response, file, fileList) {
-        this.qiniuParam.key = "";
-        let url = this.$constant.qiniuDownload + response.key;
-        this.$common.saveResource(this, this.prefix, url, file.size, file.raw.type, this.isAdmin);
+      handleSuccess(response) {
+        let url = response.data;
         this.$emit("addPicture", url);
       },
       handleError(err, file, fileList) {
-        this.qiniuParam.key = "";
         this.$message({
           message: "上传出错！",
           type: "warning"
         });
-      },
-      // 上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传
-      beforeUpload(file) {
-        if (this.$common.isEmpty(this.qiniuParam.token)) {
-          this.$message({
-            message: "上传出错！",
-            type: "warning"
-          });
-          return false;
-        }
-
-        let suffix = "";
-        if (file.name.lastIndexOf('.') !== -1) {
-          suffix = file.name.substring(file.name.lastIndexOf('.'));
-        }
-
-        this.qiniuParam.key = this.prefix + "/" + (!this.$common.isEmpty(this.$store.state.currentUser.username) ? (this.$store.state.currentUser.username.replace(/[^a-zA-Z]/g, '') + this.$store.state.currentUser.id) : (this.$store.state.currentAdmin.username.replace(/[^a-zA-Z]/g, '') + this.$store.state.currentAdmin.id)) + new Date().getTime() + Math.floor(Math.random() * 1000) + suffix;
       },
       // 添加文件、上传成功和上传失败时都会被调用
       handleChange(file, fileList) {
@@ -158,7 +115,6 @@
         //   });
         //   flag = true;
         // }
-
         if (file.size > this.maxSize * 1024 * 1024) {
           this.$message({
             message: "图片最大为" + this.maxSize + "M！",

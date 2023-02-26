@@ -1,7 +1,5 @@
 package com.jw_server.controller.blog;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogFriendService;
@@ -9,9 +7,9 @@ import com.jw_server.dao.blog.entity.BlogFriend;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.core.common.ResponseResult;
-import java.util.List;
 
 import static com.jw_server.core.constants.LogModuleConst.BlogFriendModule;
 import static com.jw_server.core.constants.LogTypeConst.*;

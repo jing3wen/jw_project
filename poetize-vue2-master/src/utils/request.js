@@ -47,9 +47,8 @@ axios.interceptors.response.use(function (response) {
 // 当data为URLSearchParams对象时设置为application/x-www-form-urlencoded;charset=utf-8
 // 当data为普通对象时，会被设置为application/json;charset=utf-8
 
-
 export default {
-  post(url, params = {}, isAdmin = false, json = true) {
+  post(url, params = {}, json = true) {
     return new Promise((resolve, reject) => {
       axios
         .post(url, json ? params : qs.stringify(params))
@@ -62,7 +61,7 @@ export default {
     });
   },
 
-  get(url, params = {}, isAdmin = false) {
+  get(url, params = {}) {
     return new Promise((resolve, reject) => {
       axios.get(url, {params: params}).then(res => {
         resolve(res.data);
@@ -81,45 +80,4 @@ export default {
       })
     });
   },
-
-  upload(url, param, isAdmin = false) {
-    let config;
-    if (isAdmin) {
-      config = {
-        headers: {"Authorization": localStorage.getItem("adminToken"), "Content-Type": "multipart/form-data"}
-      };
-    } else {
-      config = {
-        headers: {"Authorization": localStorage.getItem("userToken"), "Content-Type": "multipart/form-data"}
-      };
-    }
-    return new Promise((resolve, reject) => {
-      axios
-        .post(url, param, config)
-        .then(res => {
-          resolve(res.data);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  },
-
-  uploadQiniu(url, param) {
-    let config = {
-      headers: {"Content-Type": "multipart/form-data"},
-      timeout: 60000
-    };
-
-    return new Promise((resolve, reject) => {
-      axios
-        .post(url, param, config)
-        .then(res => {
-          resolve(res.data);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  }
 }

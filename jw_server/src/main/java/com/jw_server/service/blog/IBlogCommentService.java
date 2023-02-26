@@ -42,13 +42,6 @@ public interface IBlogCommentService extends IService<BlogComment> {
     void addComment(BlogFrontAddCommentDTO frontAddCommentDTO);
 
     /**
-     * Description: 删除评论 并且还删除该评论下的子评论
-     * Author: jingwen
-     * Date: 2023/1/4 22:49
-     **/
-    void deleteComment(Integer commentId);
-
-    /**
      * Description: 后台审核博客文章评论
      * Author: jingwen
      * Date: 2023/1/13 14:26
@@ -56,7 +49,7 @@ public interface IBlogCommentService extends IService<BlogComment> {
     void updateCommentCheckBatch(List<Integer> ids);
 
     /**
-     * Description: 后台批量删除博客文章评论
+     * Description: 后台批量删除博客文章评论，子评论也会被删除
      * Author: jingwen
      * Date: 2023/1/13 10:38
      **/

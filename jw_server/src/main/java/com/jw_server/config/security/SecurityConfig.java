@@ -21,12 +21,16 @@ import javax.annotation.Resource;
 
 /**
  * Description: SpringSecurity配置类(针对于springboot2.7新版本)
+ *
+ * prePostEnabled = true  开启@PreAuthorize等注解
+ * jsr250Enabled=true 开启@PermitAll等注解
  * Author: jingwen
  * DATE: 2022/8/29 21:20
  */
+
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 public class SecurityConfig{
 
     @Resource
@@ -55,16 +59,9 @@ public class SecurityConfig{
                 .antMatchers("/login/userLogin").anonymous()
                 .antMatchers("/sysUser/register").permitAll()
                 .antMatchers("/sysUser/getCodeForType").permitAll()
-                .antMatchers("/fileUpload/**").permitAll()
+                .antMatchers("/sysUser/updateForgetPassword").permitAll()
                 .antMatchers("/static/**").permitAll()
-                .antMatchers("/blogArticle/**").permitAll()
-                .antMatchers("/blogComment/**").permitAll()
-                .antMatchers("/blogCategory/**").permitAll()
-                .antMatchers("/blogTag/**").permitAll()
-                .antMatchers("/blogWeb/**").permitAll()
-                .antMatchers("/blogMessage/**").permitAll()
-                .antMatchers("/blogFriend/**").permitAll()
-                .antMatchers("/blogMoments/**").permitAll()
+                .antMatchers("/**/front/**").permitAll()
                 .anyRequest().authenticated()  //任意请求认证后都能访问
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)

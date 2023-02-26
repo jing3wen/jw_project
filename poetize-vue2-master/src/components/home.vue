@@ -45,12 +45,6 @@
                 💋 <span>归档</span>
               </div>
             </li>
-            <!-- 鬼畜全明星 -->
-            <li @click="$router.push({path: '/funny'})">
-              <div class="my-menu">
-                🐔 <span>音乐室</span>
-              </div>
-            </li>
             <!-- 留言 -->
             <li @click="$router.push({path: '/message'})">
               <div class="my-menu">
@@ -169,12 +163,6 @@
           <li @click="smallMenu({path: '/archive'})">
             <div>
               💋 <span>归档</span>
-            </div>
-          </li>
-          <!-- 鬼畜全明星 -->
-          <li @click="smallMenu({path: '/funny'})">
-            <div>
-              🐔 <span>音乐室</span>
             </div>
           </li>
           <!-- 留言 -->
@@ -338,7 +326,7 @@
       },
       //获取网站配置
       getWebInfo() {
-        this.$http.get("http://localhost:9090/blogWeb/getWebInfo")
+        this.$http.get("http://localhost:9090/blogWeb/front/getWebInfo")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.$store.commit("loadWebInfo", res.data);

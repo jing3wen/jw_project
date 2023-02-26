@@ -41,10 +41,6 @@ const routes = [
       name: "friend",
       component: () => import('../components/friend')
     }, {
-      path: "/funny",
-      name: "funny",
-      component: () => import('../components/funny')
-    }, {
       path: "/about",
       name: "about",
       component: () => import('../components/about')
@@ -73,18 +69,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!Boolean(localStorage.getItem("adminToken"))) {
-      next({
-        path: '/verify',
-        query: {redirect: to.fullPath}
-      });
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
+
+  next();
+
 })
 
 export default router

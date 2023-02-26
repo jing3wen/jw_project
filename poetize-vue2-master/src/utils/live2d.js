@@ -17,7 +17,7 @@ if (screen.width > 768) {
     loadExternalResource(live2d_path + "live2d.min.js", "js")
   ]).then(() => {
     initWidget({
-      waifuPath: constant.baseURL + constant.waifuPath,
+      waifuPath: "/api" + constant.waifuPath,
       cdnPath: constant.cdnPath
     });
   });

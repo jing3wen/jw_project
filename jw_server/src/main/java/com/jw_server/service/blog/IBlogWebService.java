@@ -17,4 +17,11 @@ public interface IBlogWebService extends IService<BlogWeb> {
      * Date: 2023/2/8 23:15
      **/
     BlogWeb getWebInfo();
+
+    /**
+     * Description: 获取看板娘消息
+     * Author: jingwen
+     * Date: 2023/2/26 21:13
+     **/
+    String getWaifuJson();
 }

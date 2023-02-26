@@ -4,12 +4,15 @@ import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
 import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
 import com.jw_server.dao.blog.dto.BlogFrontCommentPageDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogCommentService;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+
 import com.jw_server.core.common.ResponseResult;
 import java.util.List;
 
@@ -66,18 +69,6 @@ public class BlogCommentController {
     @PostMapping("/front/addComment")
     public ResponseResult addComment(@RequestBody BlogFrontAddCommentDTO frontAddCommentDTO) {
         blogCommentService.addComment(frontAddCommentDTO);
-        return ResponseResult.success();
-    }
-
-    /**
-     * Description: 前台删除评论
-     * Author: jingwen
-     * Date: 2023/1/4 22:48
-     **/
-    @SysLog(logModule=BlogCommentModule, logType = DELETE, logDesc = "前台删除评论")
-    @DeleteMapping("/front/deleteComment")
-    public ResponseResult deleteComment(@RequestParam Integer commentId) {
-        blogCommentService.deleteComment(commentId);
         return ResponseResult.success();
     }
 

@@ -4,6 +4,7 @@ package com.jw_server.controller.system;
 import com.jw_server.core.common.ResponseResult;
 import com.jw_server.core.fileUpload.FileUploadUtils;
 import com.jw_server.core.aop.logAspect.SysLog;
+import com.jw_server.dao.blog.dto.BlogFrontForgetPasswordOrUpdateBindDTO;
 import com.jw_server.dao.system.dto.QuerySysUserDTO;
 import com.jw_server.dao.system.dto.RegisterUserDTO;
 import com.jw_server.dao.system.dto.ResetPasswordDTO;
@@ -187,14 +188,41 @@ public class SysUserController {
 
     /**
      * Description: 获取验证码
+     *
+     * type表示获取验证码的作用：注册用户/忘记密码/更改绑定绑定信息
+     *
      * Author: jingwen
      * Date: 2023/2/25 19:42
      **/
     @GetMapping("/getCodeForType")
-    public ResponseResult getCodeForType(@RequestParam("place") String place,
-                                         @RequestParam("flag") Integer flag,
+    public ResponseResult getCodeForType(@RequestParam("email") String email,
+                                         @RequestParam("phone") String phone,
                                          @RequestParam("type") String type){
-        sysUserService.getCodeForType(place, flag, type);
+        sysUserService.getCodeForType(email, phone, type);
+        return ResponseResult.success();
+    }
+
+    /**
+     * Description: 找回密码
+     * Author: jingwen
+     * Date: 2023/2/25 23:26
+     **/
+    @PostMapping("/updateForgetPassword")
+    public ResponseResult updateForgetPassword(@RequestBody BlogFrontForgetPasswordOrUpdateBindDTO forgetPasswordDTO){
+
+        sysUserService.updateForgetPassword(forgetPasswordDTO);
+        return ResponseResult.success();
+    }
+
+    /**
+     * Description: 根据密码 绑定邮箱/手机号 或 更改绑定邮箱/手机号
+     * Author: jingwen
+     * Date: 2023/2/26 13:46
+     **/
+    @PostMapping("/updateBindByPassword")
+    public ResponseResult updateBindByPassword(@RequestBody BlogFrontForgetPasswordOrUpdateBindDTO updateBindDTO){
+
+        sysUserService.updateBindByPassword(updateBindDTO);
         return ResponseResult.success();
     }
 }

@@ -43,8 +43,8 @@
                destroy-on-close
                center>
       <div>
-        <uploadPicture :prefix="'commentPicture'" @addPicture="addPicture" :maxSize="5"
-                       :maxNumber="1"></uploadPicture>
+        <uploadImage :f_action="'/api/file/fileUpload/blog/comments'" @addPicture="addPicture" :maxSize="5"
+                       :maxNumber="1"></uploadImage>
       </div>
     </el-dialog>
   </div>
@@ -53,13 +53,13 @@
 <script>
   const emoji = () => import( "../common/emoji");
   const proButton = () => import( "../common/proButton");
-  const uploadPicture = () => import( "../common/uploadPicture");
+  const uploadImage = () => import( "../common/uploadImage");
 
   export default {
     components: {
       emoji,
       proButton,
-      uploadPicture
+      uploadImage
     },
     props: {
       disableGraffiti: {

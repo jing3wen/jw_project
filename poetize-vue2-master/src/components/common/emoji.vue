@@ -1,14 +1,18 @@
 <template>
   <div>
     <transition name="body">
-      <div v-show="showEmoji">
-        <span class="emoji-item"
-              v-for="(value, key, index) in emojiListURL"
-              :key="index"
-              @click="addEmoji(key)">
-          <img class="emoji" :src="value" :title="key" width="24px" height="24px"/>
-        </span>
-      </div>
+      <el-card v-show="showEmoji">
+        <el-tabs v-model="activeName" @tab-click="changeEmojiType">
+          <el-tab-pane v-for="(item, index) in emojiTypeList" :key="index" :label="item.label" :name="item.name">
+            <span class="emoji-item"
+                  v-for="(value, key, index) in getEmojiList(item)"
+                  :key="index"
+                  @click="addEmoji(key)">
+              <img class="emoji" :src="value" :title="key" width="24px" height="24px"/>
+            </span>
+          </el-tab-pane>
+        </el-tabs>
+      </el-card>
     </transition>
   </div>
 </template>
@@ -22,26 +26,26 @@
     },
     data() {
       return {
-        emojiList: this.$constant.emojiList,
-        emojiListURL: {}
+        emojiTypeList:this.$constant.emojiTypeList,
+        activeName:"default",
       };
     },
     created() {
-      this.emojiListURL = this.getEmojiList(this.emojiList);
+
     },
     methods: {
+      changeEmojiType(tab, event){
+        this.activeName = tab.name
+      },
       addEmoji(key) {
         this.$emit("addEmoji", key);
       },
-      getEmojiList(emojiList) {
-        let emojiName;
-        let url;
+      getEmojiList(item) {
+        let emojiList = item.list
         let result = {}
         for (let i = 0; i < emojiList.length; i++) {
-          emojiName = "[" + emojiList[i] + "]";
-          let j = i + 1;
-          url = this.$constant.qiniuDownload + "emoji/q" + j + ".gif";
-          result[emojiName] = url;
+          let emojiName = "["+item.name+":"+emojiList[i]+"]";
+          result[emojiName] = "/static/upload/blog/emoji/" + item.name + "/" + emojiList[i] + item.suffix;
         }
         return result;
       }

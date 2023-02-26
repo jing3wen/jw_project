@@ -50,9 +50,19 @@ export default {
    */
   faceReg(content) {
     content = content.replace(/\[[^\[^\]]+\]/g, (word) => {
-      let index = constant.emojiList.indexOf(word.replace("[", "").replace("]", ""));
-      if (index > -1) {
-        let url = constant.qiniuDownload + "emoji/q" + (index + 1) + ".gif";
+      //判断word属于哪种类型表情包
+      word = word.replace("[", "").replace("]", "");  //[default:衰]->default:衰
+      let emojiType = word.substring(0, word.lastIndexOf(":"))  //emojiType="default"
+      let emojiName = word.substring(word.lastIndexOf(":")+1, word.length)  //emojiName="衰"
+      if (!this.isEmpty(emojiType) && !this.isEmpty(emojiName)) {
+        //根据表情包类型遍历出该类表情包的文件类型
+        let emojiSuffix;
+        constant.emojiTypeList.forEach(item =>{
+          if(item.name === emojiType){
+            emojiSuffix = item.suffix;
+          }
+        });
+        let url = "/static/upload/blog/emoji/" + emojiType + "/" + emojiName + emojiSuffix;
         return '<img style="vertical-align: middle;width: 32px;height: 32px" src="' + url + '" title="' + word + '"/>';
       } else {
         return word;
@@ -135,26 +145,6 @@ export default {
     } else if (d_days >= 3) {
       return Y + '-' + M + '-' + D + ' ' + H + ':' + m;
     }
-  },
-
-  /**
-   * 保存资源
-   */
-  saveResource(that, type, path, size, mimeType, isAdmin = false) {
-    let resource = {
-      type: type,
-      path: path,
-      size: size,
-      mimeType: mimeType
-    };
-
-    that.$http.post(that.$constant.baseURL + "/resource/saveResource", resource, isAdmin)
-      .catch((error) => {
-        that.$message({
-          message: error.message,
-          type: "error"
-        });
-      });
   },
 
   /**

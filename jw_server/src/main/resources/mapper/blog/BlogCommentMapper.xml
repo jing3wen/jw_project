@@ -26,10 +26,11 @@
     <delete id="deleteComment" parameterType="java.lang.Integer">
         DELETE
         FROM
-            blog_comment AS bc
+            blog_comment
         WHERE
-            bc.comment_id = #{commentId}
-            OR bc.parent_id = #{commentId}
+            comment_id = #{commentId}
+            OR floor_comment_id = #{commentId}
+            OR reply_comment_id = #{commentId}
     </delete>
 
 
@@ -40,7 +41,7 @@
         FROM
             blog_comment AS bc
             LEFT JOIN sys_user AS su1 ON bc.user_id = su1.id
-            LEFT JOIN sys_user AS su2 ON bc.to_user_id = su2.id
+            LEFT JOIN sys_user AS su2 ON bc.reply_user_id = su2.id
         WHERE
             TRUE
             AND bc.is_deleted='0'

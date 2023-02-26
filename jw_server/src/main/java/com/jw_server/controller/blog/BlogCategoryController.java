@@ -9,6 +9,8 @@ import com.jw_server.service.blog.IBlogCategoryService;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+
 import com.jw_server.core.common.ResponseResult;
 
 import java.util.List;

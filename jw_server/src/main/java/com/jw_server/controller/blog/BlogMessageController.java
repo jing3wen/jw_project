@@ -7,6 +7,8 @@ import com.jw_server.dao.blog.entity.BlogMessage;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.core.common.ResponseResult;
 import java.util.List;

@@ -101,22 +101,6 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         save(addComment);
     }
 
-    /**
-     * 前台删除评论
-     **/
-    @Override
-    public void deleteComment(Integer commentId) {
-
-        BlogComment findOne = getOne(new LambdaQueryWrapper<BlogComment>()
-                .select(BlogComment::getArticleId)
-                .eq(BlogComment::getCommentId,commentId));
-
-//        if(ObjectUtil.isNotEmpty(findOne)){
-//            int deleteNum = blogCommentMapper.deleteComment(commentId);
-//            logger.warn("用户删除了 "+ deleteNum +" 条文章评论, 开始更新文章评论数");
-//            blogArticleMapper.updateArticleCommentCounts(findOne.getArticleId(), (-1)*deleteNum);
-//        }
-    }
 
     /**
      * 后台审核博客文章评论
@@ -128,12 +112,12 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     }
 
     /**
-     * 后台批量删除博客文章评论
+     * 后台批量删除博客文章评论, 子评论也会被删除
      **/
     @Override
     public void deleteBatchComment(List<Integer> ids) {
         ids.forEach(deleteId->{
-            deleteComment(deleteId);
+            blogCommentMapper.deleteComment(deleteId);
         });
     }
 

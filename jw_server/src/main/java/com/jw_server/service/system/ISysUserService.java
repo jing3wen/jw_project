@@ -2,6 +2,7 @@ package com.jw_server.service.system;
 
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.core.common.ResponseResult;
+import com.jw_server.dao.blog.dto.BlogFrontForgetPasswordOrUpdateBindDTO;
 import com.jw_server.dao.system.dto.LoginSysUserDTO;
 import com.jw_server.dao.system.dto.QuerySysUserDTO;
 import com.jw_server.dao.system.dto.RegisterUserDTO;
@@ -76,5 +77,19 @@ public interface ISysUserService extends IService<SysUser> {
      * Author: jingwen
      * Date: 2023/2/25 19:28
      **/
-    void getCodeForType(String place, Integer flag, String type);
+    void getCodeForType(String email, String phone, String type);
+
+    /**
+     * Description: 找回密码
+     * Author: jingwen
+     * Date: 2023/2/25 23:34
+     **/
+    void updateForgetPassword(BlogFrontForgetPasswordOrUpdateBindDTO forgetPasswordDTO);
+
+    /**
+     * Description: 根据密码 绑定邮箱/手机号 或 更改绑定邮箱/手机号
+     * Author: jingwen
+     * Date: 2023/2/26 13:59
+     **/
+    void updateBindByPassword(BlogFrontForgetPasswordOrUpdateBindDTO updateBindDTO);
 }

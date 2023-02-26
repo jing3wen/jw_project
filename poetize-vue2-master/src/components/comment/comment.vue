@@ -237,17 +237,21 @@
         }
         this.getComments(pagination, floorComment, true);
       },
-      //表情渲染
+      //渲染评论
       emoji(comments, flag) {
         comments.forEach(c => {
           c.commentContent = c.commentContent.replace(/\n/g, '<br/>');
+          //渲染表情包
           c.commentContent = this.$common.faceReg(c.commentContent);
+          //渲染图片
           c.commentContent = this.$common.pictureReg(c.commentContent);
           if (flag) {
             if (!this.$common.isEmpty(c.replyCommentList)) {
               c.replyCommentList.forEach(cc => {
                 c.commentContent = c.commentContent.replace(/\n/g, '<br/>');
+                //渲染表情包
                 cc.commentContent = this.$common.faceReg(cc.commentContent);
+                //渲染图片
                 cc.commentContent = this.$common.pictureReg(cc.commentContent);
               });
             }
