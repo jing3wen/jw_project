@@ -157,7 +157,7 @@ export default {
         ids = this.selectedRowIds
       else
         ids = [id]
-      this.$confirm('确定要删除此'+ids.length+'条数据吗?', '系统提示', {type : 'warning'}).then(() => {
+      this.$confirm('确定要删除此'+ids.length+'条数据吗? 该评论下的子评论也会被删除', '系统提示', {type : 'warning'}).then(() => {
         this.request.delete('/api/blogComment/admin/deleteBatch', {data:ids}).then(res =>{
           if(res.code === 200){
             this.$message.success("删除成功")
