@@ -1,6 +1,7 @@
 package com.jw_server.service.system.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.intern.InternUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -22,8 +23,10 @@ import com.jw_server.dao.system.dto.RegisterUserDTO;
 import com.jw_server.dao.system.dto.ResetPasswordDTO;
 import com.jw_server.dao.system.entity.SysRole;
 import com.jw_server.dao.system.entity.SysUser;
+import com.jw_server.dao.system.entity.SysUserRole;
 import com.jw_server.dao.system.mapper.SysRoleMapper;
 import com.jw_server.dao.system.mapper.SysUserMapper;
+import com.jw_server.dao.system.mapper.SysUserRoleMapper;
 import com.jw_server.dao.system.vo.LoginUserVO;
 import com.jw_server.dao.system.vo.SysUserVO;
 import com.jw_server.dao.system.vo.UserDetailsVO;
@@ -39,6 +42,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -64,6 +68,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private SysRoleMapper sysRoleMapper;
+
+    @Resource
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @Resource
     private SysUserMapper sysUserMapper;
@@ -131,7 +138,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return ResponseResult.success();
     }
 
+    /**
+     * 注册用户——并自动分配角色
+     * 要是角色分配失败(原因：用户类型参数错误/角色被停用),
+     * 则回滚，注册的用户也会被回滚
+     **/
     @Override
+    @Transactional
     public ResponseResult register(RegisterUserDTO registerUserDTO) {
         String username = registerUserDTO.getUsername();
         String password = registerUserDTO.getPassword();
@@ -163,8 +176,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         BeanUtil.copyProperties(registerUserDTO, addUser);
         //初始昵称
         addUser.setNickname("初始昵称");
-
         save(addUser);
+
+        //根据注册用户类型为用户自动分配角色
+        SysUser opeUser = getOne(new LambdaQueryWrapper<SysUser>()
+                .select(SysUser::getId, SysUser::getUserType)
+                .eq(SysUser::getUsername, registerUserDTO.getUsername()));
+        setRoleByRegisterUserType(opeUser);
+
         //清楚缓存
         redisUtils.deleteObject(SysConst.REGISTER_USER_CODE_CACHE + "_email_" + registerUserDTO.getEmail());
         return ResponseResult.success();
@@ -394,13 +413,34 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * Description: 根据注册用户类型分配初始角色
+     * 若userType != null 则匹配注册用户类型
+     *
      * Author: jingwen
      * Date: 2023/2/27 0:03
      **/
-    public void setRoleByRegisterUserType(RegisterUserDTO registerUserDTO){
+    public void setRoleByRegisterUserType(SysUser registerUser){
         //根据注册用户类型分配初始角色
-        if(registerUserDTO.getUserType().equals(SysConst.BLOG_USER)){
-
+        if(StrUtil.isEmpty(registerUser.getUserType())){
+            return;
+        }
+        String roleCode =  registerUser.getUserType();
+        if(SysConst.REGISTER_USER_TYPE_LIST.contains(roleCode)){
+            logger.info("当前注册用户类型: "+roleCode+" , 开始为注册用户自动分配角色");
+            SysRole findRole = sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>()
+                    .select(SysRole::getId)
+                    .eq(SysRole::getStatus, "1")
+                    .eq(SysRole::getRoleCode, roleCode));
+            //检查该角色是否被误删除
+            if(ObjectUtil.isEmpty(findRole)){
+                throw new ServiceException(HttpCode.CODE_600, "初始注册角色可能被删除或停用, 请联系管理员");
+            }
+            if(ObjectUtil.isNotEmpty(registerUser.getId())){
+                SysUserRole addUserRole = new SysUserRole(registerUser.getId(), findRole.getId());
+                sysUserRoleMapper.insert(addUserRole);
+                logger.info("已经成功分配角色——"+roleCode);
+            }
+        }else {
+            throw new ServiceException(HttpCode.CODE_400, "注册用户类型参数错误");
         }
     }
 

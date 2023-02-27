@@ -3,12 +3,16 @@ export default {
   imBaseURL: "http://localhost:81",
   webURL: "http://localhost",
 
-
+  //验证码类型
   registerUserCodeType : "register_user",
   forgetPasswordCodeType : "user_forget_password",
-  updateUserBind : "update_user_bind",
-  //用户注册类型
-  register_type:"blog_user",
+  updateUserBindCodeType : "update_user_bind",
+
+  /*
+   * 用户注册类型
+   * 注意!!!该数据要和数据库的sys_role表的role_code对应
+   */
+  register_type:"BLOG_REGISTER_ROLE",
 
   // baseURL: "https://poetize.cn/api",
   // imBaseURL: "https://poetize.cn/im",

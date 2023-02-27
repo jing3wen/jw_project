@@ -1,5 +1,8 @@
 package com.jw_server.core.constants;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Description: 系统常量
  * Author: jingwen
@@ -18,9 +21,11 @@ public class SysConst {
     public static final String USER_FORBID_STATUS = "0";
 
     /**
-     * 用户注册类型——博客用户
+     * 允许用户注册的类型: 博客用户，演示用户
+     * 注意该数据要和数据库的sys_role表的role_code对应
      **/
-    public static final String BLOG_USER = "blog_user";
+    public static final List<String> REGISTER_USER_TYPE_LIST = Arrays.asList("BLOG_REGISTER_ROLE", "SHOW_ROLE");
+
 
     /**
      * 用户注册

@@ -1,5 +1,13 @@
 //演示用户标志
-export const showRole = '演示角色'
+export const showRoleName = '演示角色'
+
+//验证码类型
+export const registerUserCodeType = "register_user"
+/*
+* 用户注册类型
+* 注意!!!该数据要和数据库的sys_role表的role_code对应
+*/
+export const registerType = "SHOW_ROLE"
 
 export const initPassword = '123456'
 

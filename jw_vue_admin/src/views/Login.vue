@@ -36,6 +36,9 @@
         <div class="drawer_register">
           <div class="register-form-title"><b>jw后台管理系统注册</b></div>
           <el-form :model="registerForm" :rules="registerFormRules" ref="registerForm" class="form">
+            <el-form-item prop="email">
+              <el-input style="margin: 10px 0" prefix-icon="el-icon-message" v-model="registerForm.email" placeholder="邮箱"></el-input>
+            </el-form-item>
             <el-form-item prop="username">
               <el-input style="margin: 10px 0" prefix-icon="el-icon-user" v-model="registerForm.username" placeholder="用户名"></el-input>
             </el-form-item>
@@ -45,9 +48,13 @@
             <el-form-item prop="confirmPassword">
               <el-input style="margin: 10px 0" prefix-icon="el-icon-lock" show-password v-model="registerForm.confirmPassword" placeholder="确认密码"></el-input>
             </el-form-item>
+            <el-form-item prop="code">
+              <el-input style="margin: 10px 0" prefix-icon="el-icon-files" v-model="registerForm.code" placeholder="验证码"></el-input>
+            </el-form-item>
           </el-form>
           <div class="drawer_buttons">
-            <el-button class="drawer_button" type="primary" round @click="registerUser" :loading="registerLoading">{{ registerLoading ? '注册中 ...' : '确 定' }}</el-button>
+            <el-button class="drawer_button" type="primary" round @click="getCode">获取验证码</el-button>
+            <el-button class="drawer_button" type="primary" round @click="registerUser" :loading="registerLoading">{{ registerLoading ? '注册中 ...' : '注   册' }}</el-button>
             <el-button class="drawer_button" round @click="cancelRegisterForm">取 消</el-button>
           </div>
         </div>
@@ -59,6 +66,7 @@
 
 <script>
 import {setRoute} from "@/router";
+import {registerUserCodeType, registerType} from "@/assets/js/config";
 
 export default {
   name: "Login",
@@ -95,6 +103,11 @@ export default {
         confirmPassword:[
           { required: true, message: '请确认密码', trigger: 'blur' },
           { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+        ],email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}
+        ],code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
         ]
       },
       registerLoading: false,
@@ -140,6 +153,27 @@ export default {
       })
     },
 
+    //获取验证码
+    getCode(){
+      const reg = /^([a-zA-Z0-9]+[-_\.]?)+@[a-zA-Z0-9]+\.[a-z]+$/;
+      if(this.registerForm.email === '' || !reg.test(this.registerForm.email)){
+        this.$message.error("请输入正确邮箱")
+        return false
+      }
+      let codeForm = {
+        email: this.registerForm.email,
+        phone: '',
+        type: registerUserCodeType
+      }
+      this.request.get("/api/sysUser/getCodeForType", {params: codeForm}).then(res => {
+        if(res.code === 200) {
+          this.$message.success("验证码已经发送，请注意查收")
+        } else {
+          this.$message.error(res.msg)
+          this.registerLoading = false
+        }
+      })
+    },
     //注册表单隐藏
     cancelRegisterForm(){
       this.registerVisible = false
@@ -147,6 +181,7 @@ export default {
     },
     //注册用户
     registerUser(){
+      this.registerForm.userType = registerType
       this.$refs['registerForm'].validate((valid) => {
         if (valid) {  // 表单校验合法
           this.registerLoading = true
@@ -211,8 +246,8 @@ export default {
   font-size: 24px;
 }
 .drawer_buttons{
-  margin: 0 30% 0;
   display:flex;
+  margin: 0 auto;
 }
 .drawer_button{
   margin-left: 5px;

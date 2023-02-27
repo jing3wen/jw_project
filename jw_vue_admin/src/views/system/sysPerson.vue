@@ -100,7 +100,7 @@ export default {
         ],
         nickname:[
           { required: true, message: '请输入用户昵称', trigger: 'blur' },
-          { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
         ],
         sex:[
           { required: true, message: '请选择用户性别', trigger: 'blur'}

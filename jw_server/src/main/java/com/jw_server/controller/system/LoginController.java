@@ -41,20 +41,6 @@ public class LoginController {
         return sysUserService.userLogin(loginSysUserDTO);
     }
 
-
-    /**
-     * Description: 获取验证码
-     * Author: jingwen
-     * Date: 2022/8/30 9:32
-     **/
-    @GetMapping("/getCode")
-    public ResponseResult getCode(){
-
-        return null;
-    }
-
-
-
     /**
      * Description: 登出
      * Author: jingwen

@@ -27,7 +27,7 @@
         <div class="form-container sign-in-container">
           <div class="myCenter">
             <h1>登录</h1>
-            <input v-model="account" type="text" placeholder="用户名/邮箱/手机号">
+            <input v-model="account" type="text" placeholder="用户名/邮箱">
             <input v-model="password" type="password" placeholder="密码">
             <a href="#" @click="changeDialog('找回密码')">忘记密码？</a>
             <button @click="login()">登录</button>
@@ -244,9 +244,11 @@
         this.submitDialog()
       },
       signUp() {
+        this.clearDialog()
         document.querySelector("#loginAndRegist").classList.add('right-panel-active');
       },
       signIn() {
+        this.clearDialog()
         document.querySelector("#loginAndRegist").classList.remove('right-panel-active');
       },
       login() {
@@ -360,6 +362,13 @@
 
         if (!this.$common.isEmpty(this.userInfo.remark)) {
           user.remark = this.userInfo.remark.trim();
+        }
+        if(user.nickname.length>10){
+          this.$message({
+            message: "昵称长度设置在10个字符以内",
+            type: "error"
+          });
+          return;
         }
 
         this.$confirm('确认保存？', '提示', {
@@ -606,7 +615,7 @@
           }else if(this.dialogTitle === "找回密码"){  //忘记密码
             params.type = this.$constant.forgetPasswordCodeType
           }else { //更改绑定
-            params.type = this.$constant.updateUserBind
+            params.type = this.$constant.updateUserBindCodeType
           }
 
           this.$http.get("http://localhost:9090/sysUser/getCodeForType", params)
