@@ -23,4 +23,11 @@ public interface BlogArticleTagMapper extends BaseMapper<BlogArticleTag> {
      **/
     List<BlogFrontTagVO> getArticleTagsByArticleId(Integer articleId);
 
+    /**
+     * Description: 批量新增文章标签关系
+     * Author: jingwen
+     * Date: 2023/2/28 21:29
+     **/
+    int insertBatchArticleTag(List<BlogArticleTag> addArticleTagList);
+
 }

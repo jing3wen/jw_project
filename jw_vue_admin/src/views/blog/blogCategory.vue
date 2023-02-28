@@ -92,6 +92,9 @@ export default {
           {required: true, message: "请输入类别名称", trigger: "blur"},
           {min: 2, max: 50, message: '用户名称长度必须介于 2 和 50 之间', trigger: 'blur'}
         ],
+        remark: [
+          {max: 50, message: '备注长度不能超过50', trigger: 'blur'}
+        ],
       }
     }
   },

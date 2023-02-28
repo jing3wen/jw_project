@@ -1,8 +1,18 @@
 package com.jw_server.service.blog.impl;
 
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jw_server.core.common.MyPageVO;
+import com.jw_server.core.constants.HttpCode;
+import com.jw_server.core.exception.ServiceException;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateCheckBatchDTO;
 import com.jw_server.dao.blog.entity.BlogMessage;
 import com.jw_server.dao.blog.mapper.BlogMessageMapper;
 import com.jw_server.service.blog.IBlogMessageService;
@@ -47,5 +57,36 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
                     .orderByDesc(BlogMessage::getCreateTime));
         }
         return messageList;
+    }
+
+    /**
+     * 后台获取留言版分页
+     **/
+    @Override
+    public MyPageVO<BlogMessage> getAdminMessagePage(Integer pageNum, Integer pageSize, String messageCheck) {
+        LambdaQueryWrapper<BlogMessage> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if(StrUtil.isNotEmpty(messageCheck)) {
+            lambdaQueryWrapper.eq(BlogMessage::getMessageCheck, messageCheck);
+        }
+        return new MyPageVO<>(
+                page(new Page<>(pageNum,pageSize),lambdaQueryWrapper)
+        );
+    }
+
+    /**
+     * 后台批量更新留言板审核状态
+     **/
+    @Override
+    public void updateMessageCheckBatch(BlogAdminUpdateCheckBatchDTO updateCheckBatchDTO) {
+
+        if(StrUtil.isEmpty(updateCheckBatchDTO.getCheckStatus())){
+            throw new ServiceException(HttpCode.CODE_400, "更新的状态参数有误");
+        }
+        if(ObjectUtil.isEmpty(updateCheckBatchDTO.getIds()) || updateCheckBatchDTO.getIds().size()==0){
+            throw new ServiceException(HttpCode.CODE_400, "请选择要更新的数据");
+        }
+        update(new LambdaUpdateWrapper<BlogMessage>()
+                .set(BlogMessage::getMessageCheck, updateCheckBatchDTO.getCheckStatus())
+                .in(BlogMessage::getMessageId, updateCheckBatchDTO.getIds()));
     }
 }

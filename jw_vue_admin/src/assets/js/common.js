@@ -86,6 +86,15 @@ function getUploadFileTypeLimitByFilename(filename) {
         return defaultUploadVideoTypeList
     }
 }
+function isEmptyFunc(value) {
+    if (typeof value === "undefined" || value === null || (typeof value === "string" && value.trim() === "") || (Array.prototype.isPrototypeOf(value) && value.length === 0) || (Object.prototype.isPrototypeOf(value) && Object.keys(value).length === 0)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 export {getFileType,
     getUploadFileSizeLimitByFilename,
-    getUploadFileTypeLimitByFilename}
+    getUploadFileTypeLimitByFilename,
+    isEmptyFunc}

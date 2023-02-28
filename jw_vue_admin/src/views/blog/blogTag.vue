@@ -21,14 +21,14 @@
               header-cell-class-name="tableHeader-style"
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="tagName" label="类别名称" width="200px" align="center"></el-table-column>
+      <el-table-column prop="tagName" label="标签名称" width="200px" align="center"></el-table-column>
       <el-table-column prop="remark" label="备注" width="300px" :show-overflow-tooltip="true" align="center"></el-table-column>
       <el-table-column prop="articleCount" label="文章数量" width="150px" align="center"></el-table-column>
       <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
       <el-table-column prop="operate" label="操作" fixed="right" width="200px" align="center">
         <template slot-scope="scope">
           <el-button type="text" class="el-icon-edit pl-10" @click="openAddOrEditDialog(scope.row)"> 编辑</el-button>
-          <el-button type="text" class="el-icon-delete pl-10" @click="deleteRows(scope.row.categoryId)">删除</el-button>
+          <el-button type="text" class="el-icon-delete pl-10" @click="deleteRows(scope.row.tagId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,7 +41,7 @@
 
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="40%" @close="clickCancel">
       <el-form :model="dialogForm" :rules="dialogFormRules" ref="dialogForm" label-width="100px">
-        <el-form-item label="类别名" prop="categoryName">
+        <el-form-item label="类别名" prop="tagName">
           <el-input v-model="dialogForm.tagName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -60,7 +60,7 @@
 import Pagination from "@/components/pagination/Pagination";
 
 export default {
-  name: "blogCategory",
+  name: "blogTag",
   components:{Pagination },
   data() {
     return {
@@ -89,8 +89,11 @@ export default {
       },
       dialogFormRules: {
         tagName: [
-          {required: true, message: "请输入类别名称", trigger: "blur"},
-          {min: 2, max: 50, message: '用户名称长度必须介于 2 和 50 之间', trigger: 'blur'}
+          {required: true, message: "请输入标签名称", trigger: "blur"},
+          {min: 2, max: 10, message: '标签名称长度必须介于 2 和 10 之间', trigger: 'blur'}
+        ],
+        remark: [
+          {max: 50, message: '备注长度不能超过50', trigger: 'blur'}
         ],
       }
     }
@@ -101,7 +104,7 @@ export default {
   },
   methods: {
     getPageList(){
-      this.request.post('/api/blogTag/admin/getBlogTagPage', this.queryForm).then(res =>{
+      this.request.get('/api/blogTag/admin/getBlogTagPage', {params:this.queryForm}).then(res =>{
         if(res.code === 200){
           this.tableData = res.data.records
           this.total = res.data.total

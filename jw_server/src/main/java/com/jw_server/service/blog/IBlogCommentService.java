@@ -1,6 +1,7 @@
 package com.jw_server.service.blog;
 
 import com.jw_server.core.common.MyPageVO;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateCheckBatchDTO;
 import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
 import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
 import com.jw_server.dao.blog.dto.BlogFrontCommentPageDTO;
@@ -46,7 +47,7 @@ public interface IBlogCommentService extends IService<BlogComment> {
      * Author: jingwen
      * Date: 2023/1/13 14:26
      **/
-    void updateCommentCheckBatch(List<Integer> ids);
+    void updateCommentCheckBatch(BlogAdminUpdateCheckBatchDTO updateCheckBatchDTO);
 
     /**
      * Description: 后台批量删除博客文章评论，子评论也会被删除

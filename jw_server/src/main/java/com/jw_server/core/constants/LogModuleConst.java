@@ -53,6 +53,11 @@ public class LogModuleConst {
     public static final String BlogCategoryModule = "博客文章类别模块";
 
     /**
+     * 博客文章标签模块
+     **/
+    public static final String BlogTagModule = "博客文章标签模块";
+
+    /**
      * 博客文章评论模块
      **/
     public static final String BlogCommentModule = "博客文章评论模块";

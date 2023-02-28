@@ -43,7 +43,7 @@ public class BlogFriend implements Serializable {
       @ApiModelProperty("备注")
       private String remark;
 
-      @ApiModelProperty("状态(1正常 0停用)")
+      @ApiModelProperty("状态(1正常 f停用, 0待定)")
       private String status;
 
       @ApiModelProperty("是否删除(0代表存在 1代表删除)")

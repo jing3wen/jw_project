@@ -1,6 +1,7 @@
 package com.jw_server.controller.blog;
 
 import com.jw_server.core.aop.logAspect.SysLog;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateCheckBatchDTO;
 import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
 import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
 import com.jw_server.dao.blog.dto.BlogFrontCommentPageDTO;
@@ -79,9 +80,9 @@ public class BlogCommentController {
      * Date: 2023/1/13 10:27
      **/
     @SysLog(logModule=BlogCommentModule, logType = UPDATE, logDesc = "后台批量审核博客文章评论")
-    @PostMapping("/admin/updateCommentCheckBatch")
-    public ResponseResult updateCommentCheckBatch(@RequestBody List<Integer> ids) {
-        blogCommentService.updateCommentCheckBatch(ids);
+    @PostMapping("/admin/updateCheckBatch")
+    public ResponseResult updateCheckBatch(@RequestBody BlogAdminUpdateCheckBatchDTO updateCheckBatchDTO) {
+        blogCommentService.updateCommentCheckBatch(updateCheckBatchDTO);
         return ResponseResult.success();
     }
 

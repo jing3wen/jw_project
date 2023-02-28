@@ -34,7 +34,7 @@ public class BlogCategoryController {
 
 
     /**
-     * Description 查询所有文章分类
+    * Description 查询所有文章分类
     * Author jingwen
     * Date 2022-12-03 16:13:45
     **/

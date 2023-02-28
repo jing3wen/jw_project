@@ -42,18 +42,6 @@ public class BlogMomentsController {
     }
 
     /**
-     * Description 更新
-     * Author jingwen
-     * Date 2023-02-11 20:48:10
-     **/
-    @SysLog(logModule=BlogMomentsModule, logType = UPDATE, logDesc = "更新")
-    @PostMapping("/update")
-    public ResponseResult update(@RequestBody BlogMoments blogMoments) {
-        blogMomentsService.updateById(blogMoments);
-        return ResponseResult.success();
-    }
-
-    /**
      * Description 博客前台删除朋友圈
      * Author jingwen
      * Date 2023-02-11 20:48:10
@@ -78,6 +66,32 @@ public class BlogMomentsController {
 
         return ResponseResult.success(blogMomentsService.getFrontMomentsPage(frontMomentsPageDTO));
     }
+
+    /**
+     * Description 博客后台批量删除朋友圈——可以和"博客前台删除朋友圈"合并
+     * Author jingwen
+     * Date 2023-02-11 20:48:10
+     **/
+    @SysLog(logModule=BlogMomentsModule, logType = DELETE, logDesc = "博客后台批量删除朋友圈")
+    @DeleteMapping("/admin/deleteBatch")
+    public ResponseResult deleteAdminBatch(@RequestBody List<Integer> ids) {
+        blogMomentsService.removeByIds(ids);
+        return ResponseResult.success();
+    }
+
+    /**
+     * Description: 后台查询朋友圈分页
+     * Author: jingwen
+     * Date: 2023/2/28 17:00
+     **/
+    @GetMapping("/admin/getAdminMomentsPage")
+    public ResponseResult getAdminMomentsPage(@RequestParam("pageNum") Integer pageNum,
+                                              @RequestParam("pageSize") Integer pageSize,
+                                              @RequestParam("nickname") String nickname) {
+
+        return ResponseResult.success(blogMomentsService.getAdminMomentsPage(pageNum, pageSize, nickname));
+    }
+
 
 }
 

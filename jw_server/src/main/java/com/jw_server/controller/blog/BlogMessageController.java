@@ -1,5 +1,6 @@
 package com.jw_server.controller.blog;
 
+import com.jw_server.dao.blog.dto.BlogAdminUpdateCheckBatchDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogMessageService;
@@ -41,31 +42,7 @@ public class BlogMessageController {
     }
 
     /**
-     * Description 更新
-     * Author jingwen
-     * Date 2023-02-09 14:24:46
-     **/
-    @SysLog(logModule="", logType = UPDATE, logDesc = "更新")
-    @PostMapping("/update")
-    public ResponseResult update(@RequestBody BlogMessage blogMessage) {
-        blogMessageService.updateById(blogMessage);
-        return ResponseResult.success();
-    }
-
-    /**
-     * Description 批量删除
-     * Author jingwen
-     * Date 2023-02-09 14:24:46
-     **/
-    @SysLog(logModule="", logType = DELETE, logDesc = "删除")
-    @PostMapping("/deleteBatch")
-    public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
-        blogMessageService.removeByIds(ids);
-        return ResponseResult.success();
-    }
-
-    /**
-     * Description 获取所有留言
+     * Description 前台获取所有留言
      * Author jingwen
      * Date 2023-02-09 14:24:46
      **/
@@ -73,6 +50,45 @@ public class BlogMessageController {
     public ResponseResult getMessageList() {
         return ResponseResult.success(blogMessageService.getMessageList());
     }
+
+    /**
+     * Description 后台批量更新留言板审核状态
+     * Author jingwen
+     * Date 2023-02-09 14:24:46
+     **/
+    @SysLog(logModule=BlogMessageModule, logType = UPDATE, logDesc = "后台批量更新留言板审核状态")
+    @PostMapping("/admin/updateCheckBatch")
+    public ResponseResult updateCheckBatch(@RequestBody BlogAdminUpdateCheckBatchDTO updateCheckBatchDTO) {
+        blogMessageService.updateMessageCheckBatch(updateCheckBatchDTO);
+        return ResponseResult.success();
+    }
+
+    /**
+     * Description 后台批量更新留言板留言
+     * Author jingwen
+     * Date 2023-02-09 14:24:46
+     **/
+    @SysLog(logModule=BlogMessageModule, logType = DELETE, logDesc = "后台批量更新留言板留言")
+    @DeleteMapping("/admin/deleteBatch")
+    public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
+        blogMessageService.removeByIds(ids);
+        return ResponseResult.success();
+    }
+
+    /**
+     * Description: 后台获取留言版分页
+     * Author: jingwen
+     * Date: 2023/2/28 16:35
+     **/
+    @GetMapping("/admin/getBlogMessagePage")
+    public ResponseResult getPageList(@RequestParam("pageNum") Integer pageNum,
+                                      @RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam("messageCheck") String messageCheck) {
+
+        return ResponseResult.success(blogMessageService.getAdminMessagePage(pageNum, pageSize, messageCheck));
+    }
+
+
 
 
 }

@@ -1,14 +1,20 @@
 package com.jw_server.service.blog.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
+import com.jw_server.core.constants.HttpCode;
+import com.jw_server.core.exception.ServiceException;
+import com.jw_server.dao.blog.dto.BlogAdminUpdateCheckBatchDTO;
 import com.jw_server.dao.blog.dto.BlogFrontAddCommentDTO;
 import com.jw_server.dao.blog.dto.BlogAdminQueryCommentPageDTO;
 import com.jw_server.dao.blog.dto.BlogFrontCommentPageDTO;
 import com.jw_server.dao.blog.entity.BlogComment;
+import com.jw_server.dao.blog.entity.BlogFriend;
 import com.jw_server.dao.blog.mapper.BlogArticleMapper;
 import com.jw_server.dao.blog.mapper.BlogCommentMapper;
 import com.jw_server.dao.blog.vo.BlogAdminCommentPageVO;
@@ -106,9 +112,17 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
      * 后台审核博客文章评论
      **/
     @Override
-    public void updateCommentCheckBatch(List<Integer> ids) {
+    public void updateCommentCheckBatch(BlogAdminUpdateCheckBatchDTO updateCheckBatchDTO) {
 
-        blogCommentMapper.updateCommentCheckBatch(ids);
+        if(StrUtil.isEmpty(updateCheckBatchDTO.getCheckStatus())){
+            throw new ServiceException(HttpCode.CODE_400, "更新的状态参数有误");
+        }
+        if(ObjectUtil.isEmpty(updateCheckBatchDTO.getIds()) || updateCheckBatchDTO.getIds().size()==0){
+            throw new ServiceException(HttpCode.CODE_400, "请选择要更新的数据");
+        }
+        update(new LambdaUpdateWrapper<BlogComment>()
+                .set(BlogComment::getCommentCheck, updateCheckBatchDTO.getCheckStatus())
+                .in(BlogComment::getCommentId, updateCheckBatchDTO.getIds()));
     }
 
     /**

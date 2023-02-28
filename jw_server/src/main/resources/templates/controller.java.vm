@@ -52,8 +52,8 @@ public class ${table.controllerName} {
      * Date ${date}
      **/
     @SysLog(logModule="", logType = ADD, logDesc = "新增")
-    @PostMapping("/add")
-    public ResponseResult add(@RequestBody ${entity} ${table.entityPath}) {
+    @PostMapping("/add${entity}")
+    public ResponseResult add${entity}(@RequestBody ${entity} ${table.entityPath}) {
         ${table.entityPath}Service.save(${table.entityPath});
         return ResponseResult.success();
     }
@@ -64,8 +64,8 @@ public class ${table.controllerName} {
      * Date ${date}
      **/
     @SysLog(logModule="", logType = UPDATE, logDesc = "更新")
-    @PostMapping("/update")
-    public ResponseResult update(@RequestBody ${entity} ${table.entityPath}) {
+    @PostMapping("/update${entity}")
+    public ResponseResult update${entity}(@RequestBody ${entity} ${table.entityPath}) {
         ${table.entityPath}Service.updateById(${table.entityPath});
         return ResponseResult.success();
     }
@@ -76,7 +76,7 @@ public class ${table.controllerName} {
      * Date ${date}
      **/
     @SysLog(logModule="", logType = DELETE, logDesc = "删除")
-    @PostMapping("/deleteBatch")
+    @DeleteMapping("/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         ${table.entityPath}Service.removeByIds(ids);
         return ResponseResult.success();
@@ -107,8 +107,8 @@ public class ${table.controllerName} {
      * Author ${author}
      * Date ${date}
      **/
-    @GetMapping("/getPageList")
-    public ResponseResult getPageList(@RequestParam Integer pageNum,@RequestParam Integer pageSize) {
+    @GetMapping("/get${entity}Page")
+    public ResponseResult get${entity}Page(@RequestParam Integer pageNum,@RequestParam Integer pageSize) {
         QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
         return ResponseResult.success(${table.entityPath}Service.page(new Page<>(pageNum, pageSize), queryWrapper));
     }

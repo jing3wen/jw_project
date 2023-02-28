@@ -14,6 +14,9 @@ public class BlogAdminQueryCommentPageDTO extends MyPageDTO {
     //评论人昵称
     private String nickname;
 
+    //评论类型
+    private String commentType;
+
     //评论审核状态
     private String commentCheck;
 }

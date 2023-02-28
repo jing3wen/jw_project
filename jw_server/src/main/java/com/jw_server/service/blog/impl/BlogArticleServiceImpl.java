@@ -8,10 +8,13 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
+import com.jw_server.core.constants.HttpCode;
+import com.jw_server.core.exception.ServiceException;
 import com.jw_server.core.utils.IpUtils;
 import com.jw_server.core.utils.RedisUtils;
 import com.jw_server.dao.blog.dto.*;
 import com.jw_server.dao.blog.entity.BlogArticle;
+import com.jw_server.dao.blog.entity.BlogArticleTag;
 import com.jw_server.dao.blog.mapper.*;
 import com.jw_server.dao.blog.vo.*;
 import com.jw_server.dao.system.vo.LoginUserVO;
@@ -144,10 +147,28 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 博客后台新增文章
      **/
     @Override
-    public void addBlogArticle(BlogAdminAddArticleDTO blogAdminAddArticleDTO) {
+    @Transactional
+    public void addBlogArticle(BlogAdminAddOrUpdateArticleDTO blogAdminAddArticleDTO) {
+        logger.info("新增文章——"+blogAdminAddArticleDTO.getArticleTitle());
         BlogArticle addArticle = new BlogArticle();
         BeanUtil.copyProperties(blogAdminAddArticleDTO, addArticle);
         save(addArticle);
+
+        //开始存储文章标签关系
+        logger.info("开始存储文章标签关系——"+blogAdminAddArticleDTO.getArticleTitle());
+        if(ObjectUtil.isEmpty(blogAdminAddArticleDTO.getTagIdList())){
+            throw new ServiceException(HttpCode.CODE_400, "请选择文章标签");
+        }
+        List<BlogArticleTag> addArticleTagList = new ArrayList<>();
+        blogAdminAddArticleDTO.getTagIdList().forEach(tagId->{
+            BlogArticleTag addArticleTag = BlogArticleTag.builder()
+                    .articleId(addArticle.getArticleId())
+                    .tagId(tagId)
+                    .build();
+            addArticleTagList.add(addArticleTag);
+        });
+        blogArticleTagMapper.insertBatchArticleTag(addArticleTagList);
+        logger.info("存储完成——"+blogAdminAddArticleDTO.getArticleTitle());
     }
 
     /**
@@ -183,6 +204,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             updateArticleVO.setCategoryName(
                     blogCategoryMapper.getCategoryNameById(updateArticleVO.getCategoryId()));
         }
+        //封装文章标签
+        updateArticleVO.setTagList(blogArticleTagMapper.getArticleTagsByArticleId(articleId));
         return updateArticleVO;
     }
 
@@ -190,7 +213,32 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 后台更新文章信息
      **/
     @Override
-    public void updateBlogArticle(BlogArticle updateArticle) {
+    public void updateBlogArticle(BlogAdminAddOrUpdateArticleDTO updateArticleDTO) {
+
+        logger.info("更新文章——"+updateArticleDTO.getArticleTitle());
+        BlogArticle updateArticle = new BlogArticle();
+        BeanUtil.copyProperties(updateArticleDTO, updateArticle);
+        updateById(updateArticle);
+
+        //开始存储文章标签关系
+        logger.info("开始存储文章标签关系——"+updateArticleDTO.getArticleTitle());
+        if(ObjectUtil.isEmpty(updateArticleDTO.getTagIdList())){
+            throw new ServiceException(HttpCode.CODE_400, "请选择文章标签");
+        }
+        //清空原有关系
+        logger.info("清空原有文章标签关系——"+updateArticleDTO.getArticleTitle());
+        blogArticleTagMapper.delete(new LambdaQueryWrapper<BlogArticleTag>()
+                .eq(BlogArticleTag::getArticleId, updateArticleDTO.getArticleId()));
+        List<BlogArticleTag> addArticleTagList = new ArrayList<>();
+        updateArticleDTO.getTagIdList().forEach(tagId->{
+            BlogArticleTag addArticleTag = BlogArticleTag.builder()
+                    .articleId(updateArticleDTO.getArticleId())
+                    .tagId(tagId)
+                    .build();
+            addArticleTagList.add(addArticleTag);
+        });
+        blogArticleTagMapper.insertBatchArticleTag(addArticleTagList);
+        logger.info("存储完成——"+updateArticleDTO.getArticleTitle());
         updateById(updateArticle);
     }
 
@@ -206,6 +254,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     /**
      * 要注意同时删除文章评论和标签
+     * 可以改成一次性全部删除
      **/
     @Override
     public void deleteBatchArticle(List<Integer> ids) {
@@ -213,8 +262,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         ids.forEach(deleteArticleId->{
             //删除评论
             blogCommentMapper.deleteCommentByArticleId(deleteArticleId);
-
             //删除标签
+            blogArticleTagMapper.delete(new LambdaQueryWrapper<BlogArticleTag>()
+                    .eq(BlogArticleTag::getArticleId, deleteArticleId));
 
         });
         //删除文章

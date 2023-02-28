@@ -37,7 +37,7 @@
     <select id="getAdminCommentPageList" resultType="com.jw_server.dao.blog.vo.BlogAdminCommentPageVO">
         SELECT
             bc.comment_id, su1.nickname, su1.avatar, su2.nickname as to_nickname,
-            bc.comment_content, bc.comment_check, bc.create_time
+            bc.comment_type, bc.comment_content, bc.comment_check, bc.create_time
         FROM
             blog_comment AS bc
             LEFT JOIN sys_user AS su1 ON bc.user_id = su1.id
@@ -47,6 +47,9 @@
             AND bc.is_deleted='0'
             <if test="queryCommentPageDTO.nickname !=null and queryCommentPageDTO.nickname != ''" >
                 AND su1.nickname like concat('%',#{queryCommentPageDTO.nickname} ,'%')
+            </if>
+            <if test="queryCommentPageDTO.commentType !=null and queryCommentPageDTO.commentType != ''" >
+                AND bc.comment_type like concat('%',#{queryCommentPageDTO.commentType} ,'%')
             </if>
             <if test="queryCommentPageDTO.commentCheck !=null and queryCommentPageDTO.commentCheck != ''" >
                 AND bc.comment_check = #{queryCommentPageDTO.commentCheck}
@@ -79,8 +82,8 @@
     <delete id="deleteCommentByArticleId" parameterType="java.lang.Integer">
         DELETE
         FROM
-            blog_comment AS bc
+            blog_comment
         WHERE
-            bc.article_id = #{articleId}
+            article_id = #{articleId}
     </delete>
 </mapper>

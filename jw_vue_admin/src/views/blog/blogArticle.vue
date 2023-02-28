@@ -39,6 +39,11 @@
         </template>
       </el-table-column>
       <el-table-column prop="categoryName" label="文章类别" width="120px"></el-table-column>
+      <el-table-column prop="tagList" label="文章标签" width="140px">
+        <template slot-scope="scope">
+          <el-tag class="ml-5" v-for="(tag,index) in scope.row.tagList" :key="index">{{tag.tagName}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="isTop" label="顶置">
         <template slot-scope="scope">
           <el-tag type="primary" v-if="scope.row.isTop==='1'">顶置</el-tag>

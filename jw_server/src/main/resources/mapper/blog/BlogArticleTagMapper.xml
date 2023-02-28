@@ -13,4 +13,11 @@
             AND bt.is_deleted = '0'
             AND bat.article_id = #{articleId}
     </select>
+
+    <insert id="insertBatchArticleTag">
+        insert into blog_article_tag(article_id, tag_id) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.articleId},#{item.tagId})
+        </foreach>
+    </insert>
 </mapper>

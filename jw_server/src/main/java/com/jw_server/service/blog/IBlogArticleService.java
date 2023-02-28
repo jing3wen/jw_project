@@ -37,7 +37,7 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2023/1/9 21:19
      **/
-    void addBlogArticle(BlogAdminAddArticleDTO blogAdminAddArticleDTO);
+    void addBlogArticle(BlogAdminAddOrUpdateArticleDTO blogAdminAddArticleDTO);
 
     /**
      * Description: 博客后台查询文章列表
@@ -58,7 +58,7 @@ public interface IBlogArticleService extends IService<BlogArticle> {
      * Author: jingwen
      * Date: 2023/1/12 14:18
      **/
-    void updateBlogArticle(BlogArticle updateArticle);
+    void updateBlogArticle(BlogAdminAddOrUpdateArticleDTO updateArticleDTO);
 
     /**
      * Description: 后台修改文章顶置状态

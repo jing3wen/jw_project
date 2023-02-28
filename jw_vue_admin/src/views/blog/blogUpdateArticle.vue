@@ -24,10 +24,6 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="文章分类:" prop="categoryId">
-<!--                <el-radio-group v-model="article.categoryId" size="medium">-->
-<!--                  <el-radio v-for="(item, index) in categoryList" :key="item.categoryId" :label="item.categoryId"-->
-<!--                            :disabled="item.disabled" border>{{item.categoryName}}</el-radio>-->
-<!--                </el-radio-group>-->
               <el-tag
                   type="success"
                   v-show="article.categoryId"
@@ -65,12 +61,49 @@
               </el-popover>
             </el-form-item>
           </el-col>
+          <!-- 文章标签 -->
           <el-col :span="24">
-            <el-form-item label="文章标签:" prop="field109">
-              <!--                <el-checkbox-group v-model="article.field109" size="medium">-->
-              <!--                  <el-checkbox v-for="(item, index) in field109Options" :key="index" :label="item.value"-->
-              <!--                               :disabled="item.disabled" border>{{item.label}}</el-checkbox>-->
-              <!--                </el-checkbox-group>-->
+            <el-form-item label="文章标签:" prop="">
+              <el-tag
+                  v-for="(item, index) of article.tagNameList"
+                  :key="index"
+                  style="margin:0 1rem 0 0"
+                  :closable="true"
+                  @close="removeTag(item)">
+                {{ item }}
+              </el-tag>
+              <!-- 分类选项 -->
+              <el-popover placement="bottom-start" width="460" trigger="click" v-if="article.tagNameList.length < 3">
+                <div class="popover-title">标签</div>
+                <!-- 搜索框 -->
+                <el-autocomplete
+                    style="width:100%"
+                    v-model="searchTagName"
+                    :fetch-suggestions="searchTag"
+                    placeholder="请输入标签名搜索，enter可添加自定义标签"
+                    :trigger-on-focus="false"
+                    @keyup.enter.native="addTag"
+                    @select="selectTag">
+                  <template slot-scope="{ item }">
+                    <div>{{ item.tagName }}</div>
+                  </template>
+                </el-autocomplete>
+                <!-- 标签 -->
+                <div class="popover-container">
+                  <div style="margin-bottom:1rem">添加标签</div>
+                  <el-tag
+                      v-for="(item, index) of tagList"
+                      :key="index"
+                      :class="tagClass(item)"
+                      @click="selectTag(item)"
+                  >
+                    {{ item.tagName }}
+                  </el-tag>
+                </div>
+                <el-button type="success" plain slot="reference">
+                  添加标签
+                </el-button>
+              </el-popover>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -145,6 +178,8 @@ export default {
         userId: '',  //文章作者
         categoryId: '', // 文章类别id
         categoryName:'', // 文章类别名
+        tagIdList:[], //文章标签id
+        tagNameList:[], //文章标签名称
         isTop:'',  //是否顶置
         articleCover: '', // 文章封面
         articleTitle: '', // 文章标题
@@ -170,15 +205,28 @@ export default {
       //搜索框中的类别名称
       searchCategoryName:'',
 
+      //文章标签列表
+      tagList: [],
+      //搜索框中的类别名称
+      searchTagName:'',
       //上传组件参数
       action:"/api/file/fileUpload/blog/article/cover",
       removeFileUrl:'/api/file/deleteUploadFile/blog/article/cover',
     };
   },
+  computed: {
+    tagClass() {
+      return function(item) {
+        const index = this.article.tagNameList.indexOf(item.tagName);
+        return index !== -1 ? "tag-item-select" : "tag-item";
+      };
+    }
+  },
   created() {
     //获取待编辑的文章信息
     this.getUpdateArticle()
     this.getAllCategory()
+    this.getAllTag()
   },
   destroyed() {
     this.cacheArticleWhenChangeVue()
@@ -231,6 +279,53 @@ export default {
       })
     },
 
+    //获取所有文章标签
+    getAllTag(){
+      this.request.get('/api/blogTag/admin/getAllBlogTagList').then(res =>{
+        if (res.code === 200){
+          this.tagList = res.data
+        }else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    //移除选择的文章标签
+    removeTag(item){
+      const index = this.article.tagNameList.indexOf(item.tagName);
+      this.article.tagIdList.splice(index, 1);
+      this.article.tagNameList.splice(index, 1);
+    },
+    //选择文章标签
+    selectTag(item){
+      if(this.article.tagIdList.indexOf(item.tagId) === -1){
+        this.article.tagIdList.push(item.tagId);
+        this.article.tagNameList.push(item.tagName);
+      }
+    },
+    //按回车新增文章类别
+    addTag(){
+      if(this.searchTagName.length === 0){
+        this.$message.error('标签名为空')
+      }else if(this.searchTagName.length > 50){
+        this.$message.warning('标签名字数应小于50')
+      }else{
+        this.request.post('/api/blogTag/admin/addBlogTag', {tagName: this.searchTagName}).then(res => {
+          if (res.code === 200) {
+            this.$message.success("新增标签成功")
+            this.getAllTag()
+          } else this.$message.error(res.msg)
+        })
+      }
+    },
+    searchTag(keyword, cb){
+      this.request.get('/api/blogTag/admin/searchBlogTagList',
+          {params: {tagName: keyword}}).then(res => {
+        if (res.code === 200) {
+          cb(res.data)
+        } else this.$message.error(res.msg)
+      })
+    },
+
     /**
      * 编辑器相关操作
      */
@@ -267,7 +362,24 @@ export default {
       const articleId = parseInt(path.substring(index + 1,path.length))
       if (articleId) {
         this.request.get("/api/blogArticle/admin/getUpdateArticle", {params: {articleId: articleId}}).then(res => {
-          this.article = res.data
+          this.article.articleId = res.data.articleId
+          this.article.userId = res.data.userId
+          this.article.categoryId = res.data.categoryId
+          this.article.categoryName = res.data.categoryName
+          this.article.articleCover = res.data.articleCover
+          this.article.articleTitle = res.data.articleTitle
+          this.article.articleSummary = res.data.articleSummary
+          this.article.articleContent = res.data.articleContent
+          this.article.articleVisible = res.data.articleVisible
+          this.article.commentAllowed = res.data.commentAllowed
+          this.article.articleCheck = res.data.articleCheck
+          this.article.isTop = res.data.isTop
+
+          let tagList = res.data.tagList;
+          tagList.forEach(item => {
+            this.article.tagIdList.push(item.tagId);
+            this.article.tagNameList.push(item.tagName);
+          })
           //缓存 数据库版本article
           sessionStorage.setItem('update-oldArticleId-'+this.article.articleId, JSON.stringify(this.article))
           //检测浏览器中是否缓存了 新版本article
@@ -279,6 +391,8 @@ export default {
               type:'success'
             });
             this.article = JSON.parse(newArticle)
+
+
           }
         })
       }
@@ -315,6 +429,10 @@ export default {
       }
     },
     updateArticle() {
+      if(this.article.tagIdList.length===0){
+        this.$message.error("请选择文章标签")
+        return false;
+      }
       this.$refs['articleForm'].validate((valid) => {
         if(valid){
           // 更新文章
@@ -383,5 +501,15 @@ export default {
   height: 260px;
   overflow-y: auto;
 }
-
+.tag-item {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+.tag-item-select {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  cursor: not-allowed;
+  color: #ccccd8 !important;
+}
 </style>

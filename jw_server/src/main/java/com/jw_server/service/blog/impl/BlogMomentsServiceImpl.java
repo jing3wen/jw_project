@@ -7,6 +7,7 @@ import com.jw_server.core.common.MyPageVO;
 import com.jw_server.dao.blog.dto.BlogFrontMomentsPageDTO;
 import com.jw_server.dao.blog.entity.BlogMoments;
 import com.jw_server.dao.blog.mapper.BlogMomentsMapper;
+import com.jw_server.dao.blog.vo.BlogAdminMomentsVO;
 import com.jw_server.dao.blog.vo.BlogFrontMomentsPageVO;
 import com.jw_server.dao.system.vo.LoginUserVO;
 import com.jw_server.service.blog.IBlogMomentsService;
@@ -50,5 +51,17 @@ public class BlogMomentsServiceImpl extends ServiceImpl<BlogMomentsMapper, BlogM
                     new Page<>(frontMomentsPageDTO.getPageNum(), frontMomentsPageDTO.getPageSize()));
         }
         return  new MyPageVO<>(page);
+    }
+
+
+    /**
+     * 后台查询朋友圈分页
+     **/
+    @Override
+    public MyPageVO<BlogAdminMomentsVO> getAdminMomentsPage(Integer pageNum, Integer pageSize, String nickname) {
+
+        return new MyPageVO<>(
+                blogMomentsMapper.getAdminMomentsPage(new Page<BlogAdminMomentsVO>(pageNum, pageSize),
+                        nickname));
     }
 }

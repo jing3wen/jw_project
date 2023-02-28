@@ -5,7 +5,10 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Description 博客标签关系表
@@ -13,7 +16,8 @@ import lombok.Data;
  * Date 2023-02-04 15:21:08
  **/
 @Data
-  @TableName("blog_article_tag")
+@Builder
+@TableName("blog_article_tag")
 @ApiModel(value = "BlogArticleTag对象", description = "博客标签关系表")
 public class BlogArticleTag implements Serializable {
 

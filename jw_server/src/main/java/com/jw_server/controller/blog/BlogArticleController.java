@@ -87,7 +87,7 @@ public class BlogArticleController {
      **/
     @SysLog(logModule=BlogArticleModule, logType = ADD, logDesc = "博客后台新增文章")
     @PostMapping("/admin/addBlogArticle")
-    public ResponseResult addBlogArticle(@RequestBody BlogAdminAddArticleDTO blogAdminAddArticleDTO) {
+    public ResponseResult addBlogArticle(@RequestBody BlogAdminAddOrUpdateArticleDTO blogAdminAddArticleDTO) {
         blogArticleService.addBlogArticle(blogAdminAddArticleDTO);
         return ResponseResult.success();
     }
@@ -135,8 +135,8 @@ public class BlogArticleController {
      **/
     @SysLog(logModule=BlogArticleModule, logType = UPDATE, logDesc = "后台更新文章信息")
     @PostMapping("/admin/updateArticle")
-    public ResponseResult updateArticle(@RequestBody BlogArticle updateArticle) {
-        blogArticleService.updateBlogArticle(updateArticle);
+    public ResponseResult updateArticle(@RequestBody BlogAdminAddOrUpdateArticleDTO updateArticleDTO) {
+        blogArticleService.updateBlogArticle(updateArticleDTO);
         return ResponseResult.success();
     }
 

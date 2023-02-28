@@ -2,19 +2,27 @@ package com.jw_server.dao.blog.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Description: 新增文章
  * Author: jingwen
  * DATE: 2023/1/9 20:50
  */
 @Data
-public class BlogAdminAddArticleDTO {
+public class BlogAdminAddOrUpdateArticleDTO {
+
+    //文章id
+    private Integer articleId;
 
     //作者id
     private Integer userId;
 
     //类别id
     private Integer categoryId;
+
+    //标签id
+    private List<Integer> tagIdList;
 
     //文章封面
     private String articleCover;

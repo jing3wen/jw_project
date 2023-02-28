@@ -2,6 +2,8 @@ package com.jw_server.dao.blog.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Description: 编辑文章返回类
  * Author: jingwen
@@ -21,6 +23,9 @@ public class BlogAdminUpdateArticleVO {
 
     //类别名称
     private String categoryName;
+
+    //标签名
+    private List<BlogFrontTagVO> tagList;
 
     //顶置（0表示不顶置，1表示顶置）
     private String isTop;

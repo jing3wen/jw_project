@@ -25,6 +25,9 @@ public class BlogAdminCommentPageVO {
     //回复用户昵称
     private String toNickname;
 
+    //评论类型
+    private String commentType;
+
     //评论内容
     private String commentContent;
 

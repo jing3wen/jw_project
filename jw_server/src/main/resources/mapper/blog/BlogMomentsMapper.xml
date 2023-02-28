@@ -27,4 +27,19 @@
             </if>
         ORDER BY bm.create_time DESC
     </select>
+    <select id="getAdminMomentsPage" resultType="com.jw_server.dao.blog.vo.BlogAdminMomentsVO">
+        SELECT
+            bm.moments_id, bm.user_id, su.nickname, su.avatar,
+            bm.moments_content, bm.is_public, bm.create_time
+        FROM
+            blog_moments AS bm
+            LEFT JOIN sys_user AS su ON su.id = bm.user_id
+        WHERE
+            true
+            <if test="nickname!=null and nickname!=''">
+                AND su.nickname like concat('%',#{nickname},'%')
+            </if>
+        ORDER BY bm.create_time DESC
+
+    </select>
 </mapper>

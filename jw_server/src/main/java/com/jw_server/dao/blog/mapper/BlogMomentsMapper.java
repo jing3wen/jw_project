@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.dao.blog.dto.BlogFrontMomentsPageDTO;
 import com.jw_server.dao.blog.entity.BlogMoments;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jw_server.dao.blog.vo.BlogAdminMomentsVO;
 import com.jw_server.dao.blog.vo.BlogFrontMomentsPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,4 +36,11 @@ public interface BlogMomentsMapper extends BaseMapper<BlogMoments> {
                                                                Integer userId,
                                                                Boolean viewMe);
 
+    /**
+     * Description: 后台查询朋友圈分页
+     * Author: jingwen
+     * Date: 2023/2/28 17:07
+     **/
+    IPage<BlogAdminMomentsVO> getAdminMomentsPage(Page<BlogAdminMomentsVO> blogAdminMomentsVOPage,
+                                                  String nickname);
 }
