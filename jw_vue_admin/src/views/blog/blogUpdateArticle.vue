@@ -141,9 +141,9 @@
     <el-card class="mt-10">
       <div class="article-editor">
         <h3 style="flex: 1">文章内容:</h3>
-<!--        <el-button type="danger" plain class="ml-10" @click="" v-if="article.articleId == null">-->
-<!--          保存草稿-->
-<!--        </el-button>-->
+        <el-button type="danger" plain class="ml-10"  v-if="recoverCacheArticleButton" @click="recoverCachedArticle">
+          恢复上次编辑状态
+        </el-button>
         <el-button type="primary" plain class="ml-10" @click="updateArticle()">
           发布文章
         </el-button>
@@ -212,6 +212,9 @@ export default {
       //上传组件参数
       action:"/api/file/fileUpload/blog/article/cover",
       removeFileUrl:'/api/file/deleteUploadFile/blog/article/cover',
+
+      //恢复缓存文章按钮
+      recoverCacheArticleButton: false,
     };
   },
   computed: {
@@ -225,6 +228,8 @@ export default {
   created() {
     //获取待编辑的文章信息
     this.getUpdateArticle()
+    //检查缓存
+    this.checkCacheArticle()
     this.getAllCategory()
     this.getAllTag()
   },
@@ -382,20 +387,32 @@ export default {
           })
           //缓存 数据库版本article
           sessionStorage.setItem('update-oldArticleId-'+this.article.articleId, JSON.stringify(this.article))
-          //检测浏览器中是否缓存了 新版本article
-          const newArticle = sessionStorage.getItem('update-newArticleId-'+this.article.articleId)
-          if(newArticle){
-            this.$notify({
-              title: '提示',
-              message: '已自动恢复到上次编辑状态',
-              type:'success'
-            });
-            this.article = JSON.parse(newArticle)
-
-
-          }
         })
       }
+    },
+    //检测浏览器中是否缓存了 新版本article
+    checkCacheArticle(){
+      const path = this.$route.path;
+      const index = path.lastIndexOf("\/")
+      const articleId = parseInt(path.substring(index + 1,path.length))
+      const newArticle = sessionStorage.getItem('update-newArticleId-'+articleId)
+      if(newArticle){
+        this.recoverCacheArticleButton = true
+      }else {
+        this.recoverCacheArticleButton = false
+      }
+    },
+    //恢复缓存状态, 移除缓存
+    recoverCachedArticle(){
+      const newArticle = sessionStorage.getItem('update-newArticleId-'+this.article.articleId)
+      this.$notify({
+        title: '提示',
+        message: '已自动恢复到上次编辑状态',
+        type:'success'
+      });
+      this.article = JSON.parse(newArticle)
+      sessionStorage.removeItem('update-newArticleId-'+this.article.articleId)
+      this.checkCacheArticle()
     },
     /**
      * 销毁组件时需要判断内容是否被修改，若修改则缓存内容
@@ -407,6 +424,7 @@ export default {
       const newArticle = this.article
       if(oldArticle){
         if (!(oldArticle.categoryId === newArticle.categoryId &&
+            oldArticle.tagIdList.toString() === newArticle.tagIdList.toString() &&
             oldArticle.isTop === newArticle.isTop &&
             oldArticle.articleCover === newArticle.articleCover &&
             oldArticle.articleTitle === newArticle.articleTitle &&
@@ -421,11 +439,8 @@ export default {
             type:'success'
           });
           sessionStorage.setItem('update-newArticleId-'+this.article.articleId, JSON.stringify(this.article))
-        }else {
-          //防止用户手动恢复到默认状态后 还存在缓存数据
-          sessionStorage.removeItem('update-oldArticleId-'+this.article.articleId)
-          sessionStorage.removeItem('update-newArticleId-'+this.article.articleId)
         }
+        sessionStorage.removeItem('update-oldArticleId-'+this.article.articleId)
       }
     },
     updateArticle() {

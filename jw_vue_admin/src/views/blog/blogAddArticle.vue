@@ -141,9 +141,9 @@
     <el-card class="mt-10">
       <div class="article-editor">
         <h3 style="flex: 1">文章内容:</h3>
-<!--        <el-button type="danger" plain class="ml-10" @click="" v-if="article.articleId == null">-->
-<!--          保存草稿-->
-<!--        </el-button>-->
+        <el-button type="danger" plain class="ml-10"  v-if="recoverCacheArticleButton" @click="recoverCachedArticle">
+          恢复上次编辑状态
+        </el-button>
         <el-button type="primary" plain class="ml-10" @click="addArticle()">
           发布文章
         </el-button>
@@ -171,7 +171,6 @@ export default {
   components: {mavonEditor, ImageVideoUpload},
   data() {
     return {
-
       // 文章表单
       article: {
         articleId: null,  //文章id
@@ -204,7 +203,6 @@ export default {
       categoryList: [],
       //搜索框中的类别名称
       searchCategoryName:'',
-
       //文章标签列表
       tagList: [],
       //搜索框中的类别名称
@@ -212,6 +210,8 @@ export default {
       //上传组件参数
       action:"/api/file/fileUpload/blog/article/cover",
       removeFileUrl:'/api/file/deleteUploadFile/blog/article/cover',
+      //恢复缓存文章按钮
+      recoverCacheArticleButton: false,
 
     };
   },
@@ -224,10 +224,10 @@ export default {
     }
   },
   created() {
+    //检查缓存
+    this.checkCacheArticle()
     this.getAllCategory()
     this.getAllTag()
-    //查看是否有缓存数据
-    this.getCachedArticle()
   },
   destroyed() {
     this.cacheArticleWhenChangeVue()
@@ -356,22 +356,32 @@ export default {
       })
     },
     //查看是否有缓存数据
-    getCachedArticle(){
+    checkCacheArticle(){
       const article = sessionStorage.getItem('add-article')
       if (article){
-        this.$notify({
-          title: '提示',
-          message: '已自动恢复到上次编辑状态',
-          type:'success'
-        });
-        this.article = JSON.parse(article)
+        this.recoverCacheArticleButton = true
+      }else {
+        this.recoverCacheArticleButton = false
       }
     },
-    //当摧毁组件时判断页面是否已经写入数据，若写入就缓存该数据
+    //恢复缓存状态, 移除缓存
+    recoverCachedArticle(){
+      const article = sessionStorage.getItem('add-article')
+      this.$notify({
+        title: '提示',
+        message: '已自动恢复到上次编辑状态',
+        type:'success'
+      });
+      this.article = JSON.parse(article)
+      sessionStorage.removeItem('add-article')
+      this.checkCacheArticle()
+    },
+    //当摧毁组件时判断页面是否已经写入数据，若写入就缓存该数据, 始终存储最近一次的缓存版本
     cacheArticleWhenChangeVue() {
       if (!(this.article.articleId === null &&
           this.article.userId === '' &&
           this.article.categoryId === '' &&
+          this.article.tagIdList.length ===0 &&
           this.article.isTop === '' &&
           this.article.articleCover === '' &&
           this.article.articleTitle === '' &&
@@ -386,9 +396,6 @@ export default {
           type: 'success'
         });
         sessionStorage.setItem('add-article', JSON.stringify(this.article))
-      } else {
-        //防止用户手动恢复到默认状态后 还存在缓存数据
-        sessionStorage.removeItem('add-article')
       }
     },
     addArticle() {
