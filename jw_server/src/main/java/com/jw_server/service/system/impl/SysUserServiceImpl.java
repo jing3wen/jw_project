@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.intern.InternUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -45,6 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -82,6 +84,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Value("${jwt.data.jwtTtl}")
     private String tokenTime;
 
+    //密码加解密密钥
+    @Value("${password.decryptKey}")
+    private String decryptKey;
+
     private static final Log logger = LogFactory.getLog(SysUserServiceImpl.class);
 
 
@@ -92,6 +98,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      **/
     @Override
     public ResponseResult userLogin(LoginSysUserDTO loginSysUserDTO) {
+        //对密码进行解密
+        loginSysUserDTO.setPassword(getDecryptPassword(loginSysUserDTO.getPassword()));
         //AuthenticationManager的authenticate方法来进行用户认证, authenticate方法会调用UserDetailsService的loadUserByUsername方法来认证
         UsernamePasswordAuthenticationToken authenticationToken = new
                 UsernamePasswordAuthenticationToken(loginSysUserDTO.getUsername(), loginSysUserDTO.getPassword());
@@ -147,7 +155,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Transactional
     public ResponseResult register(RegisterUserDTO registerUserDTO) {
         String username = registerUserDTO.getUsername();
-        String password = registerUserDTO.getPassword();
+        //对密码进行解密
+        String password = getDecryptPassword(registerUserDTO.getPassword());
         if(StrUtil.isEmpty(username) || StrUtil.isEmpty(password)){
             throw new ServiceException(HttpCode.CODE_400,"用户名或密码为空");
         }
@@ -303,6 +312,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      **/
     @Override
     public void updateForgetPassword(BlogFrontForgetPasswordOrUpdateBindDTO forgetPasswordDTO) {
+        //对密码进行解密
+        forgetPasswordDTO.setPassword(getDecryptPassword(forgetPasswordDTO.getPassword()));
         //检查输入数据
         if(StrUtil.isEmpty(forgetPasswordDTO.getPassword())){
             throw new ServiceException(HttpCode.CODE_600,"输入密码为空");
@@ -346,7 +357,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String password = getOne(new LambdaQueryWrapper<SysUser>()
                 .select(SysUser::getPassword)
                 .eq(SysUser::getId, loginUserVO.getId())).getPassword();
-
+        //对密码进行解密
+        updateBindDTO.setPassword(getDecryptPassword(updateBindDTO.getPassword()));
         if(StrUtil.isEmpty(updateBindDTO.getPassword()) || !new BCryptPasswordEncoder().matches(updateBindDTO.getPassword(), password)){
             throw new ServiceException(HttpCode.CODE_600, "账户密码错误");
         }
@@ -442,6 +454,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }else {
             throw new ServiceException(HttpCode.CODE_400, "注册用户类型参数错误");
         }
+    }
+
+    /**
+     * 对密码进行解密
+     **/
+    public String getDecryptPassword(String password){
+
+        logger.info("开始对密码进行解密——"+password);
+        String decryptPassword = "";
+        try {
+            decryptPassword = new String(SecureUtil.aes(decryptKey.getBytes(StandardCharsets.UTF_8)).decrypt(password));
+        }catch (Exception e){
+            throw new ServiceException(HttpCode.CODE_403, "密码错误");
+        }
+        logger.info("解密成功");
+        return decryptPassword;
     }
 
 

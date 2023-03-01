@@ -36,7 +36,7 @@ import static com.jw_server.core.enums.FilePathEnum.AVATAR;
 public class SysUserController {
 
     // 初始化密码
-    @Value("${sysUser.initPassword}")
+    @Value("${password.initPassword}")
     private String initPassword;
 
     @Resource

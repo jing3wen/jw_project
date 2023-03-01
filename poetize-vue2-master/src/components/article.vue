@@ -262,15 +262,12 @@
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.article = res.data;
-              // TODO:博客进展
-              // this.getNews();
               const md = new MarkdownIt({breaks: true});
               this.articleContentHtml = md.render(this.article.articleContent);
               this.$nextTick(() => {
                 this.highlight();
                 this.addId();
                 // TODO：目录到时候做成固定组件形式
-                // todo 只有程序相关文章才显示toc
                 this.getTocbot();
               });
             }

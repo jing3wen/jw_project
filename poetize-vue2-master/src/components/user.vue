@@ -262,9 +262,7 @@
 
         let user = {
           username: this.account.trim(),
-          // TODO: 密码加密
-          // password: this.$common.encrypt(this.password.trim())
-          password: this.password.trim()
+          password: this.$common.encrypt(this.password.trim())
         };
 
         this.$http.post("http://localhost:9090/login/userLogin", user)
@@ -323,8 +321,7 @@
         let user = {
           username: this.username.trim(),
           code: this.code.trim(),
-          //password: this.$common.encrypt(this.password.trim())  TODO 注册用户时密码加密
-          password: this.password.trim(),
+          password: this.$common.encrypt(this.password.trim()),
           userType:this.$constant.register_type,
         };
 
@@ -560,8 +557,7 @@
           email:"",
           phone:"",
           code: this.code.trim(),
-          //password: this.$common.encrypt(this.password.trim())
-          password: this.password.trim()
+          password: this.$common.encrypt(this.password.trim())
         };
         if (!this.checkParams(params)) {
           return;

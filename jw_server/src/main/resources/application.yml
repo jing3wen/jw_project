@@ -51,8 +51,10 @@ jwt:
 
 
 # 用户密码初始化
-sysUser:
+password:
   initPassword: 123456
+
+  decryptKey: areyouokareyouok
 
 # 人脸检测相关配置
 dlFaceDetect:

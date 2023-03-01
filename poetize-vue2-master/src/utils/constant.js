@@ -27,7 +27,7 @@ export default {
   jinrishici: "https://v1.jinrishici.com/all.json",
 
   //前后端定义的密钥，AES使用16位
-  cryptojs_key: "aoligeimeimaobin",
+  cryptojs_key: "areyouokareyouok",
 
   friendLetterTop: "https://cdn.cbd.int/hexo-butterfly-envelope/lib/before.png",
   friendLetterBottom: "https://cdn.cbd.int/hexo-butterfly-envelope/lib/after.png",

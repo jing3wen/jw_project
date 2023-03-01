@@ -44,7 +44,6 @@
 <script>
   export default {
     components: {},
-    //TODO $store.state.webInfo.webAvatar 替换成 默认头像
     props: {
       treeHoleList: {
         type: Array
