@@ -11,7 +11,7 @@
  Target Server Version : 80013
  File Encoding         : 65001
 
- Date: 01/03/2023 16:34:44
+ Date: 01/03/2023 20:14:41
 */
 
 SET NAMES utf8mb4;
@@ -136,6 +136,7 @@ CREATE TABLE `blog_friend`  (
 -- ----------------------------
 -- Records of blog_friend
 -- ----------------------------
+INSERT INTO `blog_friend` VALUES (8, '友链申请测试', 'wu', 'www.baidu.com', '友链申请测试', NULL, '0', '0', '2023-03-01 19:01:00');
 
 -- ----------------------------
 -- Table structure for blog_message
@@ -175,6 +176,7 @@ CREATE TABLE `blog_moments`  (
 -- ----------------------------
 -- Records of blog_moments
 -- ----------------------------
+INSERT INTO `blog_moments` VALUES (11, 24, '朋友圈测试', '1', '0', '2023-03-01 18:59:18', NULL);
 
 -- ----------------------------
 -- Table structure for blog_tag
@@ -306,9 +308,16 @@ CREATE TABLE `sys_login_log`  (
 -- ----------------------------
 -- Records of sys_login_log
 -- ----------------------------
-INSERT INTO `sys_login_log` VALUES (454, 'bloguser', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 1, '密码错误', '2023-03-01 15:57:01');
-INSERT INTO `sys_login_log` VALUES (455, 'bloguser', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 1, '密码错误', '2023-03-01 15:57:08');
-INSERT INTO `sys_login_log` VALUES (456, 'bloguser', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 15:58:26');
+INSERT INTO `sys_login_log` VALUES (467, 'jingwen', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 19:17:23');
+INSERT INTO `sys_login_log` VALUES (468, 'jingwen', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 19:35:48');
+INSERT INTO `sys_login_log` VALUES (469, 'showuser', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 19:36:11');
+INSERT INTO `sys_login_log` VALUES (470, 'jingwen', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 19:51:12');
+INSERT INTO `sys_login_log` VALUES (471, 'showuser', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 19:51:50');
+INSERT INTO `sys_login_log` VALUES (472, 'showuser', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 19:54:49');
+INSERT INTO `sys_login_log` VALUES (473, 'jingwen', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 20:01:28');
+INSERT INTO `sys_login_log` VALUES (474, 'showuser', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 20:02:33');
+INSERT INTO `sys_login_log` VALUES (475, 'showuser', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 20:09:07');
+INSERT INTO `sys_login_log` VALUES (476, 'jingwen', '127.0.0.1', '内网IP', 'MSEdge', 'Windows 10 or Windows Server 2016', 0, '登录成功', '2023-03-01 20:09:26');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -378,13 +387,52 @@ INSERT INTO `sys_menu` VALUES (49, 19, '评论管理', 'menu', 'el-icon-chat-lin
 INSERT INTO `sys_menu` VALUES (52, 44, '新增文章', 'menu', 'el-icon-zoom-in', '/blog/blogAddArticle', '/blog/blogAddArticle', '', 0, 1, '1', '', '0', 'jingwen', '2023-01-25 13:41:23', 'jingwen', '2023-01-25 18:59:56');
 INSERT INTO `sys_menu` VALUES (53, 44, '编辑文章', 'menu', 'el-icon-edit', '/blog/blogUpdateArticle/**', '/blog/blogUpdateArticle', '', 0, 2, '0', '', '0', 'jingwen', '2023-01-25 19:00:40', 'jingwen', '2023-01-25 19:40:48');
 INSERT INTO `sys_menu` VALUES (54, 46, '文章顶置', 'button', '', '', '', 'blog:blogArticle:editArticleTop', 0, 1, '1', '', '0', 'jingwen', '2023-01-26 13:03:40', 'jingwen', '2023-01-26 13:03:40');
-INSERT INTO `sys_menu` VALUES (55, 46, '编辑文章', 'button', '', '', '', 'blog:blogArticle:editArticle', 0, 1, '1', '', '0', 'jingwen', '2023-01-26 15:33:36', 'jingwen', '2023-01-26 15:33:36');
+INSERT INTO `sys_menu` VALUES (55, 46, '查询文章', 'button', '', '', '', 'blog:blogArticle:queryArticle', 0, 1, '1', '', '0', 'jingwen', '2023-01-26 15:33:36', 'jingwen', '2023-03-01 18:49:25');
 INSERT INTO `sys_menu` VALUES (56, 46, '删除文章', 'button', '', '', '', 'blog:blogArticle:deleteArticle', 0, 1, '1', '', '0', 'jingwen', '2023-01-26 15:34:02', 'jingwen', '2023-01-26 15:34:02');
 INSERT INTO `sys_menu` VALUES (57, 46, '审核文章', 'button', '', '', '', 'blog:blogArticle:checkArticle', 0, 1, '1', '', '0', 'jingwen', '2023-01-26 17:20:03', 'jingwen', '2023-01-26 17:20:33');
 INSERT INTO `sys_menu` VALUES (58, 19, '留言板管理', 'menu', 'el-icon-s-platform', '/blog/blogMessage', '/blog/blogMessage', '', 0, 5, '1', '', '0', 'jingwen', '2023-02-28 12:21:03', 'jingwen', '2023-02-28 12:21:11');
 INSERT INTO `sys_menu` VALUES (59, 19, '朋友圈管理', 'menu', 'el-icon-s-custom', '/blog/blogMoments', '/blog/blogMoments', '', 0, 7, '1', '', '0', 'jingwen', '2023-02-28 12:22:04', 'jingwen', '2023-02-28 18:39:11');
 INSERT INTO `sys_menu` VALUES (60, 19, '友链管理', 'menu', 'el-icon-share', '/blog/blogFriend', '/blog/blogFriend', '', 0, 6, '1', '', '0', 'jingwen', '2023-02-28 12:23:19', 'jingwen', '2023-02-28 18:39:15');
 INSERT INTO `sys_menu` VALUES (61, 19, '网站配置', 'menu', 'el-icon-s-marketing', '/blog/blogWeb', '/blog/blogWeb', '', 0, 9, '1', '', '0', 'jingwen', '2023-03-01 14:08:01', 'jingwen', '2023-03-01 14:08:01');
+INSERT INTO `sys_menu` VALUES (62, 47, '新增类别', 'button', '', '', '', 'blog:blogCategory:add', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:31:58', 'jingwen', '2023-03-01 17:34:06');
+INSERT INTO `sys_menu` VALUES (63, 47, '编辑类别', 'button', '', '', '', 'blog:blogCategory:update', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:32:31', 'jingwen', '2023-03-01 17:34:17');
+INSERT INTO `sys_menu` VALUES (64, 47, '删除类别', 'button', '', '', '', 'blog:blogCategory:delete', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:32:54', 'jingwen', '2023-03-01 17:34:21');
+INSERT INTO `sys_menu` VALUES (65, 47, '查询类别', 'button', '', '', '', 'blog:blogCategory:query', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:34:37', 'jingwen', '2023-03-01 17:34:37');
+INSERT INTO `sys_menu` VALUES (66, 48, '新增标签', 'button', '', '', '', 'blog:blogTag:add', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:35:00', 'jingwen', '2023-03-01 17:35:00');
+INSERT INTO `sys_menu` VALUES (67, 48, '编辑标签', 'button', '', '', '', 'blog:blogTag:update', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:35:20', 'jingwen', '2023-03-01 17:35:20');
+INSERT INTO `sys_menu` VALUES (68, 48, '删除标签', 'button', '', '', '', 'blog:blogTag:delete', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:35:46', 'jingwen', '2023-03-01 17:35:46');
+INSERT INTO `sys_menu` VALUES (69, 48, '查询标签', 'button', '', '', '', 'blog:blogTag:query', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:36:00', 'jingwen', '2023-03-01 17:36:00');
+INSERT INTO `sys_menu` VALUES (70, 49, '审核评论', 'button', '', '', '', 'blog:blogComment:check', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:36:34', 'jingwen', '2023-03-01 17:36:34');
+INSERT INTO `sys_menu` VALUES (71, 49, '删除评论', 'button', '', '', '', 'blog:blogComment:delete', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:37:14', 'jingwen', '2023-03-01 17:37:14');
+INSERT INTO `sys_menu` VALUES (72, 49, '查询评论', 'button', '', '', '', 'blog:blogComment:query', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:37:36', 'jingwen', '2023-03-01 17:37:36');
+INSERT INTO `sys_menu` VALUES (73, 58, '查询留言', 'button', '', '', '', 'blog:blogMessage:query', 0, 3, '1', '', '0', 'jingwen', '2023-03-01 17:38:18', 'jingwen', '2023-03-01 18:44:12');
+INSERT INTO `sys_menu` VALUES (74, 58, '审核留言', 'button', '', '', '', 'blog:blogMessage:check', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:38:46', 'jingwen', '2023-03-01 17:38:46');
+INSERT INTO `sys_menu` VALUES (75, 58, '删除留言', 'button', '', '', '', 'blog:blogMessage:delete', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:39:01', 'jingwen', '2023-03-01 17:39:01');
+INSERT INTO `sys_menu` VALUES (76, 60, '审核友链', 'button', '', '', '', 'blog:blogFriend:check', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:39:32', 'jingwen', '2023-03-01 17:39:32');
+INSERT INTO `sys_menu` VALUES (77, 60, '删除友链', 'button', '', '', '', 'blog:blogFriend:delete', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:39:47', 'jingwen', '2023-03-01 17:39:47');
+INSERT INTO `sys_menu` VALUES (78, 60, '查询友链', 'button', '', '', '', 'blog:blogFriend:query', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:40:19', 'jingwen', '2023-03-01 17:40:19');
+INSERT INTO `sys_menu` VALUES (79, 59, '删除朋友圈', 'button', '', '', '', 'blog:blogMoments:delete', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:41:35', 'jingwen', '2023-03-01 17:41:35');
+INSERT INTO `sys_menu` VALUES (80, 59, '查询朋友圈', 'button', '', '', '', 'blog:blogMoments:query', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 17:42:00', 'jingwen', '2023-03-01 17:42:00');
+INSERT INTO `sys_menu` VALUES (82, 61, '更新网站配置', 'button', '', '', '', 'blog:blogWeb:update', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 18:29:37', 'jingwen', '2023-03-01 18:29:37');
+INSERT INTO `sys_menu` VALUES (83, 52, '发布文章', 'button', '', '', '', 'blog:blogArticle:publish', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 18:31:20', 'jingwen', '2023-03-01 18:31:20');
+INSERT INTO `sys_menu` VALUES (84, 53, '更新文章', 'button', '', '', '', 'blog:blogArticle:updateArticle', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 18:49:02', 'jingwen', '2023-03-01 18:51:49');
+INSERT INTO `sys_menu` VALUES (85, 0, '文件权限', 'directory', 'el-icon-folder', '', '', '', 0, 1, '0', '', '0', 'jingwen', '2023-03-01 19:07:35', 'jingwen', '2023-03-01 19:08:06');
+INSERT INTO `sys_menu` VALUES (86, 85, '文件上传', 'button', '', '', '', 'file:uploadFile', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:09:10', 'jingwen', '2023-03-01 19:13:56');
+INSERT INTO `sys_menu` VALUES (87, 85, '删除上传文件', 'button', '', '', '', 'file:deleteUploadFile', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:09:33', 'jingwen', '2023-03-01 19:09:33');
+INSERT INTO `sys_menu` VALUES (88, 41, '新增人脸', 'button', '', '', '', 'dl:dlFaceDatabase:addFace', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:18:10', 'jingwen', '2023-03-01 19:21:29');
+INSERT INTO `sys_menu` VALUES (89, 41, '更新人脸', 'button', '', '', '', 'dl:dlFaceDatabase:update', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:19:42', 'jingwen', '2023-03-01 19:19:42');
+INSERT INTO `sys_menu` VALUES (90, 41, '删除人脸', 'button', '', '', '', 'dl:dlFaceDatabase:delete', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:19:59', 'jingwen', '2023-03-01 19:19:59');
+INSERT INTO `sys_menu` VALUES (91, 41, '查询人脸', 'button', '', '', '', 'dl:dlFaceDatabase:query', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:20:25', 'jingwen', '2023-03-01 19:20:25');
+INSERT INTO `sys_menu` VALUES (92, 41, '远程更新人脸库', 'button', '', '', '', 'dl:dlFaceDatabase:updateFaceDatabase', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:21:20', 'jingwen', '2023-03-01 19:21:20');
+INSERT INTO `sys_menu` VALUES (93, 41, '上传人脸图片', 'button', '', '', '', 'dl:dlFaceDatabase:uploadFaceImage', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:25:30', 'jingwen', '2023-03-01 19:25:46');
+INSERT INTO `sys_menu` VALUES (94, 41, '删除已上传人脸', 'button', '', '', '', 'dl:dlFaceDatabase:deleteUploadFaceImage', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:26:11', 'jingwen', '2023-03-01 19:28:06');
+INSERT INTO `sys_menu` VALUES (95, 42, '新增检测文件', 'button', '', '', '', 'dl:dlFaceDetectFile:addDetectFile', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:29:02', 'jingwen', '2023-03-01 19:29:25');
+INSERT INTO `sys_menu` VALUES (96, 42, '更新检测文件', 'button', '', '', '', 'dl:dlFaceDetectFile:update', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:30:07', 'jingwen', '2023-03-01 19:30:07');
+INSERT INTO `sys_menu` VALUES (97, 42, '删除检测文件', 'button', '', '', '', 'dl:dlFaceDetectFile:delete', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:30:16', 'jingwen', '2023-03-01 19:33:26');
+INSERT INTO `sys_menu` VALUES (98, 42, '查询检测文件', 'button', '', '', '', 'dl:dlFaceDetectFile:query', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:30:34', 'jingwen', '2023-03-01 19:30:34');
+INSERT INTO `sys_menu` VALUES (99, 42, '上传检测文件', 'button', '', '', '', 'dl:dlFaceDetectFile:uploadDetectFile', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:31:03', 'jingwen', '2023-03-01 19:31:03');
+INSERT INTO `sys_menu` VALUES (100, 42, '删除已上传文件', 'button', '', '', '', 'dl:dlFaceDetectFile:deleteUploadDetectFile', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:31:33', 'jingwen', '2023-03-01 19:31:46');
+INSERT INTO `sys_menu` VALUES (101, 42, '远程检测', 'button', '', '', '', 'dl:dlFaceDetectFile:detecting', 0, 1, '1', '', '0', 'jingwen', '2023-03-01 19:32:20', 'jingwen', '2023-03-01 19:32:20');
 
 -- ----------------------------
 -- Table structure for sys_operation_log
@@ -412,12 +460,9 @@ CREATE TABLE `sys_operation_log`  (
 -- ----------------------------
 -- Records of sys_operation_log
 -- ----------------------------
-INSERT INTO `sys_operation_log` VALUES (1128, '人脸库模块', '删除', '删除人脸库', '/dlFaceDatabase/deleteBatch', 'POST', 'com.jw_server.controller.deeplearning.DlFaceDatabaseController.deleteBatch', '[[34]]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'jingwen', '127.0.0.1', '内网IP', '2023-03-01 15:54:12');
-INSERT INTO `sys_operation_log` VALUES (1129, '文件上传模块', '上传', '上传文件', '/file/fileUpload/blog/comments', 'POST', 'com.jw_server.controller.FileUploadController.fileUpload', NULL, '{\"code\":200,\"data\":\"/static/upload/blog/comments/2023-03-01-809406f730d74791868afd632bafbcda.jpeg\",\"msg\":\"\"}', 0, NULL, 'bloguser', '127.0.0.1', '内网IP', '2023-03-01 15:59:30');
-INSERT INTO `sys_operation_log` VALUES (1130, '博客文章评论模块', '新增', '前台新增一条评论', '/blogComment/front/addComment', 'POST', 'com.jw_server.controller.blog.BlogCommentController.addComment', '[{\"commentCheck\":\"1\",\"articleId\":38,\"commentType\":\"article\",\"commentContent\":\"评论测试[default:衰][ppx:xiaochou@3x]\\n<bloguser,/static/upload/blog/comments/2023-03-01-809406f730d74791868afd632bafbcda.jpeg>\",\"userId\":24}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'bloguser', '127.0.0.1', '内网IP', '2023-03-01 15:59:35');
-INSERT INTO `sys_operation_log` VALUES (1131, '博客文章评论模块', '新增', '前台新增一条评论', '/blogComment/front/addComment', 'POST', 'com.jw_server.controller.blog.BlogCommentController.addComment', '[{\"floorCommentId\":155,\"replyUserId\":24,\"commentCheck\":\"1\",\"replyCommentId\":155,\"articleId\":38,\"commentType\":\"article\",\"commentContent\":\"回复测试[default:摸鱼]\",\"userId\":24}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'bloguser', '127.0.0.1', '内网IP', '2023-03-01 15:59:53');
-INSERT INTO `sys_operation_log` VALUES (1132, '博客留言模块', '新增', '前台新增一条留言', '/blogMessage/front/addMessage', 'POST', 'com.jw_server.controller.blog.BlogMessageController.add', '[{\"messageEmail\":\"bloguser@qq.com\",\"createTime\":\"2023-03-01T16:00:22.812596500\",\"messageCheck\":\"1\",\"messageId\":7,\"messageAvatar\":\"/static/upload/avatar/2023-02-26-73cfdb278f9e44ffb3519ae92107d59d.jpg\",\"messageNickname\":\"博客用户\",\"messageContent\":\"留言板测试\"}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'bloguser', '127.0.0.1', '内网IP', '2023-03-01 16:00:23');
-INSERT INTO `sys_operation_log` VALUES (1133, '博客文章评论模块', '新增', '前台新增一条评论', '/blogComment/front/addComment', 'POST', 'com.jw_server.controller.blog.BlogCommentController.addComment', '[{\"commentCheck\":\"1\",\"articleId\":0,\"commentType\":\"message\",\"commentContent\":\"留言评论测试[ppx:nianyu@3x]\",\"userId\":24}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'bloguser', '127.0.0.1', '内网IP', '2023-03-01 16:00:41');
+INSERT INTO `sys_operation_log` VALUES (1160, '菜单管理', '新增', '新增菜单', '/sysMenu/add', 'POST', 'com.jw_server.controller.system.SysMenuController.add', '[{\"icon\":\"\",\"menuName\":\"发布文章\",\"remark\":\"\",\"updateTime\":\"2023-03-01T18:31:20.473860200\",\"parentId\":52,\"path\":\"\",\"component\":\"\",\"createBy\":\"jingwen\",\"createTime\":\"2023-03-01T18:31:20.473860200\",\"updateBy\":\"jingwen\",\"menuType\":\"button\",\"perms\":\"blog:blogArticle:publish\",\"id\":83,\"menuSort\":1}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'jingwen', '127.0.0.1', '内网IP', '2023-03-01 18:31:21');
+INSERT INTO `sys_operation_log` VALUES (1161, '角色管理', '更新', '更新角色菜单', '/sysRole/updateRoleMenu', 'POST', 'com.jw_server.controller.system.SysRoleController.updateRoleMenu', '[{\"roleId\":6,\"menuIds\":[1,2,3,20,21,22,23,24,32,4,13,14,15,16,18,5,7,8,9,10,25,30,31,36,37,38,39,17,40,41,42,19,44,52,53,46,54,55,56,57,47,62,63,64,65,48,66,67,68,69,49,70,71,72,58,73,74,75,60,76,77,78,59,79,80,61,82]}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'jingwen', '127.0.0.1', '内网IP', '2023-03-01 18:32:10');
+INSERT INTO `sys_operation_log` VALUES (1162, '菜单管理', '更新', '更新菜单', '/sysMenu/update', 'POST', 'com.jw_server.controller.system.SysMenuController.update', '[{\"visible\":\"1\",\"icon\":\"\",\"menuName\":\"查询留言\",\"remark\":\"\",\"updateTime\":\"2023-03-01T18:44:12.212415300\",\"parentId\":58,\"path\":\"\",\"component\":\"\",\"createBy\":\"jingwen\",\"isDeleted\":\"0\",\"createTime\":\"2023-03-01 17:38:18\",\"updateBy\":\"jingwen\",\"isFrame\":0,\"menuType\":\"button\",\"perms\":\"blog:blogMessage:query\",\"id\":73,\"menuSort\":3}]', '{\"code\":200,\"msg\":\"\"}', 0, NULL, 'jingwen', '127.0.0.1', '内网IP', '2023-03-01 18:44:12');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -506,6 +551,45 @@ INSERT INTO `sys_role_menu` VALUES (6, 58);
 INSERT INTO `sys_role_menu` VALUES (6, 59);
 INSERT INTO `sys_role_menu` VALUES (6, 60);
 INSERT INTO `sys_role_menu` VALUES (6, 61);
+INSERT INTO `sys_role_menu` VALUES (6, 62);
+INSERT INTO `sys_role_menu` VALUES (6, 63);
+INSERT INTO `sys_role_menu` VALUES (6, 64);
+INSERT INTO `sys_role_menu` VALUES (6, 65);
+INSERT INTO `sys_role_menu` VALUES (6, 66);
+INSERT INTO `sys_role_menu` VALUES (6, 67);
+INSERT INTO `sys_role_menu` VALUES (6, 68);
+INSERT INTO `sys_role_menu` VALUES (6, 69);
+INSERT INTO `sys_role_menu` VALUES (6, 70);
+INSERT INTO `sys_role_menu` VALUES (6, 71);
+INSERT INTO `sys_role_menu` VALUES (6, 72);
+INSERT INTO `sys_role_menu` VALUES (6, 73);
+INSERT INTO `sys_role_menu` VALUES (6, 74);
+INSERT INTO `sys_role_menu` VALUES (6, 75);
+INSERT INTO `sys_role_menu` VALUES (6, 76);
+INSERT INTO `sys_role_menu` VALUES (6, 77);
+INSERT INTO `sys_role_menu` VALUES (6, 78);
+INSERT INTO `sys_role_menu` VALUES (6, 79);
+INSERT INTO `sys_role_menu` VALUES (6, 80);
+INSERT INTO `sys_role_menu` VALUES (6, 82);
+INSERT INTO `sys_role_menu` VALUES (6, 83);
+INSERT INTO `sys_role_menu` VALUES (6, 84);
+INSERT INTO `sys_role_menu` VALUES (6, 85);
+INSERT INTO `sys_role_menu` VALUES (6, 86);
+INSERT INTO `sys_role_menu` VALUES (6, 87);
+INSERT INTO `sys_role_menu` VALUES (6, 88);
+INSERT INTO `sys_role_menu` VALUES (6, 89);
+INSERT INTO `sys_role_menu` VALUES (6, 90);
+INSERT INTO `sys_role_menu` VALUES (6, 91);
+INSERT INTO `sys_role_menu` VALUES (6, 92);
+INSERT INTO `sys_role_menu` VALUES (6, 93);
+INSERT INTO `sys_role_menu` VALUES (6, 94);
+INSERT INTO `sys_role_menu` VALUES (6, 95);
+INSERT INTO `sys_role_menu` VALUES (6, 96);
+INSERT INTO `sys_role_menu` VALUES (6, 97);
+INSERT INTO `sys_role_menu` VALUES (6, 98);
+INSERT INTO `sys_role_menu` VALUES (6, 99);
+INSERT INTO `sys_role_menu` VALUES (6, 100);
+INSERT INTO `sys_role_menu` VALUES (6, 101);
 INSERT INTO `sys_role_menu` VALUES (15, 1);
 INSERT INTO `sys_role_menu` VALUES (15, 2);
 INSERT INTO `sys_role_menu` VALUES (15, 17);
@@ -544,10 +628,19 @@ INSERT INTO `sys_role_menu` VALUES (16, 48);
 INSERT INTO `sys_role_menu` VALUES (16, 49);
 INSERT INTO `sys_role_menu` VALUES (16, 52);
 INSERT INTO `sys_role_menu` VALUES (16, 53);
+INSERT INTO `sys_role_menu` VALUES (16, 55);
 INSERT INTO `sys_role_menu` VALUES (16, 58);
 INSERT INTO `sys_role_menu` VALUES (16, 59);
 INSERT INTO `sys_role_menu` VALUES (16, 60);
 INSERT INTO `sys_role_menu` VALUES (16, 61);
+INSERT INTO `sys_role_menu` VALUES (16, 65);
+INSERT INTO `sys_role_menu` VALUES (16, 69);
+INSERT INTO `sys_role_menu` VALUES (16, 72);
+INSERT INTO `sys_role_menu` VALUES (16, 73);
+INSERT INTO `sys_role_menu` VALUES (16, 78);
+INSERT INTO `sys_role_menu` VALUES (16, 80);
+INSERT INTO `sys_role_menu` VALUES (16, 91);
+INSERT INTO `sys_role_menu` VALUES (16, 98);
 INSERT INTO `sys_role_menu` VALUES (17, 1);
 INSERT INTO `sys_role_menu` VALUES (17, 2);
 INSERT INTO `sys_role_menu` VALUES (17, 3);
@@ -568,15 +661,24 @@ INSERT INTO `sys_role_menu` VALUES (17, 47);
 INSERT INTO `sys_role_menu` VALUES (17, 48);
 INSERT INTO `sys_role_menu` VALUES (17, 49);
 INSERT INTO `sys_role_menu` VALUES (17, 52);
-INSERT INTO `sys_role_menu` VALUES (17, 53);
-INSERT INTO `sys_role_menu` VALUES (17, 54);
 INSERT INTO `sys_role_menu` VALUES (17, 55);
-INSERT INTO `sys_role_menu` VALUES (17, 56);
-INSERT INTO `sys_role_menu` VALUES (17, 57);
 INSERT INTO `sys_role_menu` VALUES (17, 58);
 INSERT INTO `sys_role_menu` VALUES (17, 59);
 INSERT INTO `sys_role_menu` VALUES (17, 60);
 INSERT INTO `sys_role_menu` VALUES (17, 61);
+INSERT INTO `sys_role_menu` VALUES (17, 62);
+INSERT INTO `sys_role_menu` VALUES (17, 65);
+INSERT INTO `sys_role_menu` VALUES (17, 66);
+INSERT INTO `sys_role_menu` VALUES (17, 69);
+INSERT INTO `sys_role_menu` VALUES (17, 72);
+INSERT INTO `sys_role_menu` VALUES (17, 73);
+INSERT INTO `sys_role_menu` VALUES (17, 78);
+INSERT INTO `sys_role_menu` VALUES (17, 80);
+INSERT INTO `sys_role_menu` VALUES (17, 82);
+INSERT INTO `sys_role_menu` VALUES (17, 83);
+INSERT INTO `sys_role_menu` VALUES (17, 85);
+INSERT INTO `sys_role_menu` VALUES (17, 86);
+INSERT INTO `sys_role_menu` VALUES (17, 87);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -607,11 +709,11 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (7, NULL, 'admin', '$2a$10$CFcSWC9cIEQZIjGC3tCWrOjBifdaER3LOyi9PfkAJRludP3b.sZMy', '系统管理员', 'admin', 'admin@admin.com', '15644584597', '男', '/static/upload/avatar/2022-09-22-3d87428a6e4e553c6875d58c593f7c7f.png', '系统管理员,jingwen创建，请勿随便编辑', '2023-02-20 18:46:33', '1', '0', '123', '2022-09-06 14:41:00', 'admin', '2022-09-22 16:28:03');
-INSERT INTO `sys_user` VALUES (8, NULL, 'jingwen', '$2a$10$2bffMPbMd6uUINpEO39Eaev9v3BQpsStQx/Bni26SJOfZ1PIKxRj6', '靖文', 'admin', 'jingwen@qq.com', '17965788459', '保密', '/static/upload/avatar/2023-02-04-41038e3739eb4e3689f6acf5d203c40b.jpeg', '靖文235', '2023-03-01 15:48:12', '1', '0', 'admin', '2022-09-06 16:28:54', 'jingwen', '2023-02-06 17:27:40');
-INSERT INTO `sys_user` VALUES (14, NULL, 'dluser', '$2a$10$z9cxaj57nM0wVBnG.DqtcONvgojE9vJi0B7mRWi/UcacwD/4OoRtq', '深度学习专用角色', 'DL_ROLE', 'dluser@qq.com', '15845912368', '男', '/static/upload/avatar/2022-09-27-c26ab417430847058b3c1f9bf705009e.png', '深度学习专用角色', '2022-09-27 11:12:03', '1', '0', 'unknown', '2022-09-13 16:07:48', 'dluser', '2022-09-27 11:12:17');
-INSERT INTO `sys_user` VALUES (15, NULL, 'showuser', '$2a$10$FLOC4qXZ4rKnXAR8ozrstuC2T5aBEfGYwswJlmWk4pVe8N.MzX9WS', '演示用户', 'SHOW_ROLE', 'showuser@qq.com', '13345678910', '男', '/static/upload/avatar/2023-03-01-d16a20a0c9e143f098cbf18c23c4ceda.png', '', '2023-03-01 15:45:11', '1', '0', 'jingwen', '2022-09-27 12:21:04', '演示用户', '2023-03-01 15:48:07');
-INSERT INTO `sys_user` VALUES (24, NULL, 'bloguser', '$2a$10$kQkv4innDKgqwkRzbb8anODQHIm5F1DvMDezMHlUugmWZuzK0es4O', '博客用户', 'BLOG_REGISTER_ROLE', 'bloguser@qq.com', '', '男', '/static/upload/avatar/2023-02-26-73cfdb278f9e44ffb3519ae92107d59d.jpg', NULL, '2023-03-01 15:58:26', '1', '0', 'unknown', '2023-02-26 14:20:30', 'jingwen2', '2023-02-26 16:25:20');
+INSERT INTO `sys_user` VALUES (7, NULL, 'admin', '$2a$10$jWeb/6hLyYgLQZvy.vQt5O9p.xy4ZgF37q74qXS/myQFw2ySKdwfS', '系统管理员', 'admin', 'admin@admin.com', '15644584597', '男', '/static/upload/avatar/2022-09-22-3d87428a6e4e553c6875d58c593f7c7f.png', '系统管理员,jingwen创建，请勿随便编辑', '2023-02-20 18:46:33', '1', '0', '123', '2022-09-06 14:41:00', 'admin', '2022-09-22 16:28:03');
+INSERT INTO `sys_user` VALUES (8, NULL, 'jingwen', '$2a$10$evWSdimADKEt7ciCrzZNG.jbj6Lb8PYxyLouL121XiBJK17V5Oy.i', '靖文', 'admin', 'jingwen@qq.com', '17965788459', '男', '/static/upload/avatar/2023-03-01-66ddabb5e1e341119468ff6a4e728412.jpeg', '靖文235', '2023-03-01 20:09:26', '1', '0', 'admin', '2022-09-06 16:28:54', 'jingwen', '2023-03-01 19:51:06');
+INSERT INTO `sys_user` VALUES (14, NULL, 'dluser', '$2a$10$DnPuO4EJsaevYID5Cuuw1.uqWYPVoZY6wwVAs2eSl1zG27TSrZFc6', '深度学习专用角色', 'DL_ROLE', 'dluser@qq.com', '15845912368', '男', '/static/upload/avatar/2022-09-27-c26ab417430847058b3c1f9bf705009e.png', '深度学习专用角色', '2022-09-27 11:12:03', '1', '0', 'unknown', '2022-09-13 16:07:48', 'dluser', '2022-09-27 11:12:17');
+INSERT INTO `sys_user` VALUES (15, NULL, 'showuser', '$2a$10$FLOC4qXZ4rKnXAR8ozrstuC2T5aBEfGYwswJlmWk4pVe8N.MzX9WS', '演示用户', 'SHOW_ROLE', 'showuser@qq.com', '13345678910', '女', '/static/upload/avatar/2023-03-01-d16a20a0c9e143f098cbf18c23c4ceda.png', '演示用户', '2023-03-01 20:09:07', '1', '0', 'jingwen', '2022-09-27 12:21:04', 'showuser', '2023-03-01 19:54:39');
+INSERT INTO `sys_user` VALUES (24, NULL, 'bloguser', '$2a$10$tOukiD4Grk8Dx3WYd2jKu..l3enOOpqZH2hXy4Cj0u0HR9vHS4o4W', '博客用户', 'BLOG_REGISTER_ROLE', 'bloguser@qq.com', '', '男', '/static/upload/avatar/2023-02-26-73cfdb278f9e44ffb3519ae92107d59d.jpg', NULL, '2023-03-01 18:59:06', '1', '0', 'unknown', '2023-02-26 14:20:30', 'jingwen2', '2023-02-26 16:25:20');
 
 -- ----------------------------
 -- Table structure for sys_user_role
