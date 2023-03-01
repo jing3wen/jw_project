@@ -12,11 +12,17 @@ export default new Vuex.Store({
     user,
   },
   state: {
-    openArticleCheck: true,  //是否开启文章审核
+    blogWeb:{}
   },
   mutations: {
     setArticleCheck(state, status){
       this.state.openArticleCheck = status
+    },
+    setBlogWeb(state, status){
+      this.state.blogWeb = status
+    },
+    removeBlogWeb(){
+      this.state.blogWeb = {}
     }
   },
   actions: {

@@ -35,7 +35,20 @@ export default {
       return this.$store.state.layout.collapse ? "hideSideLayout" : "";
     },
   },
+  created() {
+    this.getWebInfo()
+  },
   methods: {
+    //获取博客网站配置
+    getWebInfo(){
+      this.request.get("/api/blogWeb/admin/getWebInfo").then(res =>{
+        if (res.code === 200){
+          this.$store.commit("setBlogWeb", res.data)
+        }else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
   }
 
 };

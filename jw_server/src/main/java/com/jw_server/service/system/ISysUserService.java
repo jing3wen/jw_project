@@ -12,6 +12,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.jw_server.dao.system.vo.LoginUserVO;
 import com.jw_server.dao.system.vo.SysUserVO;
 
+import java.util.List;
+
 
 /**
  * Description 系统用户表 服务类
@@ -92,4 +94,11 @@ public interface ISysUserService extends IService<SysUser> {
      * Date: 2023/2/26 13:59
      **/
     void updateBindByPassword(BlogFrontForgetPasswordOrUpdateBindDTO updateBindDTO);
+
+    /**
+     * Description: 批量删除用户, 用户绑定的属性太多, 此处使用假删除
+     * Author: jingwen
+     * Date: 2023/3/1 15:24
+     **/
+    void deleteUserBatch(List<Integer> ids);
 }

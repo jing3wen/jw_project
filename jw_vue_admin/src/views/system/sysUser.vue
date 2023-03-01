@@ -116,7 +116,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="用户类型:">
-                <el-input v-model="userForm.userType" autocomplete="off"></el-input>
+                <el-input v-model="userForm.userType" autocomplete="off" :disabled="dialogTitle==='编辑用户'"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12"  style="padding-left: 12px">
@@ -130,13 +130,13 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="邮箱:" prop="email">
-                <el-input v-model="userForm.email" autocomplete="off"></el-input>
+              <el-form-item label="邮箱:" prop="email" >
+                <el-input v-model="userForm.email" autocomplete="off" :disabled="dialogTitle==='编辑用户'"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" style="padding-left: 12px">
               <el-form-item label="电话:" prop="phone">
-                <el-input v-model="userForm.phone" autocomplete="off"></el-input>
+                <el-input v-model="userForm.phone" autocomplete="off" :disabled="dialogTitle==='编辑用户'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -383,7 +383,7 @@ export default {
         this.$message.warning('请选择要删除的数据')
         return
       }
-      this.$confirm('确定要删除此'+ids.length+'条数据吗?', '系统提示', {type : 'warning'}).then(() => {
+      this.$confirm('确定要删除此'+ids.length+'条数据吗? 建议对用户停用,而不是直接删除', '系统提示', {type : 'warning'}).then(() => {
         this.request.post('/api/sysUser/deleteBatch', ids).then(res =>{
           if(res.code === 200) {
             this.$message.success("删除成功")

@@ -406,7 +406,7 @@ export default {
       this.$refs['articleForm'].validate((valid) => {
         if(valid){
           // 添加文章
-          this.article.articleCheck = this.$store.state.openArticleCheck? '0':'1'
+          this.article.articleCheck = this.$store.state.blogWeb.articleCheck
           this.article.userId = this.$store.state.user.currentLoginUser.id
           this.request.post("/api/blogArticle/admin/addBlogArticle", this.article).then((res) => {
             if (res.code === 200) {

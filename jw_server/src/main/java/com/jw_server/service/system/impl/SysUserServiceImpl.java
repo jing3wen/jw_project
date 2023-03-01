@@ -226,6 +226,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if(StrUtil.isNotEmpty(querySysUserDTO.getNickname())){
             queryWrapper.like(SysUser::getNickname, querySysUserDTO.getNickname());
         }
+        //用户开启使用假删除
+        queryWrapper.eq(SysUser::getIsDeleted, "0");
         IPage<SysUser> userIPage = page(new Page<>(querySysUserDTO.getPageNum(), querySysUserDTO.getPageSize()), queryWrapper);
 
         //新建userVOList用来存储返回的用户
@@ -385,6 +387,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             //清除缓存验证码
             redisUtils.deleteObject(SysConst.UPDATE_USER_BIND_CODE_CACHE + "_email_" + updateBindDTO.getEmail());
 
+        }
+
+    }
+
+    /**
+     * 批量删除用户, 用户绑定的属性太多, 此处使用假删除
+     **/
+    @Override
+    @Transactional
+    public void deleteUserBatch(List<Integer> ids) {
+        //删除用户时，其绑定的角色关系也要删除
+        try {
+            ids.forEach(userId -> {
+                sysUserRoleMapper.deleteUserRoleByUserId(userId);
+                //用户绑定的属性太多, 此处使用假删除
+                //sysUserService.removeById(userId);
+                update(new LambdaUpdateWrapper<SysUser>()
+                        .set(SysUser::getIsDeleted, "1")
+                        .eq(SysUser::getId, userId));
+            });
+        }catch (Exception e){
+            throw new ServiceException(HttpCode.CODE_500, "系统异常");
         }
 
     }

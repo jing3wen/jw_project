@@ -19,6 +19,4 @@ target
 *.sw?
 
 application.yml
-static/*
-doc/jw_project开发文档正式版.docx
 package-lock.json

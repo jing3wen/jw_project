@@ -50,10 +50,11 @@ jwt:
     tokenHeader: token
 
 
-# 用户密码初始化
-password:
-  initPassword: 123456
 
+password:
+  # 用户初始化密码
+  initPassword: 123456
+  # 前后端传递密码的解密密钥
   decryptKey: areyouokareyouok
 
 # 人脸检测相关配置
@@ -65,5 +66,6 @@ dlFaceDetect:
 #文件上传
 upload:
   mode: local
+  # 改成你的本地上传文件夹
   local:
     path: E:/IDEA/project/jw_project/static/upload/

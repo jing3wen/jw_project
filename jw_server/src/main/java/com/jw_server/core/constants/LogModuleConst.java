@@ -73,10 +73,14 @@ public class LogModuleConst {
      **/
     public static final String BlogFriendModule = "博客友链模块";
 
-
     /**
      * 博客朋友圈模块
      **/
     public static final String BlogMomentsModule = "博客朋友圈模块";
+
+    /**
+     * 博客网站配置模块
+     **/
+    public static final String BlogWebModule = "博客网站配置模块";
 
 }

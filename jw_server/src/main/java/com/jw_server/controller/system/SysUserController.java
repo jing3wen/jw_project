@@ -91,11 +91,7 @@ public class SysUserController {
     @PreAuthorize("hasAuthority('system:sysUser:delete')")
     @PostMapping("/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
-        //删除用户时，其绑定的角色关系也要删除
-        ids.forEach(userId -> {
-            sysUserRoleService.deleteUserRoleByUserId(userId);
-            sysUserService.removeById(userId);
-        });
+        sysUserService.deleteUserBatch(ids);
         return ResponseResult.success();
     }
 

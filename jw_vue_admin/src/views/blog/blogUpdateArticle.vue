@@ -451,7 +451,7 @@ export default {
       this.$refs['articleForm'].validate((valid) => {
         if(valid){
           // 更新文章
-          this.article.articleCheck = this.$store.state.openArticleCheck? '0':'1'
+          this.article.articleCheck = this.$store.state.blogWeb.articleCheck
           this.request.post("/api/blogArticle/admin/updateArticle", this.article).then((res) => {
             if (res.code === 200) {
               //重置编辑器表单
