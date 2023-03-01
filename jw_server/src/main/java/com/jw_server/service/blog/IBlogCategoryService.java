@@ -52,6 +52,6 @@ public interface IBlogCategoryService extends IService<BlogCategory> {
      * Author: jingwen
      * Date: 2023/1/25 16:53
      **/
-    List<BlogFrontCategoryVO> searchBlogCategoryList(String categoryName);
+    List<BlogFrontCategoryVO> getAllCategoryByCategoryNameOrNot(String categoryName);
 
 }

@@ -92,13 +92,23 @@ public class BlogCategoryController {
 
 
     /**
+     * Description: 后台查询所有文章分类
+     * Author: jingwen
+     * Date: 2023/3/1 9:49
+     **/
+    @GetMapping("/admin/getAllBlogCategoryList")
+    public ResponseResult getAllBlogCategoryList() {
+        return ResponseResult.success(blogCategoryService.getAllCategoryByCategoryNameOrNot(null));
+    }
+
+    /**
      * Description: 后台根据文章类别名搜索类别列表
      * Author: jingwen
-     * Date: 2023/1/25 16:53
+     * Date: 2023/3/1 9:49
      **/
     @GetMapping("/admin/searchBlogCategoryList")
     public ResponseResult searchBlogCategoryList(@RequestParam String categoryName) {
-        return ResponseResult.success(blogCategoryService.searchBlogCategoryList(categoryName));
+        return ResponseResult.success(blogCategoryService.getAllCategoryByCategoryNameOrNot(categoryName));
     }
 
 }

@@ -37,11 +37,11 @@ public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
                                                            @Param("queryCategoryDTO") BlogAdminQueryCategoryPageDTO queryCategoryDTO);
 
     /**
-     * Description: 后台根据文章类别名搜索类别列表
+     * Description: 后台根据文章类别名搜索类别列表/直接搜索所有类别
      * Author: jingwen
      * Date: 2023/1/25 17:00
      **/
-    List<BlogFrontCategoryVO> searchBlogCategoryListByCategoryName(String categoryName);
+    List<BlogFrontCategoryVO> getAllCategoryByCategoryNameOrNot(String categoryName);
 
     /**
      * Description: 根据类别id搜索类别名

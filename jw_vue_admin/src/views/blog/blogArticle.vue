@@ -27,9 +27,9 @@
               header-cell-class-name="tableHeader-style"
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="nickName" label="作者名" width="120px"></el-table-column>
-      <el-table-column prop="articleTitle" label="标题" width="150px" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="articleCover" label="文章封面" width="100px">
+      <el-table-column prop="nickName" label="作者名" width="120px" align="center"></el-table-column>
+      <el-table-column prop="articleTitle" label="标题" width="150px" :show-overflow-tooltip="true" align="center"></el-table-column>
+      <el-table-column prop="articleCover" label="文章封面" width="100px" align="center">
         <template slot-scope="scope">
           <el-image :src="scope.row.articleCover"
                     style="height: 50px"
@@ -38,18 +38,18 @@
           </el-image>
         </template>
       </el-table-column>
-      <el-table-column prop="categoryName" label="文章类别" width="120px"></el-table-column>
-      <el-table-column prop="tagList" label="文章标签" width="150px">
+      <el-table-column prop="categoryName" label="文章类别" width="120px" align="center"></el-table-column>
+      <el-table-column prop="tagList" label="文章标签" width="150px" align="center">
         <template slot-scope="scope">
           <el-tag class="ml-5 mt-10" v-for="(tag,index) in scope.row.tagList" :key="index">{{tag.tagName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="isTop" label="顶置">
+      <el-table-column prop="isTop" label="顶置" align="center">
         <template slot-scope="scope">
           <el-tag type="primary" v-if="scope.row.isTop==='1'">顶置</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="审核" prop="articleCheck" align="center" width="120px">
+      <el-table-column label="审核" prop="articleCheck" width="120px" align="center">
         <template slot-scope="scope">
           <el-button type="text" class="el-icon-s-check" v-if="scope.row.articleCheck==='0'" @click="checkArticle(scope.row)"
                      v-permission="['blog:blogArticle:checkArticle']">待审核</el-button>
@@ -57,20 +57,20 @@
           <el-tag type="danger" v-if="scope.row.articleCheck==='f'">未通过</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="是否可见" prop="articleVisible" align="center" width="120px">
+      <el-table-column label="是否可见" prop="articleVisible" width="120px" align="center">
         <template slot-scope="scope">
           <el-tag type="danger" v-if="scope.row.articleVisible==='0'">私密</el-tag>
           <el-tag type="success" v-if="scope.row.articleVisible==='1'">公开</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="viewCounts" label="浏览量" align="center" width="80px"></el-table-column>
-      <el-table-column label="是否可评论" prop="commentAllowed" align="center" width="120px">
+      <el-table-column prop="viewCounts" label="浏览量" width="80px" align="center"></el-table-column>
+      <el-table-column label="是否可评论" prop="commentAllowed" width="120px" align="center">
         <template slot-scope="scope">
           <el-tag type="danger" v-if="scope.row.commentAllowed==='0'">不能评论</el-tag>
           <el-tag type="success" v-if="scope.row.commentAllowed==='1'">可评论</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="commentCounts" label="评论数" align="center" width="80px"></el-table-column>
+      <el-table-column prop="commentCounts" label="评论数" width="80px" align="center"></el-table-column>
       <el-table-column prop="createTime" label="创建时间" width="180px" align="center"></el-table-column>
       <el-table-column prop="operate" label="操作" fixed="right" width="240px" align="center">
         <template slot-scope="scope">

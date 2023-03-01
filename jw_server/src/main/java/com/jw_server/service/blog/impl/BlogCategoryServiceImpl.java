@@ -88,11 +88,11 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     /**
-     * 后台根据文章类别名搜索类别列表
+     * 后台根据文章类别名搜索类别列表/直接搜索所有类别
      **/
     @Override
-    public List<BlogFrontCategoryVO> searchBlogCategoryList(String categoryName) {
-        return blogCategoryMapper.searchBlogCategoryListByCategoryName(categoryName);
+    public List<BlogFrontCategoryVO> getAllCategoryByCategoryNameOrNot(String categoryName) {
+        return blogCategoryMapper.getAllCategoryByCategoryNameOrNot(categoryName);
     }
 
 }

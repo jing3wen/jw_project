@@ -242,7 +242,7 @@ export default {
      **/
     //获取所有文章分类
     getAllCategory(){
-      this.request.get('/api/blogCategory/front/getAllCategory').then(res =>{
+      this.request.get('/api/blogCategory/admin/getAllBlogCategoryList').then(res =>{
         if (res.code === 200){
           this.categoryList = res.data
         }else {
