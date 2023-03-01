@@ -7,6 +7,7 @@
  **1. 一个简单的springboot+vue权限管理后台** 
 
  **2. 基于FaceNet+ RetinaFace的人脸检测功能** 
+ **3. vue2的博客系统** 
 
 **TODO：安装教程太简洁了，后续打算写个word文档** 
 
