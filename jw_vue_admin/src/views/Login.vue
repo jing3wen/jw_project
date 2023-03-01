@@ -67,6 +67,7 @@
 <script>
 import {setRoute} from "@/router";
 import {registerUserCodeType, registerType} from "@/assets/js/config";
+import {encrypt} from "@/assets/js/common";
 
 export default {
   name: "Login",
@@ -119,6 +120,7 @@ export default {
       this.$refs['loginUser'].validate((valid) => {
         if (valid) {  // 表单校验合法
           this.loginLoading = true
+          this.loginUser.password = encrypt(this.loginUser.password)
           this.request.post("/api/login/userLogin", this.loginUser).then(res => {
             if(res.code === 200) {
               this.$store.commit("user/loginUser", res.data)
@@ -128,6 +130,7 @@ export default {
             }
             else {
               this.$message.error(res.msg)
+              this.loginUser.password=""
               this.loginLoading=false
             }
           })
@@ -190,12 +193,14 @@ export default {
             this.registerLoading = false
             return false
           }
+          this.registerForm.password = encrypt(this.registerForm.password)
           this.request.post("/api/sysUser/register", this.registerForm).then(res => {
             if(res.code === 200) {
               this.$message.success("注册成功")
               this.cancelRegisterForm()
             } else {
               this.$message.error(res.msg)
+              this.registerForm.password=""
               this.registerLoading = false
             }
           })

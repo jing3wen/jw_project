@@ -11,6 +11,9 @@ export const registerType = "SHOW_ROLE"
 
 export const initPassword = '123456'
 
+//前后端定义的密钥，AES使用16位
+export const cryptojs_key = "areyouokareyouok"
+
 //默认上传图片大小限制
 export const defaultUploadImageSizeLimit = 5
 //默认上传图片格式限制

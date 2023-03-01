@@ -2,7 +2,9 @@
 
 // 默认上传文件配置
 import {defaultUploadImageSizeLimit, defaultUploadImageTypeList,
-        defaultUploadVideoSizeLimit, defaultUploadVideoTypeList} from "./config";
+        defaultUploadVideoSizeLimit, defaultUploadVideoTypeList,
+        cryptojs_key} from "./config";
+import CryptoJS from 'crypto-js';
 
 function getFileType(fileName) {
     // 后缀获取
@@ -94,7 +96,35 @@ function isEmptyFunc(value) {
     }
 }
 
+/**
+ * 加密
+ */
+function encrypt(plaintText) {
+    let options = {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+    };
+    let key = CryptoJS.enc.Utf8.parse(cryptojs_key);
+    let encryptedData = CryptoJS.AES.encrypt(plaintText, key, options);
+    return encryptedData.toString().replace(/\//g, "_").replace(/\+/g, "-");
+}
+
+/**
+ * 解密
+ */
+function decrypt(encryptedBase64Str) {
+    let val = encryptedBase64Str.replace(/\-/g, '+').replace(/_/g, '/');
+    let options = {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+    };
+    let key = CryptoJS.enc.Utf8.parse(cryptojs_key);
+    let decryptedData = CryptoJS.AES.decrypt(val, key, options);
+    return CryptoJS.enc.Utf8.stringify(decryptedData);
+}
+
 export {getFileType,
     getUploadFileSizeLimitByFilename,
     getUploadFileTypeLimitByFilename,
-    isEmptyFunc}
+    isEmptyFunc,
+    encrypt}
