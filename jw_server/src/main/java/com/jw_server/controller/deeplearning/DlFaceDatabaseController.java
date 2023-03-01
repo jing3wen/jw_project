@@ -11,6 +11,7 @@ import com.jw_server.dao.deeplearning.entity.DlFaceDatabase;
 import com.jw_server.service.deeplearning.IDlFaceDatabaseService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,6 +48,7 @@ public class DlFaceDatabaseController {
      * Date 2022-09-13 17:21:26
      **/
     @SysLog(logModule=DlFaceDatabaseModule, logType = ADD, logDesc = "新增人脸库")
+    @PreAuthorize("hasAuthority('dl:dlFaceDatabase:addFace')")
     @PostMapping("/add")
     public ResponseResult add(@RequestBody DlFaceDatabase dlFaceDatabase) {
         dlFaceDatabaseService.addFaceDatabase(dlFaceDatabase);
@@ -59,6 +61,7 @@ public class DlFaceDatabaseController {
      * Date 2022-09-13 17:21:26
      **/
     @SysLog(logModule=DlFaceDatabaseModule, logType = UPDATE, logDesc = "更新人脸库")
+    @PreAuthorize("hasAuthority('dl:dlFaceDatabase:update')")
     @PostMapping("/update")
     public ResponseResult update(@RequestBody DlFaceDatabase dlFaceDatabase) {
         dlFaceDatabaseService.updateFace(dlFaceDatabase);
@@ -71,6 +74,7 @@ public class DlFaceDatabaseController {
      * Date 2022-09-13 17:21:26
      **/
     @SysLog(logModule=DlFaceDatabaseModule, logType = DELETE, logDesc = "删除人脸库")
+    @PreAuthorize("hasAuthority('dl:dlFaceDatabase:delete')")
     @PostMapping("/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         dlFaceDatabaseService.deleteFaceData(ids);
@@ -82,6 +86,7 @@ public class DlFaceDatabaseController {
      * Author jingwen
      * Date 2022-09-13 17:21:26
      **/
+    @PreAuthorize("hasAuthority('dl:dlFaceDatabase:query')")
     @PostMapping("/getPageList")
     public ResponseResult getPageList(@RequestBody QueryDlFaceDataDTO queryDlFaceDataDTO) {
         return ResponseResult.success(dlFaceDatabaseService.getFacePageList(queryDlFaceDataDTO));
@@ -94,6 +99,7 @@ public class DlFaceDatabaseController {
      * Date: 2022/9/13 17:23
      **/
     @SysLog(logModule=DlFaceDatabaseModule, logType = UPLOAD, logDesc = "上传人脸图片", saveRequestParam = false)
+    @PreAuthorize("hasAuthority('dl:dlFaceDatabase:uploadFaceImage')")
     @PostMapping("/uploadFaceDatabase")
     public ResponseResult uploadFaceImage(@RequestParam MultipartFile file){
         logger.info(DlFaceDatabaseModule+"--上传人脸图片");
@@ -107,6 +113,7 @@ public class DlFaceDatabaseController {
      * Date: 2022/9/14 11:48
      **/
     @SysLog(logModule=DlFaceDatabaseModule, logType = DELETE, logDesc = "删除上传的人脸图片")
+    @PreAuthorize("hasAuthority('dl:dlFaceDatabase:deleteUploadFaceImage')")
     @DeleteMapping("/deleteFaceImage")
     public ResponseResult deleteFaceImage(@RequestBody String fileUrl){
         logger.info(DlFaceDatabaseModule+"--删除上传的人脸图片:"+fileUrl);
@@ -121,6 +128,7 @@ public class DlFaceDatabaseController {
      * Date: 2022/9/22 22:10
      **/
     @SysLog(logModule=DlFaceDatabaseModule, logType = UPDATE, logDesc = "手动更新检测服务器人脸库")
+    @PreAuthorize("hasAuthority('dl:dlFaceDatabase:updateFaceDatabase')")
     @GetMapping("/updateFaceDatabase")
     public ResponseResult updateFaceDatabase(){
         try{

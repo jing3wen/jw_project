@@ -16,8 +16,7 @@
 
     <!-- 新增，批量删除，数据导入，导出按钮组 -->
     <div class="table-head-operate-buttons">
-      <el-button type="danger" plain class="mr-5" :disabled="multiple" @click="deleteRows(null)"
-                 v-permission="['blog:blogArticle:deleteArticle']">批量删除 <i class="el-icon-remove-outline"></i></el-button>
+      <el-button type="danger" plain class="mr-5" :disabled="multiple" @click="deleteRows(null)">批量删除 <i class="el-icon-remove-outline"></i></el-button>
     </div>
 
     <!--  表格和分页  stripe斑马纹， border边框    -->
@@ -51,8 +50,7 @@
       </el-table-column>
       <el-table-column label="审核" prop="articleCheck" width="120px" align="center">
         <template slot-scope="scope">
-          <el-button type="text" class="el-icon-s-check" v-if="scope.row.articleCheck==='0'" @click="checkArticle(scope.row)"
-                     v-permission="['blog:blogArticle:checkArticle']">待审核</el-button>
+          <el-button type="text" class="el-icon-s-check" v-if="scope.row.articleCheck==='0'" @click="checkArticle(scope.row)">待审核</el-button>
           <el-tag type="success" v-if="scope.row.articleCheck==='1'">通过</el-tag>
           <el-tag type="danger" v-if="scope.row.articleCheck==='f'">未通过</el-tag>
         </template>
@@ -74,13 +72,12 @@
       <el-table-column prop="createTime" label="创建时间" width="180px" align="center"></el-table-column>
       <el-table-column prop="operate" label="操作" fixed="right" width="240px" align="center">
         <template slot-scope="scope">
-          <el-button type="text" class="el-icon-top" @click="updateArticleTop(scope.row)" v-permission="['blog:blogArticle:editArticleTop']">
+          <el-button type="text" class="el-icon-top" @click="updateArticleTop(scope.row)">
             <span v-if="scope.row.isTop==='0'">顶置</span>
             <span v-else>取消顶置</span>
           </el-button>
-          <el-button type="text" class="el-icon-edit pl-10" @click="editArticle(scope.row.articleId)" v-permission="['blog:blogArticle:editArticle']"> 编辑</el-button>
-          <el-button type="text" class="el-icon-delete pl-10" @click="deleteRows(scope.row.articleId)"
-                     v-permission="['blog:blogArticle:deleteArticle']">删除</el-button>
+          <el-button type="text" class="el-icon-edit pl-10" @click="editArticle(scope.row.articleId)"> 编辑</el-button>
+          <el-button type="text" class="el-icon-delete pl-10" @click="deleteRows(scope.row.articleId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

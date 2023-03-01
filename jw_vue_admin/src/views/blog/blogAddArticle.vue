@@ -422,6 +422,8 @@ export default {
               this.$store.commit('layout/removeTab', '新增文章')
               this.resetWriteForm()
               this.$router.push('/blog/blogArticle')
+            }else{
+              this.$message.error(res.msg)
             }
           })
         }else {

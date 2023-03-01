@@ -48,8 +48,6 @@ public class SysUserController {
     @Resource
     private ISysUserRoleService sysUserRoleService;
 
-    @Resource
-    private FileUploadUtils fileUploadUtils;
 
     /**
      * Description 新增
@@ -135,7 +133,6 @@ public class SysUserController {
      * Author: jingwen
      * Date: 2022/9/5 22:54
      **/
-    @PreAuthorize("hasAuthority('system:sysUser:editRole')")
     @GetMapping("/findRoleByUserId")
     public ResponseResult findRoleByUserId(@RequestBody SysUser sysUser){
 
@@ -158,23 +155,12 @@ public class SysUserController {
     }
 
     /**
-     * Description: 用户头像上传
-     * Author: jingwen
-     * Date: 2022/9/10 16:05
-     **/
-    @SysLog(logModule=SysUserModule, logType = UPLOAD, logDesc = "用户头像上传")
-    @PostMapping("/uploadAvatar")
-    public ResponseResult uploadAvatar(@RequestParam MultipartFile file){
-
-        return ResponseResult.success(fileUploadUtils.fileUpload(file, AVATAR.getPath()));
-    }
-
-    /**
      * Description: 重置用户密码
      * Author: jingwen
      * Date: 2022/9/10 20:17
      **/
     @SysLog(logModule=SysUserModule, logType = UPDATE, logDesc = "重置用户密码")
+    @PreAuthorize("hasAuthority('system:sysUser:resetPassword')")
     @PostMapping("/resetPassword")
     public ResponseResult resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO){
         sysUserService.resetPassword(resetPasswordDTO);

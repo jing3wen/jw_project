@@ -5,6 +5,7 @@ import com.jw_server.core.common.ResponseResult;
 import com.jw_server.service.FileUploadService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,6 +37,7 @@ public class FileUploadController {
      * Date: 2023/1/9 21:54
      **/
     @SysLog(logModule=FileUploadModule, logType = UPLOAD, logDesc = "上传文件", saveRequestParam = false)
+    @PreAuthorize("hasAuthority('file:uploadFile')")
     @PostMapping("/fileUpload/**")
     public ResponseResult fileUpload(HttpServletRequest request,@RequestParam MultipartFile file){
         String requestUrl = request.getRequestURI();
@@ -51,6 +53,7 @@ public class FileUploadController {
      * Date: 2023/1/13 18:27
      **/
     @SysLog(logModule=FileUploadModule, logType = DELETE, logDesc = "删除上传文件")
+    @PreAuthorize("hasAuthority('file:deleteUploadFile')")
     @DeleteMapping("/deleteUploadFile/**")
     public ResponseResult deleteUploadFile(@RequestBody String fileUrl){
         logger.info("--删除上传文件--文件存储地址: "+fileUrl);

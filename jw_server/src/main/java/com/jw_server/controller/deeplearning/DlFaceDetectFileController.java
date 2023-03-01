@@ -11,6 +11,7 @@ import com.jw_server.service.deeplearning.IDlFaceDetectFileService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.annotations.Delete;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,6 +44,7 @@ public class DlFaceDetectFileController {
      * Date 2022-09-22 17:31:09
      **/
     @SysLog(logModule=DlFaceDetectFileModule, logType = ADD, logDesc = "新增")
+    @PreAuthorize("hasAuthority('dl:dlFaceDetectFile:addDetectFile')")
     @PostMapping("/add")
     public ResponseResult add(@RequestBody DlFaceDetectFile dlFaceDetectFile) {
         dlFaceDetectFileService.addDetectFile(dlFaceDetectFile);
@@ -55,6 +57,7 @@ public class DlFaceDetectFileController {
      * Date 2022-09-22 17:31:09
      **/
     @SysLog(logModule=DlFaceDetectFileModule, logType = UPDATE, logDesc = "更新")
+    @PreAuthorize("hasAuthority('dl:dlFaceDetectFile:update')")
     @PostMapping("/update")
     public ResponseResult update(@RequestBody DlFaceDetectFile dlFaceDetectFile) {
         dlFaceDetectFileService.updateById(dlFaceDetectFile);
@@ -67,6 +70,7 @@ public class DlFaceDetectFileController {
      * Date 2022-09-22 17:31:09
      **/
     @SysLog(logModule=DlFaceDetectFileModule, logType = DELETE, logDesc = "删除")
+    @PreAuthorize("hasAuthority('dl:dlFaceDetectFile:delete')")
     @PostMapping("/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         dlFaceDetectFileService.deleteFaceDetectFile(ids);
@@ -79,6 +83,7 @@ public class DlFaceDetectFileController {
      * Author jingwen
      * Date 2022-09-22 17:31:09
      **/
+    @PreAuthorize("hasAuthority('dl:dlFaceDetectFile:query')")
     @PostMapping("/getPageList")
     public ResponseResult getPageList(@RequestBody QueryDlFaceDetectFileDTO dlFaceDetectFileDTO) {
 //        System.out.println(dlFaceDetectFileDTO);
@@ -91,6 +96,7 @@ public class DlFaceDetectFileController {
      * Date: 2022/9/13 17:23
      **/
     @SysLog(logModule=DlFaceDetectFileModule, logType = UPLOAD, logDesc = "上传检测图片", saveRequestParam = false)
+    @PreAuthorize("hasAuthority('dl:dlFaceDetectFile:uploadDetectFile')")
     @PostMapping("/uploadFaceDetectFile")
     public ResponseResult uploadFaceDetectFile(@RequestParam MultipartFile file){
         logger.info(DlFaceDetectFileModule+"--上传检测文件");
@@ -104,6 +110,7 @@ public class DlFaceDetectFileController {
      * Date: 2022/9/22 19:13
      **/
     @SysLog(logModule = DlFaceDetectFileModule, logType = DELETE, logDesc = "删除上传的检测文件")
+    @PreAuthorize("hasAuthority('dl:dlFaceDetectFile:deleteUploadDetectFile')")
     @DeleteMapping("/deleteFaceDetectFile")
     public ResponseResult deleteFaceDetectFile(@RequestBody String fileUrl){
         logger.info(DlFaceDetectFileModule+"--删除上传的检测文件:"+fileUrl);
@@ -117,6 +124,7 @@ public class DlFaceDetectFileController {
      * Date: 2022/9/22 22:28
      **/
     @SysLog(logModule = DlFaceDetectFileModule, logType = UPDATE, logDesc = "检测文件")
+    @PreAuthorize("hasAuthority('dl:dlFaceDetectFile:detecting')")
     @PostMapping("/detectFaceFile")
     public ResponseResult detectFaceFile(@RequestBody DlFaceDetectFile detectFile){
 

@@ -1,8 +1,6 @@
 package com.jw_server.controller.blog;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogTagService;
@@ -49,6 +47,7 @@ public class BlogTagController {
      * Date: 2023/2/28 12:39
      **/
     @SysLog(logModule= BlogTagModule, logType = ADD, logDesc = "博客后台新增文章标签")
+    @PreAuthorize("hasAuthority('blog:blogTag:add')")
     @PostMapping("/admin/addBlogTag")
     public ResponseResult addBlogTag(@RequestBody BlogTag blogTag) {
         blogTagService.addOrUpdateBlogTag(blogTag);
@@ -61,6 +60,7 @@ public class BlogTagController {
      * Date: 2023/2/28 12:38
      **/
     @SysLog(logModule=BlogTagModule, logType = UPDATE, logDesc = "博客后台更新文章标签")
+    @PreAuthorize("hasAuthority('blog:blogTag:update')")
     @PostMapping("/admin/updateBlogTag")
     public ResponseResult updateBlogTag(@RequestBody BlogTag blogTag) {
         blogTagService.addOrUpdateBlogTag(blogTag);
@@ -73,6 +73,7 @@ public class BlogTagController {
      * Date: 2023/2/28 12:39
      **/
     @SysLog(logModule=BlogTagModule, logType = DELETE, logDesc = "博客后台批量删除文章标签")
+    @PreAuthorize("hasAuthority('blog:blogTag:delete')")
     @DeleteMapping("/admin/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         blogTagService.deleteBlogTagBatch(ids);
@@ -84,6 +85,7 @@ public class BlogTagController {
      * Author: jingwen
      * Date: 2023/2/28 12:42
      **/
+    @PreAuthorize("hasAuthority('blog:blogTag:query')")
     @GetMapping("/admin/getBlogTagPage")
     public ResponseResult getPageList(@RequestParam("pageNum") Integer pageNum,
                                       @RequestParam("pageSize") Integer pageSize,

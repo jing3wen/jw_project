@@ -3,6 +3,7 @@ package com.jw_server.controller.blog;
 import cn.hutool.core.util.ObjectUtil;
 import com.jw_server.core.constants.BlogConst;
 import com.jw_server.core.utils.RedisUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogWebService;
@@ -63,6 +64,7 @@ public class BlogWebController {
      * Date 2023-02-04 15:21:28
      **/
     @SysLog(logModule=BlogWebModule, logType = UPDATE, logDesc = "后台更新网站配置")
+    @PreAuthorize("hasAuthority('blog:blogWeb:update')")
     @PostMapping("/admin/updateBlogWeb")
     public ResponseResult update(@RequestBody BlogWeb blogWeb) {
         blogWebService.updateById(blogWeb);

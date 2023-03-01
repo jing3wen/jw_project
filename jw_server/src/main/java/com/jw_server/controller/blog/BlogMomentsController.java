@@ -1,6 +1,7 @@
 package com.jw_server.controller.blog;
 
 import com.jw_server.dao.blog.dto.BlogFrontMomentsPageDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogMomentsService;
@@ -73,6 +74,7 @@ public class BlogMomentsController {
      * Date 2023-02-11 20:48:10
      **/
     @SysLog(logModule=BlogMomentsModule, logType = DELETE, logDesc = "博客后台批量删除朋友圈")
+    @PreAuthorize("hasAuthority('blog:blogMoments:delete')")
     @DeleteMapping("/admin/deleteBatch")
     public ResponseResult deleteAdminBatch(@RequestBody List<Integer> ids) {
         blogMomentsService.removeByIds(ids);
@@ -84,6 +86,7 @@ public class BlogMomentsController {
      * Author: jingwen
      * Date: 2023/2/28 17:00
      **/
+    @PreAuthorize("hasAuthority('blog:blogMoments:query')")
     @GetMapping("/admin/getAdminMomentsPage")
     public ResponseResult getAdminMomentsPage(@RequestParam("pageNum") Integer pageNum,
                                               @RequestParam("pageSize") Integer pageSize,

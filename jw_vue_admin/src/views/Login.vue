@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       loginUser: {
-        username: "jingwen",
+        username: "showuser",
         password: "123456",
       },
       loginUserRules: {

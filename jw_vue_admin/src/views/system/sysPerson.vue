@@ -2,23 +2,12 @@
   <el-card style="width:600px" class="border-radius-25">
     <el-form :model="userForm" :rules="userFormRules" ref="userForm" label-width="100px" label-position="right" >
       <el-form-item label="头像:">
-        <el-card class="border-radius-25">
-          <el-upload
-              class="avatar-uploader"
-              :action="action"
-              :headers="config"
-              :show-file-list="false"
-              :before-upload="onBeforeUpload"
-              :on-progress="uploadVideoProcess"
-              :on-success="handleAvatarSuccess"
-          >
-            <img v-if="userForm.avatar" :src="userForm.avatar" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <div slot="tip" class="el-upload__tip">只能上传 {{avatarTypeList.toString()}} 文件，且不超过 {{avatarSizeLimit}} M</div>
-          </el-upload>
-          <!-- 进度条 -->
-          <el-progress v-if="progressFlag" :percentage="loadProgress"></el-progress>
-        </el-card>
+        <ImageVideoUpload
+            ref="image-upload"
+            :f_action.sync="uploadAvatarUrl"
+            :f_file-url.sync="userForm.avatar"
+            :f_remove-file-url="removeAvatarUrl">
+        </ImageVideoUpload>
       </el-form-item>
       <el-row>
         <el-col :span="12">
@@ -36,7 +25,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="用户类型:">
-            <el-input v-model="userForm.userType" autocomplete="off"></el-input>
+            <el-input v-model="userForm.userType" autocomplete="off" disabled></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12"  style="padding-left: 12px">
@@ -51,12 +40,12 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="邮箱:" prop="email">
-            <el-input v-model="userForm.email" autocomplete="off"></el-input>
+            <el-input v-model="userForm.email" autocomplete="off" disabled></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12" style="padding-left: 12px">
           <el-form-item label="电话:" prop="phone">
-            <el-input v-model="userForm.phone" autocomplete="off"></el-input>
+            <el-input v-model="userForm.phone" autocomplete="off" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -77,11 +66,12 @@
 <script>
 
 import {avatarSizeLimit, avatarTypeList} from "@/assets/js/config";
+import ImageVideoUpload from "@/components/file/upload/imageVideoUpload/ImageVideoUpload";
 export default {
   name: "Person",
+  components: {ImageVideoUpload},
   data(){
     return {
-      action:"/api/sysUser/uploadAvatar",
       userForm: {
         id:null,
         username: '',
@@ -116,6 +106,9 @@ export default {
       avatarTypeList:avatarTypeList,
       loadProgress: 0, // 动态显示进度条
       progressFlag: false, // 关闭进度条
+
+      uploadAvatarUrl:"/api/file/fileUpload/avatar",
+      removeAvatarUrl:"/api/file/deleteUploadFile/avatar",
     }
   },
   created() {

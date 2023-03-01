@@ -2,6 +2,7 @@ package com.jw_server.controller.system;
 
 
 import com.jw_server.dao.system.dto.QuerySysOperationLogDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.core.common.ResponseResult;
@@ -30,6 +31,7 @@ public class SysOperationLogController {
      * Author jingwen
      * Date 2022-09-11 09:32:13
      **/
+    @PreAuthorize("hasAuthority('system:sysOperationLog:delete')")
     @PostMapping("/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         sysOperationLogService.removeByIds(ids);
@@ -41,6 +43,7 @@ public class SysOperationLogController {
      * Author jingwen
      * Date 2022-09-11 09:32:13
      **/
+    @PreAuthorize("hasAuthority('system:sysOperationLog:query')")
     @PostMapping("/getPageList")
     public ResponseResult getPageList(@RequestBody QuerySysOperationLogDTO querySysOperationLogDTO) {
 

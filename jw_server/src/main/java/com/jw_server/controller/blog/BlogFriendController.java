@@ -3,6 +3,7 @@ package com.jw_server.controller.blog;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.dao.blog.dto.BlogAdminUpdateCheckBatchDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogFriendService;
@@ -62,6 +63,7 @@ public class BlogFriendController {
      * Date: 2023/2/28 17:18
      **/
     @SysLog(logModule=BlogFriendModule, logType = UPDATE, logDesc = "后台批量更新友链审核状态")
+    @PreAuthorize("hasAuthority('blog:blogFriend:check')")
     @PostMapping("/admin/updateCheckBatch")
     public ResponseResult updateCheckBatch(@RequestBody BlogAdminUpdateCheckBatchDTO updateCheckBatchDTO) {
         blogFriendService.updateFriendCheckBatch(updateCheckBatchDTO);
@@ -74,6 +76,7 @@ public class BlogFriendController {
      * Date: 2023/2/28 17:21
      **/
     @SysLog(logModule=BlogFriendModule, logType = DELETE, logDesc = "后台批量删除友链")
+    @PreAuthorize("hasAuthority('blog:blogFriend:delete')")
     @DeleteMapping("/admin/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         blogFriendService.removeByIds(ids);
@@ -85,6 +88,7 @@ public class BlogFriendController {
      * Author jingwen
      * Date 2023-02-09 21:59:28
      **/
+    @PreAuthorize("hasAuthority('blog:blogFriend:query')")
     @GetMapping("/admin/getBlogFriendPage")
     public ResponseResult getPageList(@RequestParam("pageNum") Integer pageNum,
                                       @RequestParam("pageSize") Integer pageSize,

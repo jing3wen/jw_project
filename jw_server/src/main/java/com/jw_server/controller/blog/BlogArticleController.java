@@ -2,7 +2,7 @@ package com.jw_server.controller.blog;
 
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.dao.blog.dto.*;
-import com.jw_server.dao.blog.entity.BlogArticle;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogArticleService;
@@ -86,6 +86,7 @@ public class BlogArticleController {
      * Date: 2023/1/9 21:18
      **/
     @SysLog(logModule=BlogArticleModule, logType = ADD, logDesc = "博客后台新增文章")
+    @PreAuthorize("hasAuthority('blog:blogArticle:publish')")
     @PostMapping("/admin/addBlogArticle")
     public ResponseResult addBlogArticle(@RequestBody BlogAdminAddOrUpdateArticleDTO blogAdminAddArticleDTO) {
         blogArticleService.addBlogArticle(blogAdminAddArticleDTO);
@@ -98,6 +99,7 @@ public class BlogArticleController {
      * Author: jingwen
      * Date: 2023/1/9 21:18
      **/
+    @PreAuthorize("hasAuthority('blog:blogArticle:queryArticle')")
     @PostMapping("/admin/getAdminBlogArticlePage")
     public ResponseResult getAdminBlogArticlePage(@RequestBody BlogAdminQueryArticlePageDTO blogAdminQueryArticlePageDTO) {
 
@@ -111,6 +113,7 @@ public class BlogArticleController {
      * Date: 2023/1/11 16:20
      **/
     @SysLog(logModule=BlogArticleModule, logType = DELETE, logDesc = "批量删除文章,同时删除该文章评论和标签表关系")
+    @PreAuthorize("hasAuthority('blog:blogArticle:deleteArticle')")
     @DeleteMapping("/admin/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         blogArticleService.deleteBatchArticle(ids);
@@ -134,6 +137,7 @@ public class BlogArticleController {
      * Date: 2023/1/12 12:18
      **/
     @SysLog(logModule=BlogArticleModule, logType = UPDATE, logDesc = "后台更新文章信息")
+    @PreAuthorize("hasAuthority('blog:blogArticle:updateArticle')")
     @PostMapping("/admin/updateArticle")
     public ResponseResult updateArticle(@RequestBody BlogAdminAddOrUpdateArticleDTO updateArticleDTO) {
         blogArticleService.updateBlogArticle(updateArticleDTO);
@@ -147,6 +151,7 @@ public class BlogArticleController {
      * Date: 2023/1/26 12:48
      **/
     @SysLog(logModule=BlogArticleModule, logType = UPDATE, logDesc = "后台修改文章顶置状态")
+    @PreAuthorize("hasAuthority('blog:blogArticle:editArticleTop')")
     @PostMapping("/admin/updateArticleTop")
     public ResponseResult updateArticleTop(@RequestBody BlogAdminUpdateArticleTopDTO updateTopDTO) {
         blogArticleService.updateArticleTop(updateTopDTO);
@@ -159,6 +164,7 @@ public class BlogArticleController {
      * Date: 2023/1/26 12:48
      **/
     @SysLog(logModule=BlogArticleModule, logType = UPDATE, logDesc = "后台审核文章")
+    @PreAuthorize("hasAuthority('blog:blogArticle:checkArticle')")
     @PostMapping("/admin/updateArticleCheck")
     public ResponseResult updateArticleCheck(@RequestBody BlogAdminUpdateArticleCheckDTO updateCheckDTO) {
         blogArticleService.updateArticleCheck(updateCheckDTO);

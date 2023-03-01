@@ -3,6 +3,7 @@ package com.jw_server.controller.blog;
 import com.jw_server.core.aop.logAspect.SysLog;
 import com.jw_server.dao.blog.dto.BlogAdminQueryCategoryPageDTO;
 import com.jw_server.dao.blog.entity.BlogCategory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogCategoryService;
@@ -50,6 +51,7 @@ public class BlogCategoryController {
      * Date: 2023/1/12 22:09
      **/
     @SysLog(logModule=BlogCategoryModule, logType = ADD, logDesc = "后台新增博客文章类别")
+    @PreAuthorize("hasAuthority('blog:blogCategory:add')")
     @PostMapping("/admin/addBlogCategory")
     public ResponseResult addBlogCategory(@RequestBody BlogCategory blogCategory) {
         blogCategoryService.addOrUpdateBlogCategory(blogCategory);
@@ -62,6 +64,7 @@ public class BlogCategoryController {
      * Date: 2023/1/12 22:09
      **/
     @SysLog(logModule=BlogCategoryModule, logType = UPDATE, logDesc = "后台更新博客文章类别")
+    @PreAuthorize("hasAuthority('blog:blogCategory:update')")
     @PostMapping("/admin/updateBlogCategory")
     public ResponseResult updateBlogCategory(@RequestBody BlogCategory blogCategory) {
         blogCategoryService.addOrUpdateBlogCategory(blogCategory);
@@ -74,6 +77,7 @@ public class BlogCategoryController {
      * Date: 2023/1/12 22:36
      **/
     @SysLog(logModule=BlogCategoryModule, logType = DELETE, logDesc = "后台批量删除博客文章类别")
+    @PreAuthorize("hasAuthority('blog:blogCategory:delete')")
     @DeleteMapping("/admin/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         blogCategoryService.deleteCategoryByIds(ids);
@@ -86,6 +90,7 @@ public class BlogCategoryController {
      * Date 2023/1/12 22:09
      **/
     @PostMapping("/admin/getBlogCategoryPageList")
+    @PreAuthorize("hasAuthority('blog:blogCategory:query')")
     public ResponseResult getBlogCategoryPageList(@RequestBody BlogAdminQueryCategoryPageDTO queryCategoryDTO) {
         return ResponseResult.success(blogCategoryService.getBlogCategoryPageList(queryCategoryDTO));
     }

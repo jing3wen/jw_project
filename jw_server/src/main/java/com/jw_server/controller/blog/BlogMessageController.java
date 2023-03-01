@@ -1,6 +1,7 @@
 package com.jw_server.controller.blog;
 
 import com.jw_server.dao.blog.dto.BlogAdminUpdateCheckBatchDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.jw_server.service.blog.IBlogMessageService;
@@ -57,6 +58,7 @@ public class BlogMessageController {
      * Date 2023-02-09 14:24:46
      **/
     @SysLog(logModule=BlogMessageModule, logType = UPDATE, logDesc = "后台批量更新留言板审核状态")
+    @PreAuthorize("hasAuthority('blog:blogMessage:check')")
     @PostMapping("/admin/updateCheckBatch")
     public ResponseResult updateCheckBatch(@RequestBody BlogAdminUpdateCheckBatchDTO updateCheckBatchDTO) {
         blogMessageService.updateMessageCheckBatch(updateCheckBatchDTO);
@@ -69,6 +71,7 @@ public class BlogMessageController {
      * Date 2023-02-09 14:24:46
      **/
     @SysLog(logModule=BlogMessageModule, logType = DELETE, logDesc = "后台批量更新留言板留言")
+    @PreAuthorize("hasAuthority('blog:blogMessage:delete')")
     @DeleteMapping("/admin/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         blogMessageService.removeByIds(ids);
@@ -80,6 +83,7 @@ public class BlogMessageController {
      * Author: jingwen
      * Date: 2023/2/28 16:35
      **/
+    @PreAuthorize("hasAuthority('blog:blogMessage:query')")
     @GetMapping("/admin/getBlogMessagePage")
     public ResponseResult getPageList(@RequestParam("pageNum") Integer pageNum,
                                       @RequestParam("pageSize") Integer pageSize,

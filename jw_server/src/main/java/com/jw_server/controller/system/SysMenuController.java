@@ -82,6 +82,7 @@ public class SysMenuController {
      * Author jingwen
      * Date 2022-08-30 18:58:10
      **/
+    @PreAuthorize("hasAuthority('system:sysMenu:query')")
     @PostMapping("/getPageList")
     public ResponseResult getPageList(@RequestBody QuerySysMenuDTO querySysMenuDTO) {
         return ResponseResult.success(sysMenuService.getMenuPageList(querySysMenuDTO));

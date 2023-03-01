@@ -124,9 +124,13 @@ export default {
       return typeLimit && sizeLimit;
     },
     handleUploadSuccess(res){
-      this.$message.success('上传成功')
-      this.fileType = getFileType(res.data)
-      this.fileUrl = res.data
+      if(res.code === 200){
+        this.$message.success('上传成功')
+        this.fileType = getFileType(res.data)
+        this.fileUrl = res.data
+      }else {
+       this.$message.error(res.msg)
+      }
     },
     handleRemoveImage(){
       this.request.delete(this.f_removeFileUrl,  {data:this.fileUrl}).then(res =>{

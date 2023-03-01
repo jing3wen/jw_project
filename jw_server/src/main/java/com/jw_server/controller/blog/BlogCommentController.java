@@ -80,6 +80,7 @@ public class BlogCommentController {
      * Date: 2023/1/13 10:27
      **/
     @SysLog(logModule=BlogCommentModule, logType = UPDATE, logDesc = "后台批量审核博客文章评论")
+    @PreAuthorize("hasAuthority('blog:blogComment:check')")
     @PostMapping("/admin/updateCheckBatch")
     public ResponseResult updateCheckBatch(@RequestBody BlogAdminUpdateCheckBatchDTO updateCheckBatchDTO) {
         blogCommentService.updateCommentCheckBatch(updateCheckBatchDTO);
@@ -93,6 +94,7 @@ public class BlogCommentController {
      * Date 2022-12-03 17:17:39
      **/
     @SysLog(logModule=BlogCommentModule, logType = DELETE, logDesc = "后台批量删除博客文章评论")
+    @PreAuthorize("hasAuthority('blog:blogComment:delete')")
     @DeleteMapping("/admin/deleteBatch")
     public ResponseResult deleteBatch(@RequestBody List<Integer> ids) {
         blogCommentService.deleteBatchComment(ids);
@@ -104,6 +106,7 @@ public class BlogCommentController {
      * Author: jingwen
      * Date: 2023/1/13 11:00
      **/
+    @PreAuthorize("hasAuthority('blog:blogComment:query')")
     @PostMapping("/admin/getPageList")
     public ResponseResult getPageList(@RequestBody BlogAdminQueryCommentPageDTO queryCommentPageDTO) {
 
