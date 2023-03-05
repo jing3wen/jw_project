@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate";
+import {openKanBan} from "@/utils/live2d";
 
 Vue.use(Vuex)
 
@@ -56,6 +57,9 @@ export default new Vuex.Store({
     },
     loadWebInfo(state, webInfo) {
       webInfo.webTitle = webInfo.webTitle.split('');
+      if(webInfo.webKanban==='1'){
+        openKanBan()
+      }
       state.webInfo = webInfo;
     }
   },

@@ -1,7 +1,6 @@
 package com.jw_server.service.blog.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jw_server.core.constants.BlogConst;
 import com.jw_server.core.utils.RedisUtils;
@@ -41,14 +40,4 @@ public class BlogWebServiceImpl extends ServiceImpl<BlogWebMapper, BlogWeb> impl
         return blogWeb;
     }
 
-    /**
-     * 获取看板娘消息
-     **/
-    public String getWaifuJson(){
-        BlogWeb blogWeb = getWebInfo();
-        if (ObjectUtil.isNotEmpty(blogWeb) && StrUtil.isNotEmpty(blogWeb.getWaifuJson())) {
-            return blogWeb.getWaifuJson();
-        }
-        return "{}";
-    }
 }

@@ -46,17 +46,6 @@ public class BlogWebController {
         return ResponseResult.success(blogWebService.getWebInfo());
     }
 
-    /**
-     * Description: 获取看板娘消息
-     * Author: jingwen 
-     * Date: 2023/2/26 21:06
-     **/
-    @GetMapping("/front/getWaifuJson")
-    public String getWaifuJson() {
-        return blogWebService.getWaifuJson();
-    }
-
-
 
     /**
      * Description 后台更新网站配置

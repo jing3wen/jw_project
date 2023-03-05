@@ -53,8 +53,8 @@ public class BlogWeb implements Serializable {
     @ApiModelProperty("随机封面")
     private String randomCover;
 
-    @ApiModelProperty("看板娘消息")
-    private String waifuJson;
+    @ApiModelProperty("开启看板娘(1:开启, 0:不开启)")
+    private String webKanban;
 
     @ApiModelProperty("开启文章审核(1:不开启, 0:开启)")
     private String articleCheck;

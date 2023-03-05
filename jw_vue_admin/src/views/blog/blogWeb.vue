@@ -44,6 +44,11 @@
                    active-color="#13CE66" :active-value='"1"' :inactive-value='"0"'  @change="submitForm">
         </el-switch>
       </el-form-item>
+      <el-form-item label="开启看板娘:" prop="webKanban" required>
+        <el-switch v-model="blogWebForm.webKanban" active-text="开启" inactive-text="关闭"
+                   active-color="#13CE66" :active-value='"1"' :inactive-value='"0"'  @change="submitForm">
+        </el-switch>
+      </el-form-item>
       <el-form-item label="网站状态:" prop="status" required>
         <el-switch v-model="blogWebForm.status" active-text="正常" inactive-text="维护"
                    active-color="#13CE66" inactive-color="#F90606" :active-value='"1"' :inactive-value='"0"' @change="submitForm">
@@ -70,6 +75,7 @@ export default {
         webFooter: "",
         backgroundImage: "",
         webAvatar: "",
+        webKanban: "1",
         articleCheck: "1",
         commentCheck: "1",
         messageCheck: "1",

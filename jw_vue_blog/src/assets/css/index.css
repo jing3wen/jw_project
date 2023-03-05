@@ -170,26 +170,14 @@ body {
 }
 
 /* 看板娘 */
-#waifu-toggle, #waifu {
-    z-index: 100;
-}
-
-#waifu-tips {
-    border: unset;
-    animation: unset;
-    width: 200px;
-    min-height: 60px;
-}
-
-#waifu-tool {
-    right: -10px;
-    bottom: 20px;
-    top: unset;
-}
-
 #waifu #live2d {
-    height: 250px;
-    width: 250px;
+    height: 300px!important;
+    width: 300px!important;
+}
+#waifu-tips {
+    top: -40px;
+    /*隐藏对话框*/
+    /*display:none !important;*/
 }
 
 /* 图标旋转 */
