@@ -123,7 +123,7 @@
       },
 
       getArticles() {
-        this.$http.post("http://localhost:9090/blogArticle/front/getFrontArticlePage", this.pagination)
+        this.$http.post("/api/blogArticle/front/getFrontArticlePage", this.pagination)
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.articles = this.articles.concat(res.data.records);

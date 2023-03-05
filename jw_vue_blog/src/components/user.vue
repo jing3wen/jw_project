@@ -265,7 +265,7 @@
           password: this.$common.encrypt(this.password.trim())
         };
 
-        this.$http.post("http://localhost:9090/login/userLogin", user)
+        this.$http.post("/api/login/userLogin", user)
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.$message.success('登陆成功')
@@ -329,7 +329,7 @@
           user.email = this.email;
         }
 
-        this.$http.post("http://localhost:9090/sysUser/register", user)
+        this.$http.post("/api/sysUser/register", user)
           .then((res) => {
             this.$message.success("注册成功");
             this.account=''
@@ -374,7 +374,7 @@
           type: 'success',
           center: true
         }).then(() => {
-          this.$http.post("http://localhost:9090/sysUser/update", user)
+          this.$http.post("/api/sysUser/update", user)
             .then((res) => {
               this.$message({
                 message: "修改成功,重新登陆生效!",
@@ -507,7 +507,7 @@
               avatar: this.avatar.trim()
             };
 
-            this.$http.post("http://localhost:9090/sysUser/update", user)
+            this.$http.post("/api/sysUser/update", user)
               .then((res) => {
                 this.clearDialog();
                 this.$message({
@@ -564,7 +564,7 @@
         }
 
         if (this.dialogTitle === "找回密码") {  //找回密码
-          this.$http.post("http://localhost:9090/sysUser/updateForgetPassword", params)
+          this.$http.post("/api/sysUser/updateForgetPassword", params)
             .then((res) => {
               this.clearDialog();
               this.$message({
@@ -579,7 +579,7 @@
               });
             });
         } else {  //更改绑定邮箱
-          this.$http.post("http://localhost:9090/sysUser/updateBindByPassword", params)
+          this.$http.post("/api/sysUser/updateBindByPassword", params)
             .then((res) => {
               this.$message({
                 message: "修改成功！重新登陆后生效",
@@ -614,7 +614,7 @@
             params.type = this.$constant.updateUserBindCodeType
           }
 
-          this.$http.get("http://localhost:9090/sysUser/getCodeForType", params)
+          this.$http.get("/api/sysUser/getCodeForType", params)
             .then((res) => {
               this.$message({
                 message: "验证码已发送，请注意查收！",

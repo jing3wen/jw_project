@@ -258,7 +258,7 @@
       },
       //获取文章详情
       getArticle() {
-        this.$http.get("http://localhost:9090/blogArticle/front/getFrontArticleDetails", {articleId: this.id})
+        this.$http.get("/api/blogArticle/front/getFrontArticleDetails", {articleId: this.id})
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.article = res.data;

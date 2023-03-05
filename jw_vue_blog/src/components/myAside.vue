@@ -92,7 +92,7 @@
     },
     methods: {
       getRecommendArticles() {
-        this.$http.get("http://localhost:9090/blogArticle/front/getHotArticle")
+        this.$http.get("/api/blogArticle/front/getHotArticle")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.recommendArticles = res.data;

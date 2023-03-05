@@ -169,7 +169,7 @@
     methods: {
       //获取一级(二级)评论
       getComments(pagination, floorComment = {}, isToPage = false) {
-        this.$http.post("http://localhost:9090/blogComment/front/getFrontComment", pagination)
+        this.$http.post("/api/blogComment/front/getFrontComment", pagination)
           .then((res) => {
             if (!this.$common.isEmpty(res.data) && !this.$common.isEmpty(res.data.records)) {
               if (this.$common.isEmpty(floorComment)) {
@@ -201,7 +201,7 @@
       },
       //获取评论总数
       getTotal() {
-        this.$http.get("http://localhost:9090/blogComment/front/getFrontCommentCounts", {articleId: this.source})
+        this.$http.get("/api/blogComment/front/getFrontCommentCounts", {articleId: this.source})
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.commentTotal = res.data;
@@ -272,7 +272,7 @@
           commentContent: commentContent,
           commentCheck: this.$store.state.webInfo.commentCheck,
         };
-        this.$http.post("http://localhost:9090/blogComment/front/addComment", comment)
+        this.$http.post("/api/blogComment/front/addComment", comment)
           .then((res) => {
             //重置分页数据
             this.pagination = {
@@ -317,7 +317,7 @@
         };
         let floorComment = this.floorComment;
 
-        this.$http.post("http://localhost:9090/blogComment/front/addComment", comment)
+        this.$http.post("/api/blogComment/front/addComment", comment)
           .then((res) => {
             //提交回复后，查询(回复评论)二级评论
             let pagination = {

@@ -123,7 +123,7 @@
           momentsContent: content,
           isPublic: this.isPublic
         };
-        this.$http.post("http://localhost:9090/blogMoments/front/addMoments", moments)
+        this.$http.post("/api/blogMoments/front/addMoments", moments)
           .then((res) => {
             this.$message({
               type: 'success',
@@ -162,7 +162,7 @@
           type: 'success',
           center: true
         }).then(() => {
-          this.$http.delete("http://localhost:9090/blogMoments/front/deleteBatch", [id])
+          this.$http.delete("/api/blogMoments/front/deleteBatch", [id])
             .then((res) => {
               this.$message({
                 type: 'success',
@@ -185,7 +185,7 @@
         });
       },
       getMoments() {
-        this.$http.post("http://localhost:9090/blogMoments/front/getFrontMomentsPage", this.pagination)
+        this.$http.post("/api/blogMoments/front/getFrontMomentsPage", this.pagination)
           .then((res) => {
             this.showFooter = false;
             if (!this.$common.isEmpty(res.data)) {

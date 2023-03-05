@@ -179,7 +179,7 @@
           return;
         }
 
-        this.$http.post("http://localhost:9090/blogFriend/front/addFriend", this.friend)
+        this.$http.post("/api/blogFriend/front/addFriend", this.friend)
           .then((res) => {
             $(".form-wrap").css({"height": "447px", "top": "0"});
             this.$message({
@@ -201,7 +201,7 @@
         window.open(path);
       },
       getFriends() {
-        this.$http.get("http://localhost:9090/blogFriend/front/getAllFriend")
+        this.$http.get("/api/blogFriend/front/getAllFriend")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.friendList = res.data;

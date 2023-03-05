@@ -1,7 +1,4 @@
 export default {
-  baseURL: "http://localhost:8081",
-  imBaseURL: "http://localhost:81",
-  webURL: "http://localhost",
 
   //验证码类型
   registerUserCodeType : "register_user",

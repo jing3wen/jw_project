@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    
+
     <div style="background: var(--background)">
       <myFooter></myFooter>
     </div>
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     getArchive() {
-      this.$http.get("http://localhost:9090/blogArticle/front/getArticleArchive", this.pagination)
+      this.$http.get("/api/blogArticle/front/getArticleArchive", this.pagination)
         .then((res) => {
           this.archiveList = res.data.records;
           this.total = res.data.total;

@@ -65,7 +65,7 @@
     },
     methods: {
       getTreeHole() {
-        this.$http.get("http://localhost:9090/blogMessage/front/getMessageList")
+        this.$http.get("/api/blogMessage/front/getMessageList")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               res.data.forEach(m => {
@@ -110,7 +110,7 @@
             message.messageEmail = this.$store.state.currentUser.email;
           }
         }
-        this.$http.post("http://localhost:9090/blogMessage/front/addMessage", message)
+        this.$http.post("/api/blogMessage/front/addMessage", message)
           .then((res) => {
             this.getTreeHole()
           })

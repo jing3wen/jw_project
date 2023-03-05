@@ -310,7 +310,7 @@
       },
       //登出
       logout() {
-        this.$http.post("http://localhost:9090/login/userLogout")
+        this.$http.post("/api/login/userLogout")
           .then((res) => {
             this.$message.success('注销成功')
             this.$store.commit("loadCurrentUser", {});
@@ -326,7 +326,7 @@
       },
       //获取网站配置
       getWebInfo() {
-        this.$http.get("http://localhost:9090/blogWeb/front/getWebInfo")
+        this.$http.get("/api/blogWeb/front/getWebInfo")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.$store.commit("loadWebInfo", res.data);
@@ -341,7 +341,7 @@
       },
       //获取类别列表
       getCategoryList() {
-        this.$http.get("http://localhost:9090/blogCategory/front/getAllCategory")
+        this.$http.get("/api/blogCategory/front/getAllCategory")
           .then((res) => {
             if (!this.$common.isEmpty(res.data)) {
               this.$store.commit("loadCategoryList", res.data);
