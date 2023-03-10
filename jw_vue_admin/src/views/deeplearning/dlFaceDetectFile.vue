@@ -50,6 +50,7 @@
       </el-table-column>
       <el-table-column prop="detectStatus" label="检测状态" width="100px" align="center">
         <template slot-scope="scope">
+          <el-tag type="warning" v-if="scope.row.detectStatus === 4" style="font-weight: bold">等待中</el-tag>
           <el-tag type="primary" v-if="scope.row.detectStatus === 2" style="font-weight: bold">检测完成</el-tag>
           <el-tag type="success" v-if="scope.row.detectStatus === 1" style="font-weight: bold">检测中</el-tag>
           <el-tag type="info" v-if="scope.row.detectStatus === 0" style="font-weight: bold">未检测</el-tag>
@@ -327,7 +328,8 @@ export default {
     detectFaceFile(data){
       this.request.post('/api/dlFaceDetectFile/detectFaceFile', data).then(res =>{
         if(res.code === 200){
-          this.$message.success("文件检测完成")
+
+          this.$message.success("检测任务已提交")
           this.getPageList()
         }else if(res.code === 202){
           this.$message.info("文件正在检测中, 请稍等")

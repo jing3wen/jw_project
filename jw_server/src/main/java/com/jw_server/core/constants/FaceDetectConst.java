@@ -33,4 +33,24 @@ public class FaceDetectConst {
      **/
     public static final String DETECT_FILE_RESULT = "detect_file_result";
 
+    /*
+     * 缓存检测任务线程池的状态
+     **/
+    public static final String DETECT_TASK_CACHE = "dl:detect_task_cache";
+
+    /*
+     * 检测任务线程池参数
+     * 核心线程大小
+     * 最大线程大小
+     * 工作队列大小
+     * 空闲线程等待时间
+     **/
+    public static final Integer CORE_POOL_SIZE = 2;
+    public static final Integer MAX_POOL_SIZE = 2;
+    public static final Integer WORK_QUEUE_SIZE = 5;
+    public static final Integer KEEP_ALIVE_SECONDS = 60;
+
+
+
+
 }

@@ -34,7 +34,7 @@ public class DlFaceDetectFile implements Serializable {
     @ApiModelProperty("检测文件类别")
     private String fileType;
 
-    @ApiModelProperty("检测状态(0:未检测, 1:检测中, 2:检测完成, -1:检测失败)")
+    @ApiModelProperty("检测状态(0:未检测, 1:检测中, 2:检测完成, -1:检测失败, 4:已创建任务等待调度)")
     private Integer detectStatus;
 
     @ApiModelProperty("是否保存检测结果(0:否, 1:是)")

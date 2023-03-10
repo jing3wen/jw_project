@@ -8,6 +8,7 @@ import com.jw_server.dao.deeplearning.entity.DlFaceDetectFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 
 /**
@@ -57,5 +58,13 @@ public interface IDlFaceDetectFileService extends IService<DlFaceDetectFile> {
      * Author: jingwen
      * Date: 2022/9/24 11:55
      **/
-    void asyncDetectedFile(DlFaceDetectFile detectFile);
+    void asyncDetectedFile(DlFaceDetectFile detectFile, String taskId);
+
+    /**
+     * Description: 更新文件检测状态
+     * Author: jingwen
+     * Date: 2022/9/22 23:19
+     **/
+    void updateFileDetectStatus(Integer fileId, Integer detectStatus);
+
 }

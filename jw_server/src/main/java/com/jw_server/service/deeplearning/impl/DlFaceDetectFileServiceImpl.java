@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jw_server.core.common.ResponseResult;
 import com.jw_server.core.constants.HttpCode;
+import com.jw_server.core.enums.DetectFileStatusEnum;
 import com.jw_server.core.exception.ServiceException;
 import com.jw_server.core.fileUpload.FileUploadUtils;
 import com.jw_server.core.utils.socketToPython.DetectFileUtils;
@@ -18,15 +19,19 @@ import com.jw_server.dao.deeplearning.entity.DlFaceDetectFile;
 import com.jw_server.dao.deeplearning.mapper.DlFaceDetectFileMapper;
 import com.jw_server.service.deeplearning.IDlFaceDetectFileService;
 import com.jw_server.service.system.ISysUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static com.jw_server.core.constants.FaceDetectConst.*;
 import static com.jw_server.core.enums.FilePathEnum.FACE_DETECT_FILE;
@@ -38,6 +43,7 @@ import static com.jw_server.core.enums.FilePathEnum.FACE_DETECT_FILE;
  * Date 2022-09-22 17:31:09
  **/
 @Service
+@Slf4j
 public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMapper, DlFaceDetectFile> implements IDlFaceDetectFileService {
 
     @Resource
@@ -45,9 +51,6 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
 
     @Resource
     private DetectFileUtils detectFileUtils;
-
-    @Resource
-    private ISysUserService sysUserService;
 
     @Resource
     private DlFaceDetectFileMapper dlFaceDetectFileMapper;
@@ -61,7 +64,7 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
             queryWrapper.like(DlFaceDetectFile::getFileName, dlFaceDetectFileDTO.getFileName());
         }
         if(dlFaceDetectFileDTO.getDetectStatus()!= null){
-            queryWrapper.like(DlFaceDetectFile::getDetectStatus, dlFaceDetectFileDTO.getDetectStatus());
+            queryWrapper.eq(DlFaceDetectFile::getDetectStatus, dlFaceDetectFileDTO.getDetectStatus());
         }
         return page(new Page<>(dlFaceDetectFileDTO.getPageNum(),
                         dlFaceDetectFileDTO.getPageSize()),
@@ -86,10 +89,16 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
         //删除检测文件和检测结果文件
         ids.forEach(deleteFileId ->{
             DlFaceDetectFile deleteFile = getOne(new LambdaQueryWrapper<DlFaceDetectFile>()
-                    .select(DlFaceDetectFile::getId, DlFaceDetectFile::getFileAddress, DlFaceDetectFile::getResultFileAddress)
+                    .select(DlFaceDetectFile::getId,
+                            DlFaceDetectFile::getFileAddress,
+                            DlFaceDetectFile::getResultFileAddress,
+                            DlFaceDetectFile::getDetectStatus)
                     .eq(DlFaceDetectFile::getId, deleteFileId));
+            if(deleteFile.getDetectStatus().equals(DetectFileStatusEnum.RUNNING.getState())
+                    || deleteFile.getDetectStatus().equals(DetectFileStatusEnum.WAITING.getState())){
+                throw new ServiceException(HttpCode.CODE_500,"任务已经提交, 暂时不能删除");
+            }
 
-            System.out.println(deleteFile);
             if(StrUtil.isNotBlank(deleteFile.getFileAddress())){
                 logger.info("删除检测文件--"+deleteFile.getFileAddress());
                 fileUploadUtils.fileDelete(deleteFile.getFileAddress());
@@ -135,74 +144,96 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
      * Author: jingwen
      * Date: 2022/9/24 10:55
      **/
-    @Async
-    public void asyncDetectedFile(DlFaceDetectFile detectFile){
+    @Async("detectFileThreadPool")
+    public void asyncDetectedFile(DlFaceDetectFile detectFile, String taskId){
+        //开始检测, 更新文件检测状态 0(未检测) -> 1(检测中)
+        dlFaceDetectFileMapper.updateFileDetectStatus(detectFile.getId(), DetectFileStatusEnum.RUNNING.getState());
+        try{
+            TimeUnit.SECONDS.sleep(60);
+        } catch (InterruptedException e) {
+
+        }
+
         /**
-         * jingwen:
+         * 发送数据格式
+         *{
+         *   "code":200,
+         *   "message": "call_SocketService",
+         *   "data":{
+         *       "service_name":"predictImage()",
+         *        "service_params":{
+         *               "image_path":"你的application.yml中的本地上传的路径/deep_learning/face_detect/face_detect_file/to_detect_file/jingwen_undetected.jpg",
+         *               "save_iamge":1   # True
+         *       }
+         *   }
+         *}
+         **/
+        /**
          * 此处调用socket对文件进行检测
          * res格式: {
          * 				"code":200
          *              "message":"识别成功"
          *              "data":{
          *              		"recognition_face_list": ["yuwenxing"],
-         *              		"save_file_path": "D:/SpringBoot_v2-master_upload/my_upload/detection_result/jingwen_detected.jpg"
-         *              		//视频时  'recognition_face_list': [],
-         *              	    //	     'student_course_score_dict': {'lixian': 2773, 'huge': 4148, 'wangyibo': 1}
-         *              	    //		 "save_file_path": "D:/SpringBoot_v2-master_upload/my_upload/detection_result/123/123/jingwen_detected.jpg"
+         *              		"save_file_path": "你的application.yml中的本地上传的路径/deep_learning/face_detect/face_detect_file/detect_file_result/jingwen_detected.jpg"
+         *              		//视频时  'recognition_face_list': ["yuwenxing", "luohong"],
+         *              	    //		 "save_file_path": "你的application.yml中的本地上传的路径/deep_learning/face_detect/face_detect_file/detect_file_result/jingwen_detected_voice.mp4"
          *
          *              	}
          *
          *
          *          }
          * **/
-        //开始检测, 更新文件检测状态 0(未检测) -> 1(检测中)
-        dlFaceDetectFileMapper.updateFileDetectStatus(detectFile.getId(), 1);
+
 
         //要检测的文件路径
         String filePath = fileUploadUtils.fileUrlToFilePath(detectFile.getFileAddress());
-        //读取返回res的data，即res.data
-        JSONObject resData=new JSONObject();
-        /**
-         * //定义返回给前端的数据，recognitionFaceList识别出的人脸,studentCourseScoreDict:学生得分，二选一
-         * 若检测类型为图片，返回结果为recognitionFaceList（列表）
-         * 若检测类型为视频，返回结果为studentCourseScoreDict（json数据）
-         **/
-        JSONArray recognitionFaceList=new JSONArray();
-        JSONObject studentCourseScoreDict=new JSONObject();
-        //定义检测结果
-        JSONObject detectionResult=new JSONObject();
+
+
+        //根据文件类别来获取调用方法
+        String serviceName = "";
         if(detectFile.getFileType().equals("image")){
-            try {
-                resData = detectFileUtils.remoteCall_predictImageOrVideo(200,
-                        "call_SocketService",
-                        "predictImage()",
-                        filePath,
-                        Integer.parseInt(detectFile.getSaveResult())).getJSONObject("data");
-            }catch(Exception e){
-                throw new ServiceException(HttpCode.CODE_400,"调用检测服务器异常");
-            }
-            recognitionFaceList=resData.getJSONArray("recognition_face_list");
-        }if(detectFile.getFileType().equals("video")){
-            try {
-                resData = detectFileUtils.remoteCall_predictImageOrVideo(200,
-                        "call_SocketService",
-                        "predictVideo()",
-                        filePath,
-                        Integer.parseInt(detectFile.getSaveResult())).getJSONObject("data");
-            }catch(Exception e){
-                throw new ServiceException(HttpCode.CODE_400,"调用检测服务器异常");
-            }
-            recognitionFaceList=resData.getJSONArray("recognition_face_list");
+            serviceName = "predictImage()";
+        }else if(detectFile.getFileType().equals("video")){
+            serviceName = "predictVideo()";
         }
-        //System.out.println("resData:"+resData);
-        String detectedFilePath=resData.getString("save_file_path");
-        //定义检测文件结果地址
-        String file_detected_url=fileUploadUtils.filePathToFileUrl(detectedFilePath);
-        // 更新检测文件的信息
-        detectFile.setDetectStatus(2);
-        detectFile.setResultFileAddress(file_detected_url);
-        detectFile.setResultMsg("检测到的人脸: "+recognitionFaceList.toString());
-        updateById(detectFile);
-        //TODO 检测视频过程很长，检测完成前，前端的axios报异常会超时，后续可通过webSocket主动向前端发送消息
+        try {
+            //读取返回res的data，即res.data
+            JSONObject resData = detectFileUtils.remoteCall_predictImageOrVideo(200,
+                    "call_SocketService",
+                    serviceName,
+                    filePath,
+                    Integer.parseInt(detectFile.getSaveResult())).getJSONObject("data");
+            log.error("[taskId="+detectFile.getId()+"]检测成功");
+            /*
+             * 检测成功——获取检测结果，
+             * detectedFilePath检测结果存储位置
+             * recognitionFaceList识别出的人脸
+             **/
+            String detectedFilePath=resData.getString("save_file_path");
+            JSONArray recognitionFaceList=resData.getJSONArray("recognition_face_list");
+            //定义检测文件结果地址
+            String file_detected_url=fileUploadUtils.filePathToFileUrl(detectedFilePath);
+            // 更新检测文件的信息
+            detectFile.setDetectStatus(DetectFileStatusEnum.SUCCESS.getState());
+            detectFile.setResultFileAddress(file_detected_url);
+            detectFile.setResultMsg("检测到的人脸: "+recognitionFaceList.toString());
+            updateById(detectFile);
+        }catch(Exception e){
+            log.error("[taskId="+detectFile.getId()+"] 检测失败");
+            // 检测失败——更新检测文件的信息
+            detectFile.setDetectStatus(DetectFileStatusEnum.FAILED.getState());
+            detectFile.setResultMsg("调用检测服务器异常");
+            updateById(detectFile);
+            throw new ServiceException(HttpCode.CODE_400,"调用检测服务器异常");
+        }
+    }
+
+    /**
+     * Description: 更新文件检测状态
+     **/
+    @Override
+    public void updateFileDetectStatus(Integer fileId, Integer detectStatus) {
+        dlFaceDetectFileMapper.updateFileDetectStatus(fileId, detectStatus);
     }
 }

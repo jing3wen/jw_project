@@ -6,17 +6,22 @@ import com.jw_server.core.constants.HttpCode;
 import com.jw_server.core.exception.ServiceException;
 import com.jw_server.core.fileUpload.FileUploadUtils;
 import com.jw_server.dao.deeplearning.dto.QueryDlFaceDetectFileDTO;
+import com.jw_server.dao.deeplearning.entity.DetectFileTaskInfo;
 import com.jw_server.dao.deeplearning.entity.DlFaceDetectFile;
 import com.jw_server.service.deeplearning.IDlFaceDetectFileService;
+import com.jw_server.service.deeplearning.impl.DetectFileTaskManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Queue;
+import java.util.Random;
+import java.util.concurrent.Future;
 
 import static com.jw_server.core.constants.LogModuleConst.DlFaceDetectFileModule;
 import static com.jw_server.core.constants.LogTypeConst.*;
@@ -37,7 +42,12 @@ public class DlFaceDetectFileController {
     @Resource
     private FileUploadUtils fileUploadUtils;
 
+    @Resource
+    private DetectFileTaskManager detectFileTaskManager;
+
     private static final Log logger = LogFactory.getLog(DlFaceDetectFileController.class);
+
+
     /**
      * Description 新增
      * Author jingwen
@@ -118,33 +128,19 @@ public class DlFaceDetectFileController {
         return ResponseResult.success();
     }
 
+
     /**
-     * Description: 异步检测文件
+     * Description: 异步检测文件——线程池监控版本
      * Author: jingwen
-     * Date: 2022/9/22 22:28
+     * Date: 2023/3/9 20:16
      **/
     @SysLog(logModule = DlFaceDetectFileModule, logType = UPDATE, logDesc = "检测文件")
     @PreAuthorize("hasAuthority('dl:dlFaceDetectFile:detecting')")
     @PostMapping("/detectFaceFile")
-    public ResponseResult detectFaceFile(@RequestBody DlFaceDetectFile detectFile){
-
-        Integer detectStatus = dlFaceDetectFileService.getDetectStatus(detectFile.getId());
-        if(detectStatus==1){
-            return ResponseResult.error(HttpCode.CODE_202,"文件正在检测中, 请稍等");
-        }
-        if(detectStatus == 2){  //文件检测完成
-            return ResponseResult.success();
-        }
-        if(detectStatus == -1){
-            return ResponseResult.error(HttpCode.CODE_400,"文件检测失败");
-        }
-        try{
-            dlFaceDetectFileService.asyncDetectedFile(detectFile);
-        }catch(Exception e){
-            throw new ServiceException(HttpCode.CODE_400, "调用检测服务器异常");
-        }
-
-        return ResponseResult.error(HttpCode.CODE_202,"文件正在检测中, 请稍等");
+    public ResponseResult submitDetectTask(@RequestBody DlFaceDetectFile detectFile){
+        detectFileTaskManager.submitDetectTask(detectFile);
+        return ResponseResult.success();
     }
+
 }
 

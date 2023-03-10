@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -45,6 +46,8 @@ public class SecurityConfig{
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        //开始线程传递用户认证信息
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
         return httpSecurity
                 .csrf().disable()  //关闭csrf
                 .cors() //开启跨域
@@ -62,6 +65,8 @@ public class SecurityConfig{
                 .antMatchers("/sysUser/updateForgetPassword").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/**/front/**").permitAll()
+                .antMatchers("/dlFaceDetectFile/submitTask").permitAll()
+                .antMatchers("/dlFaceDetectFile/getTaskStatus").permitAll()
                 .anyRequest().authenticated()  //任意请求认证后都能访问
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)

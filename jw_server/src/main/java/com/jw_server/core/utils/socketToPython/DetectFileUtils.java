@@ -89,19 +89,35 @@ public class DetectFileUtils {
 
     public JSONObject remoteCall_predictImageOrVideo(int code,String message,String serviceName,String filePath,int saveResult){
         /**
-         发送数据格式
-         {
-             "code":200,
-             "message": "call_SocketService",
-             "data":{
-                 "service_name":"predictImage()",
-                 "service_params":{
-                     "image_path":"D:/IDEA/static/upload/img/jingwen.jpg",
-                     "save_iamge":1   # True
-                }
-            }
-         }
+         * 发送数据格式
+         *{
+         *   "code":200,
+         *   "message": "call_SocketService",
+         *   "data":{
+         *       "service_name":"predictImage()",
+         *        "service_params":{
+         *               "image_path":"你的application.yml中的本地上传的路径/deep_learning/face_detect/face_detect_file/to_detect_file/jingwen_undetected.jpg",
+         *               "save_iamge":1   # True
+         *       }
+         *   }
+         *}
          **/
+        /**
+         * 此处调用socket对文件进行检测
+         * res格式: {
+         * 				"code":200
+         *              "message":"识别成功"
+         *              "data":{
+         *              		"recognition_face_list": ["yuwenxing"],
+         *              		"save_file_path": "你的application.yml中的本地上传的路径/deep_learning/face_detect/face_detect_file/detect_file_result/jingwen_detected.jpg"
+         *              		//视频时  'recognition_face_list': ["yuwenxing", "luohong"],
+         *              	    //		 "save_file_path": "你的application.yml中的本地上传的路径/deep_learning/face_detect/face_detect_file/detect_file_result/jingwen_detected_voice.mp4"
+         *
+         *              	}
+         *
+         *
+         *          }
+         * **/
         JSONObject send = new JSONObject();
         //封装发送数据
         send.put("code",code);

@@ -45,3 +45,5 @@ def video_add_voice(video_file, voice_file):
     os.remove(video_file)
 
     return outfile_name
+
+video_add_voice('audio.mp4', 'video.mp4');
