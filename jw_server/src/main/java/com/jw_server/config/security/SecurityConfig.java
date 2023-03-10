@@ -55,7 +55,7 @@ public class SecurityConfig{
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  //不通过Session获取SecurityContext
                 .and()
                 .authorizeRequests()  // 请求认证
-                /**
+                /*
                  * 对于登录接口 允许匿名访问, .anonymous()用户登录认证后(请求头带token)就不能访问
                  * .permitAll()用户登录认证，未登录认证(请求头带不带token)都能访问
                  **/
@@ -65,8 +65,6 @@ public class SecurityConfig{
                 .antMatchers("/sysUser/updateForgetPassword").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/**/front/**").permitAll()
-                .antMatchers("/dlFaceDetectFile/submitTask").permitAll()
-                .antMatchers("/dlFaceDetectFile/getTaskStatus").permitAll()
                 .anyRequest().authenticated()  //任意请求认证后都能访问
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
@@ -93,8 +91,7 @@ public class SecurityConfig{
     //获取AuthenticationManager（认证管理器），登录时认证使用
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
-        AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
-        return authenticationManager;
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 
