@@ -148,11 +148,6 @@ public class DlFaceDetectFileServiceImpl extends ServiceImpl<DlFaceDetectFileMap
     public void asyncDetectedFile(DlFaceDetectFile detectFile, String taskId){
         //开始检测, 更新文件检测状态 0(未检测) -> 1(检测中)
         dlFaceDetectFileMapper.updateFileDetectStatus(detectFile.getId(), DetectFileStatusEnum.RUNNING.getState());
-        try{
-            TimeUnit.SECONDS.sleep(60);
-        } catch (InterruptedException e) {
-
-        }
 
         /**
          * 发送数据格式
