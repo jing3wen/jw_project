@@ -7,15 +7,13 @@ import com.jw_server.core.exception.ServiceException;
 import com.jw_server.core.utils.RedisUtils;
 import com.jw_server.dao.deeplearning.entity.DetectFileTaskInfo;
 import com.jw_server.dao.deeplearning.entity.DlFaceDetectFile;
-import com.jw_server.dao.deeplearning.mapper.DlFaceDetectFileMapper;
 import com.jw_server.service.deeplearning.IDlFaceDetectFileService;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Description: 异步检测任务管理类
@@ -32,9 +30,9 @@ public class DetectFileTaskManager {
     private IDlFaceDetectFileService dlFaceDetectFileService;
 
     //正在检测的队列
-    private final Queue<Integer> detectingQueue = new ArrayDeque<>();
+    private final LinkedBlockingQueue<Integer> detectingQueue = new LinkedBlockingQueue<>();
     //等待队列
-    private final Queue<Integer> waitingQueue = new ArrayDeque<>();
+    private final LinkedBlockingQueue<Integer> waitingQueue = new LinkedBlockingQueue<>();
 
 
 
@@ -112,7 +110,6 @@ public class DetectFileTaskManager {
             detectingQueue.remove(taskInfo.getTaskId());
             //dlFaceDetectFileMapper.updateFileDetectStatus(taskInfo.getTaskId(), taskInfo.getStatus().getState());
             redisUtils.deleteObject(FaceDetectConst.DETECT_TASK_CACHE+"_id_"+taskInfo.getTaskId());
-            return;
         }
 
     }
@@ -120,7 +117,6 @@ public class DetectFileTaskManager {
     /**
      * 获取任务信息
      * @param taskId 任务ID
-     * @return
      */
     public DetectFileTaskInfo getTaskInfo(String taskId) {
         return redisUtils.getCacheObject(FaceDetectConst.DETECT_TASK_CACHE+"_id_"+taskId);
@@ -130,7 +126,6 @@ public class DetectFileTaskManager {
      * 获取任务状态
      *
      * @param taskId 任务ID
-     * @return
      */
     public DetectFileStatusEnum getTaskStatus(String taskId) {
         return getTaskInfo(taskId).getStatus();
