@@ -51,6 +51,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             Claims claims = JwtUtils.parseJWT(token);
             userId = claims.getSubject();
         }catch (Exception e) {
+            //此处抛出ServiceException会被spring security的认证失败处理器AuthenticationEntryPointImpl捕获，自定义捕获其捕获不到
             throw new ServiceException(HttpCode.CODE_401, "token验证失败，请重新登录");
         }
         //从redis中获取用户信息
@@ -58,6 +59,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String redisKey = "login-tokens:"+ subToken;
         UserDetailsVO userDetailsVO = redisUtils.getCacheObject(redisKey);
         if(Objects.isNull(userDetailsVO)){
+            //此处抛出ServiceException会被spring security的认证失败处理器AuthenticationEntryPointImpl捕获，自定义捕获其捕获不到
             throw new ServiceException(HttpCode.CODE_401, "用户不存在，请重新登录");
         }
         //存入SecurityContextHolder
