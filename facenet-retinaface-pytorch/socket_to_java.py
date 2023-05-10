@@ -8,7 +8,7 @@
 import socket
 import threading
 import json
-from service.SocketService import SocketService
+from SocketService import SocketService
 from apiResponse.ApiResponse import ApiResponse
 
 socketService=SocketService()
