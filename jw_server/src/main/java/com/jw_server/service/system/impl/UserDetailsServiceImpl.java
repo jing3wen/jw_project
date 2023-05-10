@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,12 +29,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private SysUserMapper sysUserMapper;
-
-    @Resource
-    private SysRoleMapper sysRoleMapper;
-
-    @Resource
-    private ISysMenuService sysMenuService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -74,10 +69,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * return
      */
     public UserDetailsVO createLoginSysUserVO(SysUser queryUser){
-        //查询用户所有角色信息
-        List<String> roleList = sysRoleMapper.selectRoleNameListByUserId(queryUser.getId());
-        //存储所有权限按钮
-        List<String> permissionList = sysMenuService.selectPermissionsByUserId(queryUser.getId());
+
+        //角色名称和权限按钮  在SysUserServiceImpl#userLogin中封装
         // 把数据封装成UserDetails返回
         return UserDetailsVO.builder()
                 .id(queryUser.getId())
@@ -85,8 +78,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .password(queryUser.getPassword())
                 .nickname(queryUser.getNickname())
                 .avatar(queryUser.getAvatar())
-                .roleList(roleList)
-                .permissionList(permissionList)
+                .permissionList(new ArrayList<>()) //此处为需要初始化new ArrayList<>(); 因为authorities为null会抛出异常
                 .email(queryUser.getEmail())
                 .phone(queryUser.getPhone())
                 .sex(queryUser.getSex())

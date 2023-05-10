@@ -112,8 +112,7 @@ public class DlFaceDatabaseServiceImpl extends ServiceImpl<DlFaceDatabaseMapper,
          * 图片路径修改, 图片名称修改均涉及到文件的变化
          **/
         DlFaceDatabase oldFace = getOne(new LambdaQueryWrapper<DlFaceDatabase>()
-                .select(DlFaceDatabase::getFaceName)
-                .select(DlFaceDatabase::getImageAddress)
+                .select(DlFaceDatabase::getFaceName, DlFaceDatabase::getImageAddress)
                 .eq(DlFaceDatabase::getId ,updateFace.getId()));
         /*
          * 图片路径修改（更新图片）：对新人脸图片重命名+删除旧人脸图片
