@@ -31,6 +31,7 @@ import com.jw_server.dao.system.mapper.SysUserRoleMapper;
 import com.jw_server.dao.system.vo.LoginUserVO;
 import com.jw_server.dao.system.vo.SysUserVO;
 import com.jw_server.dao.system.vo.UserDetailsVO;
+import com.jw_server.service.system.ISysMenuService;
 import com.jw_server.service.system.ISysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -76,6 +77,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private SysUserMapper sysUserMapper;
+
+    @Resource
+    private ISysMenuService sysMenuService;
 
     @Resource
     private EMailUtils eMailUtils;
@@ -128,6 +132,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         /*
         * 不建议直接返回userDetailsVO，因为里面有一些属性前端不需要
          */
+        //TODO 此处两个调用服务可以异步，然后阻塞等待结果汇总
+        //查询用户所有角色信息
+        userDetailsVO.setRoleList(sysRoleMapper.selectRoleNameListByUserId(userDetailsVO.getId()));
+        //存储所有权限按钮
+        userDetailsVO.setPermissionList(sysMenuService.selectPermissionsByUserId(userDetailsVO.getId()));
+
         LoginUserVO loginUserVO = copyBeanFromUserDetailsVO(userDetailsVO);
 
         //更新登录时间

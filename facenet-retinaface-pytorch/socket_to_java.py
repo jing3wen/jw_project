@@ -6,11 +6,9 @@
 # @Desc:   :
 
 import socket
-import sys
 import threading
 import json
-import numpy as np
-from SocketService import SocketService
+from service.SocketService import SocketService
 from apiResponse.ApiResponse import ApiResponse
 
 socketService=SocketService()
