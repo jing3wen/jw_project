@@ -1,7 +1,6 @@
 package com.jw_server.service.system.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.intern.InternUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -104,6 +103,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public ResponseResult userLogin(LoginSysUserDTO loginSysUserDTO) {
         //对密码进行解密
         loginSysUserDTO.setPassword(getDecryptPassword(loginSysUserDTO.getPassword()));
+        //logger.info(loginSysUserDTO.toString());
         //AuthenticationManager的authenticate方法来进行用户认证, authenticate方法会调用UserDetailsService的loadUserByUsername方法来认证
         UsernamePasswordAuthenticationToken authenticationToken = new
                 UsernamePasswordAuthenticationToken(loginSysUserDTO.getUsername(), loginSysUserDTO.getPassword());
@@ -188,6 +188,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (ObjectUtil.isNotEmpty(findSameEmailUser)){
             throw new ServiceException(HttpCode.CODE_600,"该邮箱已经注册");
         }
+
+        //将解密后的密码写入到实体类中
+        registerUserDTO.setPassword(password);
         //对密码进行加密
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         registerUserDTO.setPassword(bCryptPasswordEncoder.encode(registerUserDTO.getPassword()));
