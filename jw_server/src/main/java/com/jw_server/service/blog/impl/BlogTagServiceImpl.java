@@ -1,9 +1,7 @@
 package com.jw_server.service.blog.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jw_server.core.common.MyPageVO;
 import com.jw_server.core.constants.HttpCode;
@@ -17,14 +15,14 @@ import com.jw_server.dao.blog.vo.BlogFrontTagVO;
 import com.jw_server.service.blog.IBlogTagService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Description 博客标签表 服务实现类
- * Author jingwen
+ * @author : jingwen
  * Date 2023-02-04 15:20:40
  **/
 @Service
@@ -48,6 +46,7 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag> impl
      * 新增文章标签, 要检查同名
      **/
     @Override
+    @Transactional
     public void addOrUpdateBlogTag(BlogTag blogTag) {
         //查询是否有同名类别
         BlogTag findSameName = blogTagMapper.selectOne(new LambdaQueryWrapper<BlogTag>()
@@ -63,6 +62,7 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag> impl
      * 后台批量删除博客标签
      **/
     @Override
+    @Transactional
     public void deleteBlogTagBatch(List<Integer> ids) {
         Long count = blogArticleTagMapper.selectCount(new LambdaQueryWrapper<BlogArticleTag>()
                 .in(BlogArticleTag::getTagId, ids));
@@ -78,7 +78,7 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag> impl
     @Override
     public MyPageVO<BlogAdminTagPageVO> getAdminTagPage(Integer pageNum, Integer pageSize, String tagName) {
 
-        return new MyPageVO<>(blogTagMapper.getAdminTagPage(new Page<BlogAdminTagPageVO>(pageNum,pageSize), tagName));
+        return new MyPageVO<>(blogTagMapper.getAdminTagPage(new Page<>(pageNum, pageSize), tagName));
     }
 
 

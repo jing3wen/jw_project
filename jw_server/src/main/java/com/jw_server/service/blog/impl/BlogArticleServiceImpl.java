@@ -87,7 +87,6 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
                     blogFrontQueryArticlePageDTO);
         }
 
-
         List<BlogFrontArticlePageVO> articleVOList = articlePage.getRecords();
         if(CollectionUtil.isNotEmpty(articleVOList)){
             articleVOList.forEach(articleVO->{

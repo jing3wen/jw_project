@@ -15,6 +15,7 @@ import com.jw_server.dao.system.mapper.SysRoleMenuMapper;
 import com.jw_server.dao.system.mapper.SysUserRoleMapper;
 import com.jw_server.service.system.ISysRoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -61,6 +62,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
+    @Transactional  //saveOrUpdate()拥有事务注解, 此处引入是防止自调用导致事务失效
     public void addOrUpdateSysRole(SysRole sysRole) {
         //查询是否存在相同角色编码 (不用查询所有数据，查主键id就行了)
         SysRole findSameRoleCode = sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>()

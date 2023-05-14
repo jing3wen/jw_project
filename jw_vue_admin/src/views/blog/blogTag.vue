@@ -41,7 +41,7 @@
 
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="40%" @close="clickCancel">
       <el-form :model="dialogForm" :rules="dialogFormRules" ref="dialogForm" label-width="100px">
-        <el-form-item label="类别名" prop="tagName">
+        <el-form-item label="标签名" prop="tagName">
           <el-input v-model="dialogForm.tagName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -131,11 +131,11 @@ export default {
       this.resetDialogForm()
       if(data == null ){  //新增
         this.dialogForm.tagId=null
-        this.dialogTitle = '添加类别'
+        this.dialogTitle = '添加标签'
       }
       else {
         this.dialogForm = JSON.parse(JSON.stringify(data))
-        this.dialogTitle = '编辑类别'
+        this.dialogTitle = '编辑标签'
       }
       this.openDialog = true
     },
