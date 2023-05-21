@@ -17,13 +17,14 @@ import com.jw_server.dao.blog.vo.BlogFrontCategoryVO;
 import com.jw_server.service.blog.IBlogCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * Description 文章类别表 服务实现类
- * Author jingwen
+ * @author : jingwen
  * Date 2022-12-03 16:13:45
  **/
 @Service
@@ -62,6 +63,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
      * 新增或更新文章类别
      **/
     @Override
+    @Transactional
     public void addOrUpdateBlogCategory(BlogCategory blogCategory) {
         //查询是否有同名类别
         BlogCategory findOne = blogCategoryMapper.selectOne(new LambdaQueryWrapper<BlogCategory>()
@@ -78,6 +80,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
      * 需要判断该类别下是否还有文章，若还有就提示不能删除
      **/
     @Override
+    @Transactional
     public void deleteCategoryByIds(List<Integer> ids) {
         Long count = blogArticleMapper.selectCount(new LambdaQueryWrapper<BlogArticle>()
                 .in(BlogArticle::getCategoryId, ids));
