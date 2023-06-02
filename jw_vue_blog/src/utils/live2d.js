@@ -1,5 +1,5 @@
-//导入别人的api接口
-const live2d_path = "https://api.itggg.cn/live2dnew/left/";
+//导入别人的js文件
+const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"
 
 function loadExternalResource(url, type) {
   return new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@ export function openKanBan(){
 
   if (screen.width >= 768) {
     //采用第三方库动态导入看板娘文件
-    loadExternalResource("https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js", "js").then(r => {
+    loadExternalResource(live2d_path, "js").then(r => {
 
     })
   }
