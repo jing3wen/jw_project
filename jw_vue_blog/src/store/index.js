@@ -20,9 +20,11 @@ export default new Vuex.Store({
       webFooter: "",
       backgroundImage: "",
       webAvatar: "",
+      webKanban:'',
       articleCheck:"",
       commentCheck:"",
       messageCheck:"",
+      status:'1',
     },
   },
   getters: {

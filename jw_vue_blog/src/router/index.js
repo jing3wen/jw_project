@@ -62,7 +62,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
-  base: process.env.NODE_ENV === 'production' ? 'jw_vue_blog/':'/',
+  base: process.env.NODE_ENV === 'production' ? 'blog/':'/',
   routes: routes,
   scrollBehavior(to, from, savedPosition) {
     return {x: 0, y: 0}
