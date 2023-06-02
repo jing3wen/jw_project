@@ -1,14 +1,19 @@
 import axios from "axios";
-import constant from "./constant";
 //处理url参数
 import qs from "qs";
-
 import store from "../store";
-
 
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
+
+  //检查完整是否进入维护状态, 只有查询博客配置的请求"/blogWeb/front/getWebInfo"可以放行
+  if(!config.url.includes("/blogWeb/front/getWebInfo")){
+    if(store.state.webInfo.status==='0'){
+      return Promise.reject(new Error("网站维护中"))
+    }
+  }
+
   // 在发送请求之前做些什么
   config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
@@ -79,3 +84,4 @@ export default {
     });
   },
 }
+

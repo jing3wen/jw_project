@@ -1,6 +1,5 @@
-
-//导入别人的api接口
-const live2d_path = "https://api.itggg.cn/live2dnew/left/";
+//导入别人的js文件
+const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"
 
 function loadExternalResource(url, type) {
   return new Promise((resolve, reject) => {
@@ -23,17 +22,13 @@ function loadExternalResource(url, type) {
 
 export function openKanBan(){
   //看板娘加载指定模型
-  localStorage.setItem('modelId', '2');
+  localStorage.setItem('modelId', '4');
   localStorage.setItem('modelTexturesId', '1');
 
   if (screen.width >= 768) {
-    Promise.all([loadExternalResource(live2d_path + "waifu.min.css", "css"),
-      loadExternalResource(live2d_path + "live2d.min.js", "js"),
-      loadExternalResource(live2d_path + "waifu-tips.min.js", "js")]).then(() => {
-      initWidget({waifuPath: live2d_path + "waifu-tips.json", apiPath: "https://api.itggg.cn/live2d_api/",})
+    //采用第三方库动态导入看板娘文件
+    loadExternalResource(live2d_path, "js").then(r => {
+
     })
   }
 }
-
-
-

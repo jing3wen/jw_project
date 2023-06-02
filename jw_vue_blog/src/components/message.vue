@@ -44,7 +44,7 @@
 <script>
   const comment = () => import( "./comment/comment");
   const myFooter = () => import( "./common/myFooter");
-
+  import messageDefaultAvatar from "../assets/file/messageDefault.png"
 
   export default {
     components: {
@@ -57,7 +57,7 @@
         messageContent: "",
         // background: {"background": "url(" + this.$store.state.webInfo.backgroundImage + ") center center / cover no-repeat"},
         barrageList: [],
-        messageDefaultAvatar:"../assets/file/messageDefault.png",
+        messageDefaultAvatar: messageDefaultAvatar,
       };
     },
     created() {
